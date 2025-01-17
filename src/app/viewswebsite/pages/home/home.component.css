@@ -1,8 +1,3 @@
-main {
-  padding: 20px;
-  background-color: #f7f2f2;
-}
-
 .container {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -10,13 +5,11 @@ main {
 
 .text-home {
   margin: 0 auto;
-  /* Esto centra el div horizontalmente */
   text-align: center;
 }
 
-.text-home h1 {
+.text-home h1title-one {
   text-align: center;
-  color: rgb(176, 7, 7);
 }
 
 .text-home p {
@@ -38,7 +31,6 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: rgb(176, 7, 7);
 }
 
 .text-info {
@@ -70,25 +62,3 @@ p {
 .titlleModal {
   text-align: center;
 }
-
-
-
-/* Estilos para el menú de tarjeta*/
-/*
-.mat-menu-item {
-  font-size: 0.9em;
-  color: #b51919;
-}
-.mat-icon {
-  color: #121212;
-  border: #fcfbfb solid 0px;
-}
-mat-icon-button {
-  color: #b11c1c;
-  padding: 8px;
-}
-mat-icon-button:hover {
-  background-color: rgba(197, 11, 11, 0.08);
-  border-radius: 20%;
-  border: solid 0px;
-}/*/

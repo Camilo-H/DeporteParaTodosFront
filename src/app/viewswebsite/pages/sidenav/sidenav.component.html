@@ -1,47 +1,60 @@
-<mat-toolbar color="#CECECE" class="toolbar">
-  <button (click)="drawer.toggle()" mat-icon-button>
-    <mat-icon class="iconMenu">menu</mat-icon>
-  </button>
-  <!--<mat-menu #company="matMenu">
-    <button mat-menu-item>Term</button>
-    <button mat-menu-item>Tax</button>
-    <button mat-menu-item>Currency</button>
-  </mat-menu>
-  <button (click)="badgevisibility()" mat-icon-button>
-    <mat-icon matBadgeColor="accent" matBadge="15" [matBadgeHidden]="badgevisible"
-      matBadgeSize="small">notifications</mat-icon>
-  </button>-->
-</mat-toolbar>
-<mat-drawer-container autosize>
-  <mat-drawer #drawer opened="true" mode="side" position="start">
-    <mat-nav-list>
-      <mat-list-item>
-        <button routerLink="card" mat-button><mat-icon>dashboard</mat-icon> Dashboard</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button routerLink="" mat-button><mat-icon>home</mat-icon> Home</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button routerLink="slider" mat-button><mat-icon>explore</mat-icon> Slider</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button routerLink="table" mat-button><mat-icon>table</mat-icon> Table</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button mat-button><mat-icon>settings</mat-icon> Settings</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button mat-button><mat-icon>help</mat-icon> Help</button>
-      </mat-list-item>
-      <mat-list-item>
-        <button mat-button><mat-icon>analytics</mat-icon> analytics</button>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-drawer>
-  <mat-drawer-content>
-    <div style="text-align: center;min-height: 600px;">
 
-      <p>Hola camilo</p>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <div class="navegacion">
+      <div class="encabezadonavbar">
+        <img src="./assets/imagesSystem/Logo-Universidad-del-Cauca-horizontal-B.png">
+      </div>
+      <div class="contenidonavbar">
+      <mat-nav-list>
+        <a mat-list-item href="#" class="nav-item" style="color: white;" >
+          <mat-icon>home</mat-icon>
+          <span class="text-body-small-r opcion-espaciado-p">Home</span>
+        </a>
+        <a mat-list-item (click)="redirectionTo('lista-instructores')" class="nav-item">
+          <mat-icon>person</mat-icon>
+          <span class="text-body-small-r opcion-espaciado-p">Instructores</span>
+        </a>
+     
+        <a mat-list-item (click)="redirectionTo('reportes')" class="nav-item">
+          <mat-icon>tune</mat-icon>
+          <span class="text-body-small-r opcion-espaciado-p">Reportes</span>
+        </a>
+        <a mat-list-item (click)="redirectionTo('info-instructor')" class="nav-item">
+          <mat-icon>person</mat-icon>
+          <span class="text-body-small-r opcion-espaciado-p">Mi información</span>
+        </a>
+      </mat-nav-list>
+      </div>
     </div>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="navbar">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon"> menu</mat-icon>
+      </button>
+      <!--<span>Deporte para todos</span>-->
+      <div class="navbar-left">
+        <a (click)="redirectionTo('home')">
+          <!--<img src="./assets/imagesSystem/logo_unicauca.png" alt="Logo" class="logo" width="110px" height="">-->
+          <mat-icon>home</mat-icon>
+        </a>
+      </div>
+      <div class="navbar-right">
+        <ul>
+          <li><a (click)="redirectionTo('info-instructor')">Inicio</a></li>
+          <li><a (click)="redirectionTo ('listaCursos')">Noticias</a></li>
+          <li><a (click)="redirectionTo ('menu')">Nosotros</a></li>
+          <li><a (click)="redirectionTo('nuevoCursoCategoria')">Contáctanos </a></li>
+          <li><a (click)="redirectionTo('login')"> Cerrar Sesión
+              <!--<mat-icon>login</mat-icon>  Icono de inicio de sesión --> </a></li>
+        </ul>
+      </div>
+    </mat-toolbar>
+    <div class="contenido">
+      <ng-content></ng-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

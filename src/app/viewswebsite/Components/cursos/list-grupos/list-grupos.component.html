@@ -1,0 +1,40 @@
+<app-sidenav>
+    <div class="cabecero">
+        <h1>Grupos de: {{curso?.nombre}}</h1>
+        <button class="btnAgregar" (click)="nuevoGrupo()">Nuevo Grupo +</button>
+    </div>
+    <div style="width: 80%; margin: 0 auto">
+        <mat-grid-list [cols]="colsize" rowHeight="330">
+            <mat-grid-tile *ngFor="let item of grupos" [colspan]="1" [rowspan]="1" [style.background]="">
+                <mat-card class="mycard shadow">
+                    <img mat-card-image src="./assets/imagesSystem/catDeportes.jpg" alt="" width="280"
+                        (click)="verEstudiantesGrupo()" />
+                    <mat-card-content class="contenido">
+                        <!-- Icono de configuración con el menú -->
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>settings</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="onUpdate()">
+                                <mat-icon>edit</mat-icon>
+                                <span>Actualizar</span>
+                            </button>
+
+                            <button mat-menu-item (click)="onDelete()">
+                                <mat-icon>delete</mat-icon>
+                                <span>Eliminar</span>
+                            </button>
+                        </mat-menu>
+                        <mat-card-title class="card_title title-one">{{item.nombre}}
+                        </mat-card-title>
+                        <div class="d-flex justify-content-center">
+                            <button class="btnInscripcion" (click)="inscribirseAcurso()">
+                              {{ inscrito ? 'Cerrar inscripción' : 'Abrir inscripción' }}
+                            </button>
+                          </div>
+                    </mat-card-content>
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+</app-sidenav>

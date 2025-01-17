@@ -1,0 +1,136 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.info-deporte,
+.descripcion-curso,
+.deportistas {
+  width: 100%;
+}
+
+.acciones {
+  display: flex;
+  justify-content: space-between;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.mat-card {
+  padding: 10px;
+}
+
+.contenedor-superior {
+  display: flex;
+  justify-content: space-between;
+  /* Para que haya espacio entre los dos elementos */
+  align-items: flex-start;
+  /* Para que se alineen en la parte superior */
+  padding: 20px;
+}
+
+.info-deporte,
+.descripcion-curso {
+  width: 48%;
+  /* Ambas tarjetas ocuparán un 48% del ancho para dejar un pequeño espacio entre ellas */
+}
+
+mat-card {
+  padding: 15px;
+}
+
+@media (max-width: 768px) {
+  .contenedor-superior {
+    flex-direction: column;
+    /* Apilar los elementos uno debajo del otro */
+  }
+
+  .info-deporte,
+  .descripcion-curso {
+    width: 100%;
+    /* Cada tarjeta ocupará el 100% del ancho */
+    margin-bottom: 20px;
+    /* Espacio entre las tarjetas cuando están apiladas */
+  }
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  /* Separador entre las filas */
+  background-color: #f5f5f5;
+  /* Color de fondo para cada fila */
+}
+
+mat-card {
+  max-width: 100%;
+  /* Para que ocupe todo el ancho disponible */
+}
+
+mat-card-title {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+p {
+  margin: 0;
+  /* Elimina los márgenes del párrafo para que esté bien alineado */
+}
+
+.btnAgregar {
+  font-size: 19px;
+}
+
+button {
+  border: none;
+  /* Quita cualquier borde */
+  box-shadow: none;
+  /* Elimina sombras si existen */
+}
+
+
+.btnGuardar {
+  display: flex;
+  justify-content:end; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  height: 90px; /* Altura del contenedor */
+}
+
+.btnGuardar button {
+  width: 100px; /* Ancho personalizado */
+  height: 40px; /* Altura personalizada */
+  background-color: #000066 !important; /* Fondo azul */
+  color: rgb(251, 251, 252) !important; /* Texto blanco */
+  border-radius: 20px !important; /* Bordes redondeados */
+  border: none; /* Sin borde */
+  text-align: center; /* Alineación del texto */
+  font-size: 16px; /* Tamaño del texto */
+  font-weight: bold; /* Texto en negrita */
+  cursor: pointer; /* Cambia el cursor a "puntero" */
+}
+
+.btnGuardar button:disabled {
+  background-color: #cccccc !important; /* Fondo gris deshabilitado */
+  color: #666666 !important; /* Texto gris deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor cuando está deshabilitado */
+}
+
+.no-border {
+  background: none; /* Sin fondo */
+  box-shadow: none; /* Sin sombra */
+  border: none; /* Sin borde */
+  padding: 0; /* Elimina cualquier espacio extra */
+  min-width: 0; /* Elimina el ancho mínimo que Angular Material aplica a botones */
+}
+
+.no-border mat-icon {
+  color: inherit; /* Usa el color actual del texto (o ajusta el color si es necesario) */
+  font-size: 24px; /* Asegúrate de que el ícono mantenga un buen tamaño */
+}

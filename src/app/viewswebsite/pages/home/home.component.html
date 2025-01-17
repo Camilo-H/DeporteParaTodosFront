@@ -1,6 +1,7 @@
+<app-header></app-header>
 <div class="container d-flex justify-content-center">
     <div class="text-home col-lg-10 shadow p-3 mb-5 bg-white rounded">
-        <h1 class="tittles">Deporte para todos</h1>
+        <h1 class="title-one">Deporte para todos</h1>
         <p>
             Lorem Ipsum is simply dummy text of the printing and typesetting industry.
             Lorem Ipsum has been the industry's standard dummy text ever since the
@@ -14,33 +15,33 @@
         </p>
     </div>
 </div>
-
 <div style="width: 80%; margin: 0 auto">
     <mat-grid-list [cols]="colsize" rowHeight="330">
         <mat-grid-tile *ngFor="let item of listaEscenarios" [colspan]="1" [rowspan]="1" [style.background]="">
+
             <mat-card class="mycard shadow">
-                <img mat-card-image src="./assets/imagesSystem/deporte.jpg" alt="" (click)="abrirCursosDeportivos()" />
+                <img mat-card-image src="./assets/imagesSystem/deporte.jpg" 
+                    (click)="abrirCursosDeportivos(item.titulo)" />
                 <mat-card-content class="contenido">
                     <!--Menu de configuracion en tarjeta-->
                     <button mat-icon-button [matMenuTriggerFor]="menu">
                         <mat-icon>settings</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="onUpdate()">
+                        <button mat-menu-item (click)="onUpdate(item.titulo)">
                             <mat-icon>edit</mat-icon>
                             <span>Actualizar</span>
                         </button>
-                        
-                        <button mat-menu-item (click)="onDelete()">
+
+                        <button mat-menu-item (click)="onDelete(item.titulo)">
                             <mat-icon>delete</mat-icon>
                             <span>Eliminar</span>
                         </button>
                     </mat-menu>
-                    <mat-card-title class="card_title">Semillero deportivo
+                    <mat-card-title class="card_title title-three-nrs">{{item.titulo}}
                     </mat-card-title>
                     <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
+                        <button type="button" class="btn btn-primary" (click)="verInformacion(item)"
                             style="border: none; background-color: transparent; color: black">
                             Ver información
                         </button>
@@ -50,7 +51,7 @@
         </mat-grid-tile>
     </mat-grid-list>
     <div class="container d-flex justify-content-center">
-        <button class="btn btn-primary" (click)="nuevaCategoria()">Nueva categoría curso +</button>
+        <button class="btnAgregar" (click)="nuevaCategoria()">Nueva categoría curso +</button>
     </div>
 </div>
 
@@ -59,25 +60,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title col-11 text-center" id="exampleModalLabel">
-                    Información de curso
+                <h1 class="modal-title col-11 text-center title-one" id="exampleModalLabel">
+                    {{ categoriaSeleccionada?.titulo }}
                 </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>
-                    "Es una cancha con el sistema de revestimiento acrílico compuesto por
-                    seis (6) capas, utilizado en canchas de hockey, pistas de patinaje,
-                    ciclo rutas, zonas de bicicletas. también se puede utilizar para
-                    canchas de tenis, baloncesto, fútbol sala y voleibol. El sistema es
-                    100% acrílico, obteniendo una combinación de capas de textura y
-                    acabado no abrasivo, Es una cancha con el sistema de revestimiento
-                    acrílico compuesto por seis (6) capas, utilizado en canchas de hockey,
-                    pistas de patinaje, ciclo rutas, zonas de bicicletas. también se puede
-                    utilizar para canchas de tenis, baloncesto, fútbol sala y voleibol. El
-                    sistema es 100% acrílico, obteniendo una combinación de capas de
-                    textura y acabado no abrasivo"
-                </p>
+                <p>{{ categoriaSeleccionada?.descripcion }}</p>
             </div>
         </div>
     </div>

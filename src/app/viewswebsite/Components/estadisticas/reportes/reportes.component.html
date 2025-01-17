@@ -1,0 +1,69 @@
+<app-sidenav>
+    <div class="report-container">
+        <div class="data-visualization">
+            <h3>Información de modalidad</h3>
+            <table class="data-table" *ngIf="showTable">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Atenciones</th>
+                        <th>Horas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of reportData">
+                        <td>{{ item.nombre }}</td>
+                        <td>{{ item.atenciones }}</td>
+                        <td>{{ item.horas }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td>{{ getTotal('atenciones') }}</td>
+                        <td>{{ getTotal('horas') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="!showTable" class="chart-container">
+                <ngx-charts-bar-vertical [results]="chartData" [xAxis]="true" [yAxis]="true" [legend]="true"
+                    [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="'Nombre'" [yAxisLabel]="'Atenciones'">
+                </ngx-charts-bar-vertical>
+
+
+            </div>
+            <div class="actions">
+                <button class="btn" (click)="toggleView('table')">Tabla de datos</button>
+                <button class="btn" (click)="toggleView('chart')">Diagramas</button>
+                <button class="btn" (click)="downloadData()">Descargar datos</button>
+            </div>
+        </div>
+
+        <div class="filters">
+            <h4>Genera tus reportes</h4>
+            <div class="filter">
+                <label for="student">Por estudiante</label>
+                <select id="student" [(ngModel)]="selectedStudent">
+                    <option *ngFor="let student of students" [value]="student">{{ student }}</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="sport">Por curso deportivo</label>
+                <select id="sport" [(ngModel)]="selectedSport">
+                    <option *ngFor="let sport of sports" [value]="sport">{{ sport }}</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="faculty">Facultades, programas y estamentos</label>
+                <select id="faculty" [(ngModel)]="selectedFaculty">
+                    <option *ngFor="let faculty of faculties" [value]="faculty">{{ faculty }}</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label for="instructor">Por instructor</label>
+                <input type="text" id="instructor" [(ngModel)]="selectedInstructor" />
+            </div>
+            <div class="contenedor">
+                <button class="btngenerar">Generar</button>
+            </div>
+        </div>
+    </div>
+</app-sidenav>

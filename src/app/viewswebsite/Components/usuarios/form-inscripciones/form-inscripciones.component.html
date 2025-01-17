@@ -1,0 +1,53 @@
+<div class="form-container">
+  <mat-card>
+    <!--
+    <button mat-icon-button class="close-button" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>-->
+    <mat-card-title class="form-title">Inscripción</mat-card-title>
+    <form>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Nombre</mat-label>
+        <input matInput placeholder="Nombre" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" placeholder="Correo electrónico" required>
+      </mat-form-field> 
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Tipo identificación</mat-label>
+        <mat-select>
+          <mat-option value="C.C">Cédula ciudadanía</mat-option>
+          <mat-option value="Tarjeta identidad">Tarjeta identidad</mat-option>
+          <mat-option value="C.Extranjería">Cédula extranjera</mat-option>
+          <mat-option value="otro">Otro</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Número identificación</mat-label>
+        <input matInput placeholder="Número ID" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Sexo</mat-label>
+        <mat-select>
+          <mat-option value="Masculino">Masculino</mat-option>
+          <mat-option value="Femenino">Femenino</mat-option>
+          <mat-option value="Otro">Otro</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Código</mat-label>
+        <input matInput placeholder="Código" required>
+      </mat-form-field>
+    </form>
+    <div class="form-buttons">
+      <button mat-raised-button class="aceptar" (click)="guardar()">Aceptar</button>
+      <button mat-raised-button class="cancelar" >Cancelar</button>
+    </div>
+  </mat-card>
+</div>

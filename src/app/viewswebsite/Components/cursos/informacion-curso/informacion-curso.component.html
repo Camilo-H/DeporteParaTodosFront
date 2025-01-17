@@ -1,0 +1,102 @@
+<app-sidenav>
+  <div class="contenedor">
+    <div class="contenedor-superior">
+      <div class="info-deporte">
+        <mat-card>
+          <mat-card-title>Información de deporte</mat-card-title>
+          <mat-card-content>
+            <div class="fila">
+              <p><strong>Nombre:</strong> Basquetbol masculino seleccionado</p>
+            </div>
+            <div class="fila">
+              <p><strong>Tipo de deporte:</strong> Semillero</p>
+            </div>
+            <div class="fila">
+              <p><strong>Cupos:</strong> 40 deportistas</p>
+            </div>
+            <div class="fila">
+              <p>
+                <strong>Horarios:</strong> Lunes 6-8 pm Coliseo, Miércoles 6-8
+                cancha 1
+              </p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="descripcion-curso">
+        <mat-card>
+          <mat-card-title>Descripción</mat-card-title>
+          <mat-card-content>
+            <p>
+              Descripción del curso. Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit. Es una cancha con el sistema de revestimiento
+              acrílico compuesto por seis (6) capas, utilizado en canchas de
+              hockey, pistas de patinaje, ciclo rutas, zonas de bicicletas.
+              también se puede utilizar para canchas de tenis, baloncesto,
+              fútbol sala y voleibol. El sistema es 100% acrílico, obteniendo
+              una combinación de capas de textura y acabado no abrasivo, Es una
+              cancha con el sistema de revestimiento acrílico compuesto por seis
+              (6) capas, utilizado en canchas de hockey, pistas de patinaje,
+              ciclo rutas, zonas de bicicletas.
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="deportistas">
+      <mat-card>
+        <mat-card-content>
+          <div class="acciones">
+            <h2>Deportistas de curso</h2>
+            <button mat-raised-button class="btnAgregar" (click)="inscribir()">
+              + Agregar Atleta
+            </button>
+            <button mat-raised-button class="btnAgregar">
+              <mat-icon>email</mat-icon> Notificación
+            </button>
+          </div>
+
+          <table mat-table [dataSource]="deportistas" class="mat-elevation-z8">
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>
+                Nombre completo de deportista
+              </th>
+              <td mat-cell *matCellDef="let deportista">
+                {{ deportista.nombre }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="atenciones">
+              <th mat-header-cell *matHeaderCellDef>Atenciones [01/11/2024]</th>
+              <td mat-cell *matCellDef="let deportista">
+                <mat-checkbox  [(ngModel)]="deportista.checked" (change)="onCheckboxChange($event)"></mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let deportista">
+                <button mat-icon-button class="no-border">
+                  <mat-icon>email</mat-icon>
+                </button>
+                <button mat-icon-button class="no-border">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <div class="btnGuardar">
+            <button mat-raised-button [disabled]="!isButtonEnabled" (click)="guardar()">
+              Guardar
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</app-sidenav>

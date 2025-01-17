@@ -1,0 +1,31 @@
+<button mat-icon-button class="close-button" matDialogClose style="float: right;">
+  <mat-icon>close</mat-icon>
+</button>
+
+<mat-dialog-content class="dialog-content">
+  <header class="title-two">{{ isEditing ? 'Editar grupo' : 'Registrar grupo' }}</header>
+  <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm" class="form-content">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Nombre</mat-label>
+      <input matInput placeholder="Nombre">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Descripción</mat-label>
+      <input matInput placeholder="Descripción" name="descripcion">
+    </mat-form-field>
+
+    <div class="form-field buttonImage">
+      <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" />
+
+      <div *ngIf="imagenPreview" class="preview">
+        <img [src]="imagenPreview" alt="Vista previa" class="image-preview">
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-card-actions class="form-buttons">
+  <button mat-raised-button class="aceptar">Aceptar</button>
+  <button mat-raised-button class="cancelar" matDialogClose>Cancelar</button>
+</mat-card-actions>

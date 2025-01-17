@@ -1,0 +1,56 @@
+<app-sidenav>
+  <div class="container">
+    <div class="personal-info">
+      <div class="info-text">
+        <h3>Tu información personal</h3>
+        <table>
+          <tr>
+            <td>Nombres:</td>
+            <td>Camilo Hernán Anacona</td>
+          </tr>
+          <tr>
+            <td>Identificación:</td>
+            <td>12341123</td>
+          </tr>
+          <tr>
+            <td>Tipo de identificación:</td>
+            <td>Cédula</td>
+          </tr>
+          <tr>
+            <td>Rol:</td>
+            <td>Instructor</td>
+          </tr>
+        </table>
+      </div>
+      <div class="profile-pic">
+        <img src="./assets/imagesSystem/Silueta.jpeg" alt="Profile Picture" />
+      </div>
+    </div>
+
+    <div class="course-info">
+      <h3>Tus cursos</h3>
+      <table mat-table [dataSource]="courses" class="mat-elevation-z8">
+        <!-- Nombre del curso Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre de deporte </th>
+          <td mat-cell *matCellDef="let course"> {{course.nombre}} </td>
+        </ng-container>
+
+        <!-- Tipo de curso Column -->
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef> Tipo de curso </th>
+          <td mat-cell *matCellDef="let course"> {{course.tipo}} </td>
+        </ng-container>
+
+        <!-- Horario Column -->
+        <ng-container matColumnDef="horario">
+          <th mat-header-cell *matHeaderCellDef> Horario </th>
+          <td mat-cell *matCellDef="let course"> {{course.horario}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</app-sidenav>

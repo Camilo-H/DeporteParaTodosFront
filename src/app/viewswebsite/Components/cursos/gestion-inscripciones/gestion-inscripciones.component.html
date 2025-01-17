@@ -1,0 +1,99 @@
+<!--<div class="modal-container">
+    <h2 class="modal-title">Configurar Inscripciones</h2>
+    <p class="modal-description">
+      Habilita o deshabilita las inscripciones a los cursos en cada una de las modalidades haciendo clic en el recuadro de selección.
+    </p>
+  
+    <div class="modal-content-scrollable">
+      <div class="modal-content">
+        <div class="modal-item" *ngFor="let modalidad of modalidades">
+          <mat-checkbox [(ngModel)]="modalidad.seleccionado">{{ modalidad.nombre }}</mat-checkbox>
+        </div>
+      </div>
+  
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Ajustar rango de fechas para inscripciones
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="fecha-rango">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Inicio</mat-label>
+              <input matInput [matDatepicker]="fechaInicioPicker" [(ngModel)]="fechaInicio" />
+              <mat-datepicker-toggle matSuffix [for]="fechaInicioPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fechaInicioPicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Fin</mat-label>
+              <input matInput [matDatepicker]="fechaFinPicker" [(ngModel)]="fechaFin" />
+              <mat-datepicker-toggle matSuffix [for]="fechaFinPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fechaFinPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+    </div>
+
+    <div class="form-buttons">
+      <button mat-raised-button class="aceptar" (click)="guardar()">Guardar</button>
+      <button mat-raised-button class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>-->
+
+<div class="modal-container">
+  <h2 class="modal-title">Configurar Inscripciones</h2>
+  <p class="modal-description">
+    Habilita o deshabilita las inscripciones a los cursos en cada una de las modalidades haciendo clic en el recuadro de
+    selección.
+  </p>
+
+  <!-- Contenedor centrado -->
+  <div class="modal-content-centralizado">
+    <!-- Modalidades -->
+    <div class="section">
+      <h3 class="section-title">Modalidades</h3>
+      <div class="modalidades-grid">
+        <div class="modal-item" *ngFor="let modalidad of modalidades">
+          <mat-checkbox [(ngModel)]="modalidad.seleccionado">{{ modalidad.nombre }}</mat-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rango de fechas -->
+    <div class="section">
+      <h3 class="section-title">Rango de Fechas</h3>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Ajustar rango de fechas para inscripciones
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="fecha-rango">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Inicio</mat-label>
+              <input matInput [matDatepicker]="fechaInicioPicker" [(ngModel)]="fechaInicio" />
+              <mat-datepicker-toggle matSuffix [for]="fechaInicioPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fechaInicioPicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Fin</mat-label>
+              <input matInput [matDatepicker]="fechaFinPicker" [(ngModel)]="fechaFin" />
+              <mat-datepicker-toggle matSuffix [for]="fechaFinPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fechaFinPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="form-buttons">
+    <button mat-raised-button class="aceptar" (click)="guardar()">Guardar</button>
+    <button mat-raised-button class="cancelar" (click)="cancelar()">Cancelar</button>
+  </div>
+</div>

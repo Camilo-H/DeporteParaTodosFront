@@ -1,0 +1,101 @@
+.report-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.data-visualization {
+  width: 70%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+
+
+.actions button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.filters {
+  width: 25%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.filter {
+  margin-bottom: 15px;
+}
+
+.filter label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.filter select,
+.filter input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center;
+}
+
+.btn {
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  border-radius: 20px !important;
+  width: 100px;
+  height: 40px;
+  text-align: center; /* Asegura el centrado del texto */
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center;     /* Centra el contenido verticalmente */
+}
+
+.btngenerar {
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  border-radius: 20px !important;
+  width: 100px;
+  height: 40px;
+  text-align: center;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.chart-container ngx-charts-bar-vertical,
+.chart-container ngx-charts-pie-chart {
+  flex: 1 1 45%;
+  height: 400px;
+}

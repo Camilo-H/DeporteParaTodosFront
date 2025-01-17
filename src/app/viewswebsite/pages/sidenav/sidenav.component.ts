@@ -1,34 +1,43 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-/**Material dependences */
-import {MatListModule} from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, inject } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule} from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatBadgeModule} from '@angular/material/badge';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrls: ['./sidenav.component.css'],
   standalone: true,
-  imports: 
-  [
-    CommonModule,
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
     MatListModule,
     MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatBadgeModule,
-    ],
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.css']
+    AsyncPipe,
+    CommonModule,
+    NgIf,
+  ],
 })
 export class SidenavComponent {
-  badgevisible = false;
-  badgevisibility() {
-    this.badgevisible = true;
+  constructor(private router: Router) {}
+  private breakpointObserver = inject(BreakpointObserver);
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map((result) => result.matches),
+      shareReplay()
+    );
+
+  redirectionTo(param: any) {
+    this.router.navigate([param]);
   }
 }

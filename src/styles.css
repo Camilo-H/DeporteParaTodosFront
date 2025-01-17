@@ -1,30 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
-/*
+/* Establece el tamaño completo de la ventana del navegador */
 html,
 body {
-  height: 100%;
   margin: 0;
-  font-family: Arial;
-}
-
-app-root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-main {
-  flex: 1;
-  padding: 20px;
-}
-*/
-/* styles.css */
-
-/* Establece el tamaño completo de la ventana del navegador */
-html, body {
+  padding: 0;
+  width: 100%;
   height: 100%;
+  overflow-x: hidden; /* Evita el desbordamiento horizontal*/
 }
 
-/* Contenedor principal que usa Flexbox */
+/* Contenedor principal */
 app-root {
   display: flex;
   flex-direction: column;
@@ -32,11 +16,120 @@ app-root {
 }
 
 /* Estilo para el header y footer */
-app-header, app-footer {
+app-header,
+app-footer {
   flex-shrink: 0; /* Evita que se reduzcan en tamaño */
 }
 
-/* Estilo para el home */
 app-home {
   flex: 1; /* Ocupa el espacio disponible restante */
+}
+
+/*Titulos*/
+.title-one {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 700; /* Valor numérico de negrita */
+  font-size: 60px;
+  color: #000066;
+}
+.title-two {
+  text-align: center;
+  margin: 20px;
+  font-family: "FiraSans-Bold";
+  font-size: 32px;
+  color: #000066;
+}
+
+.title-three-nrs {
+  font-family: "FiraSans-SemiBold";
+  font-size: 22px;
+  color: #000066;
+}
+
+.text-body-small-sb {
+  font-family: "FiraSans-SemiBold";
+  font-size: 14px;
+  color: #000066;
+}
+
+.text-body-extra-small-r {
+  font-family: "FiraSans-Regular";
+  font-size: 12px;
+}
+
+.text-body-extra-small-r {
+  font-family: "FiraSans-Regular";
+  font-size: 12px;
+}
+
+.text-body-extra-small {
+  font-family: "FiraSans-Light";
+  font-size: 12px;
+}
+
+.campoTooltip {
+  color: #ed7d31;
+}
+
+.warn-tooltip-is {
+  --mdc-plain-tooltip-container-color: #ed7d31 !important;
+  --mdc-plain-tooltip-supporting-text-size: 15px !important;
+  padding-left: 50% !important;
+  width: 100% !important;
+}
+
+.rounded-button-total {
+  border-radius: 8px !important;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.rounded-button-total:hover {
+  background-color: #5056ac !important;
+}
+
+.rounded-button {
+  border-radius: 8px !important;
+  transition: background-color 0.3s;
+  width: 100px !important;
+  margin: 10px;
+}
+
+.rounded-button:hover {
+  background-color: #5056ac !important;
+}
+
+/*Botones*/
+
+.form-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 20px;
+}
+
+.aceptar {
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  border-radius: 20px !important;
+  width: 100px;
+  height: 40px;
+}
+
+.cancelar {
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  border-radius: 20px !important;
+  width: 100px;
+  height: 40px;
+}
+
+.btnAgregar {
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  border-radius: 20px !important;
+  padding: 10px 15px; /* Ajusta el padding */
+  font-size: 16px;
+  max-width: 220px; /* Evita que el botón se expanda más allá de 250px */
+  width: 100%;
 }
