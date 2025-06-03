@@ -6,7 +6,7 @@
         <table>
           <tr>
             <td>Nombres:</td>
-            <td>Danie Alejandro Marín</td>
+            <td>Camilo Hernán Anacona</td>
           </tr>
           <tr>
             <td>Identificación:</td>
@@ -15,10 +15,10 @@
           <tr>
             <td>Tipo de identificación:</td>
             <td>Cédula</td>
-          </tr> 
+          </tr>
           <tr>
             <td>Rol:</td>
-            <td>Instructor</td>
+            <td>Estudiante</td>
           </tr>
         </table>
       </div>
@@ -28,7 +28,7 @@
     </div>
 
     <div class="course-info">
-      <h3>Tus cursos encargados</h3>
+      <h3>Tus cursos matriculados</h3>
       <table mat-table [dataSource]="courses" class="mat-elevation-z8">
         <!-- Nombre del curso Column -->
         <ng-container matColumnDef="nombre">
@@ -52,5 +52,10 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
+
+    <div class="btnGuardar">
+      <button (click)="openNotificacionesModal()">Mis Notificaciones</button>
+    </div>
+
   </div>
 </app-sidenav>

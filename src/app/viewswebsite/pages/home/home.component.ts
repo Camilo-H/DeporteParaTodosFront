@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
@@ -17,6 +17,8 @@ import { HeaderComponent } from '../header/header.component';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { CategoriaDTO } from 'src/app/Models/DTOs/categoria-dto';
 import * as bootstrap from 'bootstrap';
+import { PerfilService } from 'src/app/services/perfil.service';
+import { ImagenService } from 'src/app/services/imagen.service';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +32,6 @@ import * as bootstrap from 'bootstrap';
     MatPaginatorModule,
     MatIconModule,
     MatMenuModule,
-    DialogComponent,
     MatDialogModule,
     HeaderComponent,
   ],
@@ -38,28 +39,34 @@ import * as bootstrap from 'bootstrap';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
+
 export class HomeComponent {
   public colsize = 3;
   public isMobile: boolean = false;
   public listaEscenarios: CategoriaDTO[] = [];
   public categoriaSeleccionada: CategoriaDTO | null = null; // Variable para almacenar la categoría seleccionada
+  perfil?: string;
 
   constructor(
     private breakPointObserver: BreakpointObserver,
     private router: Router,
     private categoriaService: CategoriaService,
-    private dialog: MatDialog
-  ) {}
+    private imagenService: ImagenService,
+    private dialog: MatDialog,
+    private perfilService: PerfilService
+  ) { }
 
   ngOnInit(): void {
     this.loadCategorias();
-
     this.breakPointObserver
       .observe([Breakpoints.Handset])
       .subscribe((result) => {
         this.isMobile = result.matches;
         this.colsize = this.isMobile ? 1 : 3;
       });
+    this.perfilService.perfil$.subscribe(perfil => {
+      this.perfil = perfil;
+    });
   }
 
   // Método para cargar las categorías desde el servicio
@@ -67,6 +74,20 @@ export class HomeComponent {
     this.categoriaService.getCategorias().subscribe(
       (data) => {
         this.listaEscenarios = data;
+
+        this.listaEscenarios.forEach((categoria) => {
+          if (categoria.imagenId != null) {
+            this.imagenService.getimagen(categoria.imagenId).subscribe(
+              (imagenData) => {
+                categoria.imagenBase64 = imagenData.datosBase64;
+                categoria.tipoArchivo = imagenData.tipoArchivo;
+              },
+              (error) => {
+                console.error(`Error al obtener la imagen de la categoría  ${categoria.titulo}`, error);
+              }
+            );
+          }
+        });
       },
       (error) => {
         console.error('Error al cargar las categorías', error);
@@ -76,11 +97,11 @@ export class HomeComponent {
 
   // Método para abrir la modal y mostrar la descripción
   verInformacion(item: CategoriaDTO): void {
-    this.categoriaSeleccionada = item; // Almacenar la categoría seleccionada
+    this.categoriaSeleccionada = item;
     const modalElement = document.getElementById('exampleModal');
     if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement); // Inicializar modal
-      modal.show(); // Mostrar la modal
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
     }
   }
 
@@ -96,10 +117,6 @@ export class HomeComponent {
   //Método para actualizar la categoría
   onUpdate(titulo: string): void {
     const dialogRef = this.dialog.open(NuevoCursoCategoriaComponent, {
-      //tamaño de modal
-      width: '30%',
-      height: '60%',
-      maxWidth: 'none',
       data: { titulo },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -113,7 +130,6 @@ export class HomeComponent {
   onDelete(identificador: string): void {
     let elemento: string = ' la categoría';
     const dialogRef = this.dialog.open(DialogComponent, {
-    
       data: { elemento, identificador },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -129,7 +145,6 @@ export class HomeComponent {
   //Método para registrar una categoría
   nuevaCategoria(): void {
     const dialogRef = this.dialog.open(NuevoCursoCategoriaComponent, {
-      width: '450px',
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.loadCategorias();

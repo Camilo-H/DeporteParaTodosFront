@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CursoDTO } from 'src/app/Models/DTOs/curso-dto';
 import { GrupoDTO } from 'src/app/Models/DTOs/grupo-dto';
 import { GrupoService } from 'src/app/services/grupo.service';
+import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
+import { PerfilService } from 'src/app/services/perfil.service';
 
 @Component({
   selector: 'app-list-grupos',
@@ -27,6 +29,7 @@ import { GrupoService } from 'src/app/services/grupo.service';
     MatMenuModule,
     MatDialogModule,
     SidenavComponent,
+    NgIf,
   ],
   templateUrl: './list-grupos.component.html',
   styleUrls: ['./list-grupos.component.css'],
@@ -36,15 +39,17 @@ export class ListGruposComponent implements OnInit {
   public colsize = 3;
   public isMobile: boolean = false;
   public grupos: GrupoDTO[] = [];
+  perfil?: string;
 
   constructor(
     private breakPointObserver: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
     private cursoService: CursodeportivoService,
+    private grupoService: GrupoService,
     private dialog: MatDialog,
-    private grupoService: GrupoService
-  ) {}
+    private perfilService: PerfilService
+  ) { }
 
   inscrito: boolean = false; // Estado de la inscripción
 
@@ -70,12 +75,19 @@ export class ListGruposComponent implements OnInit {
           this.colsize = 3;
         }
       });
+
+    this.perfilService.perfil$.subscribe(perfil => {
+      this.perfil = perfil;
+      // Lógica para mostrar/ocultar contenido basado en el perfil
+    });
   }
 
-  inscribirseAcurso(){
+  inscribirseAcurso() {
     this.inscrito = !this.inscrito;
+    const dialogRef = this.dialog.open(FormInscripcionesComponent, {
+      /*data: {name: this.name(), animal: this.animal()},*/
+    });
   }
-
 
   loadGrupos(): void {
     this.grupoService.getGrupos().subscribe(
@@ -105,15 +117,16 @@ export class ListGruposComponent implements OnInit {
     });
   }
   nuevoGrupo(): void {
-    const dialogRef = this.dialog.open(FormGruposComponent, {
-     
-    });
+    const dialogRef = this.dialog.open(FormGruposComponent, {});
   }
 
-  verEstudiantesGrupo(): void {
-    this.router.navigate(['/info-curso']);
+  verEstudiantesGrupo(param: any): void {
+    if (this.perfil !== 'Estudiante') {
+      this.router.navigate([param]);
+    }else{
+      alert('No tienes permiso para acceder a esta sección, comuniquese con el administrador para más información');
+    }
   }
-
 }
 
 /*

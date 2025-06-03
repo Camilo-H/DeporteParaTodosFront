@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,9 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { PerfilService } from 'src/app/services/perfil.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -23,12 +26,26 @@ import { Router } from '@angular/router';
     MatIconModule,
     AsyncPipe,
     CommonModule,
+    MatFormFieldModule,
+    MatSelectModule,
     NgIf,
   ],
 })
-export class SidenavComponent {
-  constructor(private router: Router) {}
+export class SidenavComponent implements OnInit {
+  perfil?: string;
+
+  constructor(private router: Router, private perfilservice: PerfilService) {
+  }
+
+  ngOnInit(): void {
+    this.perfilservice.perfil$.subscribe(perfil => {
+      this.perfil = perfil;
+      // Lógica para mostrar/ocultar contenido basado en el perfil
+    });
+  }
+
   private breakpointObserver = inject(BreakpointObserver);
+
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -37,7 +54,15 @@ export class SidenavComponent {
       shareReplay()
     );
 
-  redirectionTo(param: any) {
+  /*redirectionTo(param: any) {
     this.router.navigate([param]);
+  }*/
+
+  redirectionTo(url: string): void {
+    window.location.href = url;
   }
+
+
+
+
 }

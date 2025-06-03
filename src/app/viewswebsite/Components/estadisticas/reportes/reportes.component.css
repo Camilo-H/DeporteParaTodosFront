@@ -1,7 +1,31 @@
 .report-container {
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+  flex-direction: row; /* Cambiado a fila para que los elementos estén uno al lado del otro */
+  gap: 1rem; /* Espaciado entre secciones */
+}
+
+h2{
+  text-align: center;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* Espaciado entre gráficos */
+  max-width: 100%; /* Asegura que los gráficos no desborden */
+}
+
+.chart {
+  width: 100%; /* Asegura que cada gráfico ocupe todo el ancho disponible */
+  height: 300px; /* Ajusta la altura según sea necesario */
+  overflow: hidden; /* Evita que el contenido desborde */
+}
+
+ngx-charts-bar-vertical,
+ngx-charts-pie-chart {
+  width: 100%; /* Asegura que los gráficos ocupen todo el ancho del contenedor */
+  height: 100%; /* Ajusta la altura para que no sean demasiado grandes */
 }
 
 .data-visualization {
@@ -19,8 +43,6 @@
   padding: 8px;
   text-align: center;
 }
-
-
 
 .actions button {
   margin-right: 10px;
@@ -75,7 +97,8 @@
 .contenedor {
   display: flex;
   justify-content: center; /* Centra el contenido horizontalmente */
-  align-items: center;     /* Centra el contenido verticalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  gap: 18px;
 }
 
 .btngenerar {
@@ -85,17 +108,14 @@
   width: 100px;
   height: 40px;
   text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  
 }
 
-.chart-container {
+.actions {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.chart-container ngx-charts-bar-vertical,
-.chart-container ngx-charts-pie-chart {
-  flex: 1 1 45%;
-  height: 400px;
+  justify-content: center;
+  gap: 1rem; /* Espaciado entre botones */
+  margin-top: 1rem;
 }

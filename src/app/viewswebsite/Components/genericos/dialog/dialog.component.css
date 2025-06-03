@@ -1,19 +1,24 @@
 ::ng-deep .mat-dialog-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Alinea los elementos */
-  height: auto; /* Ajusta la altura según el contenido */
-  overflow: hidden; /* Elimina el scroll */
+  justify-content: space-between;
+  /* Alinea los elementos */
+  height: auto;
+  /* Ajusta la altura según el contenido */
+  overflow: hidden;
+  /* Elimina el scroll */
 }
 
 .mat-dialog-content {
   padding: 20px;
-  overflow: visible; /* Asegura que el contenido no cause scroll */
+  overflow: visible;
+  /* Asegura que el contenido no cause scroll */
 }
 
 .mat-dialog-actions {
   display: flex;
-  justify-content: flex-end; /* Alinea los botones a la derecha */
+  justify-content: flex-end;
+  /* Alinea los botones a la derecha */
   padding: 10px 20px;
 }
 
@@ -23,11 +28,20 @@ button {
 
 .btn-cerrar {
   margin-right: 8px;
-  background-color: #b61b1b;
+  background-color: #d31212;
   color: white !important;
 }
 
 .btn-confirmar {
-  background-color: #170486;
+  background-color: #000066 !important;
   color: white !important;
+}
+
+.texConfirmation {
+  font-weight: bold;
+  color: #525151;
+}
+
+.title-one{
+  color: #000066;
 }

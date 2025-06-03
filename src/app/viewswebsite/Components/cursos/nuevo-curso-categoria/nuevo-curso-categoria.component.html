@@ -25,68 +25,8 @@
 
     <div class="form-buttons">
       <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
-      <button mat-raised-button class="aceptar" type="submit" [disabled]="!categoriaForm.form.valid">Aceptar</button>
-    </div>
-  </form>
-</mat-dialog-content>
-
-<!--<mat-dialog-content class="dialog-content">
-  <header class="title-two">{{ isEditing ? 'Editar categoría' : 'Registrar categoría' }}</header>
-  <form (ngSubmit)="onSubmit(categoriaForm)" #categoriaForm="ngForm" class="form-content">
-    <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Nombre</mat-label>
-      <input matInput placeholder="Nombre">
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Descripción</mat-label>
-      <input matInput placeholder="Descripción" name="descripcion">
-    </mat-form-field>
-
-    <div class="form-field buttonImage">
-      <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" />
-
-      <div *ngIf="imagenPreview" class="preview">
-        <img [src]="imagenPreview" alt="Vista previa" class="image-preview">
-      </div>
-    </div>
-    <div class="form-buttons">
-      <button mat-button type="button"class="cancelar" (click)="onCancel()">Cancelar</button>
+      <!--<button mat-raised-button class="aceptar" type="submit" [disabled]="!categoriaForm.form.valid">Aceptar</button>-->
       <button mat-raised-button class="aceptar" type="submit">Aceptar</button>
     </div>
   </form>
-</mat-dialog-content>-->
-
-
-
-
-
-<!--}
-<mat-card-actions class="form-buttons">
-  <button mat-raised-button [disabled]="categoriaForm.invalid" class="aceptar">Aceptar</button>
-  <button mat-raised-button class="cancelar" matDialogClose>Cancelar</button>
-</mat-card-actions>
-<div class="form-container">
-  <mat-card class="modal-card">
-    <mat-card-title class="title-two">{{ isEditing ? 'Editar categoría' : 'Nueva categoría' }}</mat-card-title>
-    <form (ngSubmit)="onSubmit(categoriaForm)" #categoriaForm="ngForm" class="form-content">
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre" name="nombre" [(ngModel)]="categoria.titulo" required #nombre="ngModel" />
-        <mat-error *ngIf="nombre.invalid && nombre.touched">El nombre es obligatorio.</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Descripción</mat-label>
-        <input matInput placeholder="Descripción" name="descripcion" [(ngModel)]="categoria.descripcion" required
-          #descripcion="ngModel" />
-        <mat-error *ngIf="descripcion.invalid && descripcion.touched">La descripción es obligatoria.</mat-error>
-      </mat-form-field>
-
-      <div class="form-buttons">
-        <button mat-raised-button color="primary" [disabled]="categoriaForm.invalid">Aceptar</button>
-        <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancelar</button>
-      </div>
-    </form>
-  </mat-card>
-</div>-->
+</mat-dialog-content>

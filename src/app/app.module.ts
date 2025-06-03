@@ -7,6 +7,7 @@ import { HeaderComponent } from './viewswebsite/pages/header/header.component';
 import { FooterComponent } from './viewswebsite/pages/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { AlertaServiceService } from './services/alerta-service.service';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
     OAuthModule.forRoot(),
     HttpClientModule,
   ],
-  providers: [],
+  providers: [AlertaServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

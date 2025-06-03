@@ -1,0 +1,24 @@
+<button mat-icon-button class="close-button" matDialogClose style="float: right;">
+    <mat-icon>close</mat-icon>
+</button>
+
+<mat-dialog-content class="dialog-content">
+    <header class="title-two">Creación de notificación</header>
+    <form (ngSubmit)="onSubmit(categoriaForm)" #categoriaForm="ngForm" class="form-content">
+        
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Asunto</mat-label>
+            <input matInput placeholder="Escribe el asunto" [(ngModel)]="notificacion.asunto" name="titulo" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput placeholder="Escribe la descripción" [(ngModel)]="notificacion.descripcion" name="descripcion" required></textarea>
+        </mat-form-field>
+
+        <div class="form-buttons">
+            <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
+            <button mat-raised-button class="aceptar" type="submit" [disabled]="!categoriaForm.form.valid">Aceptar</button>
+        </div>
+    </form>
+</mat-dialog-content>

@@ -34,28 +34,29 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+  loginForm: FormGroup;
+
   validadorCorreo = new FormControl('', [
     Validators.required,
     Validators.email,
     this.unicaucaValidadorCorreoElectronico,
   ]);
+
   formularioInicioSesion: FormGroup;
   validadorContrasenia = new FormControl('', [Validators.required]);
-
   showTooltip: boolean = false;
   hide = true;
   buttomPaswword = false;
   buttomSummit = false;
-  form: FormGroup;
+  //form: FormGroup;
 
   constructor(
     private authGoogleService: AuthService,
     private fb: FormBuilder,
     private http: HttpClient,
-
     private formBuilder: FormBuilder
   ) {
-    this.form = fb.group({
+    this.loginForm = fb.group({
       user: ['', Validators.required],
       password: ['', Validators.required],
     });
@@ -66,10 +67,13 @@ export class LoginComponent {
     });
   }
 
-  login() {
+  login(): void {
+    console.log("Llamando el método del login")
     this.authGoogleService.login();
+    console.log("Llamó el método del login")
+  }
 
-    setTimeout(() => {
+  /*setTimeout(() => {
       const profile = this.authGoogleService.getProfile();
       const token = this.authGoogleService.getAccesToken();
       if (token) {
@@ -81,8 +85,7 @@ export class LoginComponent {
       } else {
         console.error('Error: No se pudo obtener el token');
       }
-    }, 1000);
-  }
+    }, 1000);*/
 
   callBackendWithToken(token: string) {
     const headers = new HttpHeaders({

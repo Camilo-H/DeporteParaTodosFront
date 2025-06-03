@@ -21,6 +21,7 @@ import { CategoriaService } from 'src/app/services/categoria.service';
 import * as bootstrap from 'bootstrap';
 import { CursoDTO } from 'src/app/Models/DTOs/curso-dto';
 import { GestionInscripcionesComponent } from '../gestion-inscripciones/gestion-inscripciones.component';
+import { PerfilService } from 'src/app/services/perfil.service';
 
 @Component({
   selector: 'app-cursos-deportivos',
@@ -47,13 +48,15 @@ export class CursosDeportivosComponent implements OnInit {
   public colsize = 3;
   public isMobile: boolean = false;
   public cursoSeleccionado: CursoDTO | null = null; // Variable para almacenar el curso
+  perfil?:string;
 
   constructor(
     private breakPointObserver: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
     private categoriaService: CategoriaService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private perfilService: PerfilService
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +79,11 @@ export class CursosDeportivosComponent implements OnInit {
         } else {
           this.colsize = 3;
         }
+      });
+
+      this.perfilService.perfil$.subscribe(perfil => {
+        this.perfil = perfil;
+        // Lógica para mostrar/ocultar contenido basado en el perfil
       });
   }
 

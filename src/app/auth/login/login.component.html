@@ -1,3 +1,8 @@
+
+
+
+
+
 <div class="componente-inicio-sesion">
     <div class="contenido">
         <div class="iniciosesion">
@@ -8,7 +13,39 @@
                 </div>
             </div>
             <div class="contenidoiniciosesion">
-                <form class="containerUsuarioContrasenia">
+                <form [formGroup]="loginForm" class="containerUsuarioContrasenia">
+                    <span class="title-three-nrs">Inicio de sesión</span>
+                    <br>
+                    <span class="text-body-small-sb">
+                        Usuario <span matTooltip="Este campo es obligatorio" matTooltipPosition="above"
+                            class="campoTooltip" matTooltipClass="warn-tooltip-is" style="cursor: pointer;">*</span>
+                    </span>
+                    <mat-form-field class="rounded-form-field" appearance="outline">
+                        <input matInput placeholder="Ingrese su correo aquí" formControlName="correo" required>
+                        <mat-error *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
+                            El correo es obligatorio y debe ser válido.
+                        </mat-error>
+                    </mat-form-field>
+                    <br>
+                    <span class="text-body-small-sb">
+                        Contraseña <span matTooltip="Este campo es obligatorio" matTooltipPosition="above"
+                            class="campoTooltip" matTooltipClass="warn-tooltip-is" style="cursor: pointer;">*</span>
+                    </span>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Ingrese su contraseña aquí" formControlName="contrasenia" required>
+                        <mat-error *ngIf="loginForm.get('contrasenia')?.invalid && loginForm.get('contrasenia')?.touched">
+                            La contraseña es obligatoria.
+                        </mat-error>
+                    </mat-form-field>
+                    <br>
+                    <button mat-raised-button color="primary" class="rounded-button-total" type="submit" [disabled]="loginForm.invalid">
+                        Iniciar Sesión
+                    </button>
+                    <button class="w-100 btn btn-lg btn-google" (click)="login()">
+                        <img src="https://img.icons8.com/color/22/000000/google-logo.png"> Ingresa con Google
+                    </button>
+                </form>
+                <!--<form class="containerUsuarioContrasenia">
                     <span class="title-three-nrs">Inicio de sesión</span>
                     <br>
                     <span class="text-body-small-sb">
@@ -26,10 +63,7 @@
                     </span>
                     <mat-form-field appearance="outline">
                         <input matInput placeholder="Ingrese su contraseña aquí" formControlName="contrasenia" required>
-                        <!--<button mat-icon-button matSuffix type="button" (click)="ocultar = !ocultar"
-                            [attr.aria-label]="'Ocultar contraseña'" [attr.aria-pressed]="ocultar">
-                            <mat-icon>{{ocultar ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>-->
+                       
                         <mat-error class="text-body-extra-small-r" *ngIf="validadorContrasenia.invalid">
                         </mat-error>
                     </mat-form-field>
@@ -40,7 +74,7 @@
                     <button class="w-100  btn btn-lg btn-google" (click)="login()">
                         <img src="https://img.icons8.com/color/22/000000/google-logo.png"> Ingresa con google
                     </button>
-                </form>
+                </form>-->
             </div>
         </div>
         <div class="imagen"></div>

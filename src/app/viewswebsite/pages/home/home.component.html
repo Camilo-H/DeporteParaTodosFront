@@ -3,28 +3,35 @@
     <div class="text-home col-lg-10 shadow p-3 mb-5 bg-white rounded">
         <h1 class="title-one">Deporte para todos</h1>
         <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the
-            1500s, when an unknown printer took a galley of type and scrambled it to
-            make a type specimen book. It has survived not only five centuries, but
-            also the leap into electronic typesetting, remaining essentially
-            unchanged. It was popularised in the 1960s with the release of Letraset
-            sheets containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.
+            En la División de la Gestión de la Recreación y el Deporte se busca
+            fortalecer la formación integral y el bienestar de todas aquellas personas
+            que hacen parte de la comunidad universitaria mediante procesos y
+            manifestaciones lúdicas, motrices y deportivas que complementen el
+            desarrollo integral, que se implementan como procesos contribuyentes a la
+            formación profesional para satisfacer sus necesidades e intereses de los
+            sujetos vinculados, promoviendo la cultura de la práctica deportiva y el
+            uso constructivo del tiempo libre.
         </p>
     </div>
 </div>
 <div style="width: 80%; margin: 0 auto">
-    <mat-grid-list [cols]="colsize" rowHeight="330">
+    <mat-grid-list [cols]="colsize" rowHeight="355">
         <mat-grid-tile *ngFor="let item of listaEscenarios" [colspan]="1" [rowspan]="1" [style.background]="">
-
             <mat-card class="mycard shadow">
-                <img mat-card-image src="./assets/imagesSystem/deporte.jpg" 
-                    (click)="abrirCursosDeportivos(item.titulo)" />
+
+                <div class="img-container" (click)="abrirCursosDeportivos(item.titulo)">
+                    <img *ngIf="!!item.imagenBase64; else imagenPorDefecto"
+                        [src]="'data:' + item.tipoArchivo + ';base64,' + item.imagenBase64" mat-card-image
+                        alt="Imagen de categoría" />
+
+                    <ng-template #imagenPorDefecto>
+                        <img src="assets/imagesSystem/deporte.jpg" mat-card-image alt="Imagen por defecto" />
+                    </ng-template>
+                </div>
+
                 <mat-card-content class="contenido">
                     <!--Menu de configuracion en tarjeta-->
-                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="perfil === 'Administrador'">
                         <mat-icon>settings</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
@@ -38,7 +45,7 @@
                             <span>Eliminar</span>
                         </button>
                     </mat-menu>
-                    <mat-card-title class="card_title title-three-nrs">{{item.titulo}}
+                    <mat-card-title class="card_title title-three-nrs">{{ item.titulo }}
                     </mat-card-title>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-primary" (click)="verInformacion(item)"
@@ -50,8 +57,10 @@
             </mat-card>
         </mat-grid-tile>
     </mat-grid-list>
-    <div class="container d-flex justify-content-center">
-        <button class="btnAgregar" (click)="nuevaCategoria()">Nueva categoría curso +</button>
+    <div class="container d-flex justify-content-center" *ngIf="perfil === 'Administrador'">
+        <button class="btnAgregar" (click)="nuevaCategoria()">
+            Nueva categoría curso +
+        </button>
     </div>
 </div>
 

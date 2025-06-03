@@ -1,7 +1,8 @@
 export interface ImagenDTO {
-  id: number;
+  id: number | null;
   nombre: string;
   tipoArchivo: string;
   longitud: number;
-  datos: Uint8Array;
+  datosMultipartFile?: File;
+  datosBase64: string;
 }

@@ -7,7 +7,8 @@
 }
 img,
 p {
-  cursor: pointer;
+  text-align: center;
+  margin: 0px;
 }
 .card_title {
   display: flex;

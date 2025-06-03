@@ -12,12 +12,12 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 d-flex justify-content-center">
+            <div class="col-lg-4 d-flex justify-content-center" *ngIf=" perfil === 'Administrador'" >
                 <button class="btnAgregar" (click)="registroDeporte()">
                     Agregar curso +
                 </button>
             </div>
-            <div class="col-lg-4 d-flex justify-content-center">
+            <div class="col-lg-4 d-flex justify-content-center"  *ngIf=" perfil === 'Administrador'" >
                 <button type="button" class="btn btn-light border"
                     (click)="configurarInscripcion()">Inscripciones</button>
             </div>
@@ -31,13 +31,13 @@
     <div style="width: 70%; margin: 0 auto">
         <mat-grid-list [cols]="colsize" rowHeight="360" gutterSize="20px"><!--gutterSize="20px"-->
       
-            <mat-grid-tile *ngFor="let item of categoria?.cursos" [colspan]="1" [rowspan]="1" [style.background]="" > 
+            <mat-grid-tile *ngFor="let item of categoria?.descripcion" [colspan]="1" [rowspan]="1" [style.background]="" > 
                 <mat-card class="mycard shadow">
                     <img mat-card-image src="./assets/imagesSystem/deporte.jpg" alt=""
-                        (click)="gruposCurso(item.nombre)" />
+                        (click)="gruposCurso(item)" />
                     <mat-card-content class="contenido">
-
-                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                        
+                        <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="perfil === 'Administrador'" >
                             <mat-icon>settings</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
@@ -50,13 +50,13 @@
                                 <span>Eliminar</span>
                             </button>
                         </mat-menu>
-                        <mat-card-title class="card_title title-three-nrs">{{item.nombre}}</mat-card-title>
+                        <mat-card-title class="card_title title-three-nrs">{{item}}</mat-card-title>
 
                         <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-primary" (click)="verInformacion(item)"
+                            <!--<button type="button" class="btn btn-primary" (click)="verInformacion()" PARA MOSTRAR INFORMACIÓN DEL CURSO DE UNA CATEGORÍA
                                 style="border: none; background-color: transparent; color: black">
                                 Ver información
-                            </button>
+                            </button>-->
                         </div>
 
                     </mat-card-content>

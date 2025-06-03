@@ -98,39 +98,52 @@ button {
 
 .btnGuardar {
   display: flex;
-  justify-content:end; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 90px; /* Altura del contenedor */
+  justify-content: end;
+  align-items: center;
+  height: 90px;
 }
 
 .btnGuardar button {
-  width: 100px; /* Ancho personalizado */
-  height: 40px; /* Altura personalizada */
-  background-color: #000066 !important; /* Fondo azul */
-  color: rgb(251, 251, 252) !important; /* Texto blanco */
-  border-radius: 20px !important; /* Bordes redondeados */
-  border: none; /* Sin borde */
-  text-align: center; /* Alineación del texto */
-  font-size: 16px; /* Tamaño del texto */
-  font-weight: bold; /* Texto en negrita */
-  cursor: pointer; /* Cambia el cursor a "puntero" */
+  width: 100px;
+  height: 40px;
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  border-radius: 20px !important;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .btnGuardar button:disabled {
-  background-color: #cccccc !important; /* Fondo gris deshabilitado */
-  color: #666666 !important; /* Texto gris deshabilitado */
-  cursor: not-allowed; /* Cambia el cursor cuando está deshabilitado */
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed;
 }
 
 .no-border {
-  background: none; /* Sin fondo */
-  box-shadow: none; /* Sin sombra */
-  border: none; /* Sin borde */
-  padding: 0; /* Elimina cualquier espacio extra */
-  min-width: 0; /* Elimina el ancho mínimo que Angular Material aplica a botones */
+  background: none;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  min-width: 0;
 }
 
 .no-border mat-icon {
-  color: inherit; /* Usa el color actual del texto (o ajusta el color si es necesario) */
-  font-size: 24px; /* Asegúrate de que el ícono mantenga un buen tamaño */
+  color: inherit;
+  font-size: 24px;
+}
+
+.btnNotificacion{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+  background-color: #000066 !important;
+  color: rgb(251, 251, 252) !important;
+  width: 130px;
+  height: 40px;
+  border-radius: 20px !important;
+  font-size: 16px;
 }

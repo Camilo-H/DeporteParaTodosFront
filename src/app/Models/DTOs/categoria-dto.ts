@@ -4,7 +4,8 @@ import { ImagenDTO } from "./imagen-dto";
 export interface CategoriaDTO {
     titulo: string;
     descripcion: string;
-    rutaImagen?: string;
-    imagen?: ImagenDTO | null;
-    cursos: CursoDTO [];
+    imagenId?: number | null;
+    eliminado?: number | null;
+    imagenBase64?: string | null;
+    tipoArchivo?: string | null;
 }

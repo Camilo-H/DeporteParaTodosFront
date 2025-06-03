@@ -1,0 +1,53 @@
+.notificaciones-modal {
+    width: 100%;
+    max-width: 600px; /* Limita el ancho máximo del modal */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.notificaciones-modal h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.notificaciones-modal mat-dialog-content {
+    max-height: 70vh; /* Limita la altura máxima del contenido */
+    overflow-y: auto; /* Añade scroll si el contenido es muy largo */
+}
+
+.notificaciones-modal h3 {
+    font-size: 20px;
+    margin: 10px 0;
+    color: #3f51b5; /* Color del texto */
+}
+
+.notificaciones-modal p {
+    font-size: 16px;
+    margin: 5px 0 15px 0;
+    color: #555; /* Color del texto */
+}
+
+.notificaciones-modal mat-divider {
+    margin: 15px 0;
+}
+
+.notificaciones-modal mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 0 0;
+}
+
+.notificaciones-modal button {
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #3f51b5; /* Color del botón */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.notificaciones-modal button:hover {
+    background-color: #303f9f; /* Color del botón al pasar el mouse */
+}

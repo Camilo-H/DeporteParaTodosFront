@@ -32,21 +32,7 @@ mat-dialog-content {
   justify-content: flex-start;
 }
 
-.preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  width: 100%;
-}
 
-.image-preview {
-  max-width: 80%; /* Limita el tamaño máximo de la imagen */
-  max-height: 40vh;
-  object-fit: contain;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
 
 
 /* Diseño responsivo */

@@ -14,6 +14,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { ImagenService } from 'src/app/services/imagen.service';
 
 @Component({
   selector: 'app-nuevo-curso-categoria',
@@ -40,95 +41,89 @@ export class NuevoCursoCategoriaComponent implements OnInit {
   categoria: CategoriaDTO = {
     titulo: '',
     descripcion: '',
-    rutaImagen: '',
-    imagen: null,
-    cursos: [],
+    imagenId: null,
   };
 
   constructor(
     private categoriaService: CategoriaService,
+    private imagenService: ImagenService,
     private route: ActivatedRoute,
     private router: Router,
     private dialogRef: MatDialogRef<NuevoCursoCategoriaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { titulo: string }
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // const titulo = this.route.snapshot.paramMap.get('titulo');
-    console.log('este es el titulo', this.data.titulo);
     if (this.data && this.data.titulo) {
       this.isEditing = true;
       this.loadCategoria(this.data.titulo);
     }
   }
 
-  /*loadCategoria(titulo: string): void {
-    this.categoriaService.getCategoria(titulo).subscribe(
-      (categoria) => {
-        this.categoria = categoria;
-      },
-      (error) => console.error('Error al cargar la categoría', error)
-    );
-  }*/
-
   loadCategoria(titulo: string): void {
     this.categoriaService.getCategoria(titulo).subscribe(
       (categoria) => {
         this.categoria = categoria;
+        if (categoria.imagenId != null) {
+          this.imagenService.getimagen(categoria.imagenId).subscribe(
+            (imagenData) => {
+              categoria.imagenBase64 = imagenData.datosBase64;
+              categoria.tipoArchivo = imagenData.tipoArchivo;
+              this.imagenPreview = `data:${categoria.tipoArchivo};base64,${categoria.imagenBase64}`;
+            },
+            (error) => {
+              console.error(`Error al obtener la imagen de la categoría  ${categoria.titulo}`, error);
+            }
+          )
+        }
       },
       (error) => console.error('Error al cargar la categoría', error)
     );
   }
 
-  /*onSubmit(form: NgForm): void {
-    if (this.isEditing) {
-      this.categoriaService
-        .updateCategoria(this.categoria.titulo, this.categoria)
-        .subscribe(
-          () => {
-            console.log('Categoría actualizada exitosamente');
-            this.router.navigate(['/categorias']);
-          },
-          (error) => console.error('Error al actualizar la categoría', error)
-        );
-      this.dialogRef.close(true);
-    } else {
-      this.categoriaService.createCategoria(this.categoria).subscribe(
-        () => {
-          console.log('Categoría creada exitosamente');
-          this.router.navigate(['/categorias']);
-        },
-        (error) => console.error('Error al crear la categoría', error)
-      );
-      this.dialogRef.close(true);
-    }
-  }*/
-
   onSubmit(form: NgForm): void {
     // Crear una copia del objeto categoría sin la propiedad imagen
-    const categoriaSinImagen = { ...this.categoria };
-    delete categoriaSinImagen.imagen;
+    if (this.selectedFile) {
+      this.imagenService.postImagen(this.selectedFile).subscribe(
+        (imagenResponse) => {
+          const idImagen = imagenResponse.id;
 
-    if (this.isEditing) {
-      this.categoriaService
-        .updateCategoria(this.categoria.titulo, categoriaSinImagen)
-        .subscribe(
-          () => {
-            console.log('Categoría actualizada exitosamente');
-            this.router.navigate(['/categorias']);
-          },
-          (error) => console.error('Error al actualizar la categoría', error)
-        );
-      this.dialogRef.close(true);
-    } else {
-      this.categoriaService.createCategoria(categoriaSinImagen).subscribe(
-        () => {
-          console.log('Categoría creada exitosamente');
-          this.router.navigate(['/categorias']);
+          const nuevaCategoria: CategoriaDTO = {
+            titulo: this.categoria.titulo,
+            descripcion: this.categoria.descripcion,
+            imagenId: idImagen
+          };
+
+          this.categoriaService.createCategoria(nuevaCategoria).subscribe(
+            (response) => {
+              console.log('Categoría creada con éxito', response);
+              this.dialogRef.close(true);
+            },
+            (error) => {
+              console.error('Error al crear la categoría', error);
+            }
+          );
         },
-        (error) => console.error('Error al crear la categoría', error)
+        (error) => {
+          console.error('Error al subir la imagen', error);
+        }
       );
-      this.dialogRef.close(true);
+    } else {
+      const nuevaCategoria: CategoriaDTO = {
+        titulo: this.categoria.titulo,
+        descripcion: this.categoria.descripcion,
+        imagenId: null
+      };
+      this.categoriaService.createCategoria(nuevaCategoria).subscribe(
+        (response) => {
+          console.log('Categoría creada con éxito', response);
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          console.error('Error al crear la categoría', error);
+        }
+      );
     }
   }
 
@@ -137,6 +132,7 @@ export class NuevoCursoCategoriaComponent implements OnInit {
 
     if (input.files && input.files[0]) {
       this.imagenSeleccionada = input.files[0];
+      this.selectedFile = input.files[0];
 
       // Crear una URL para la vista previa de la imagen
       const reader = new FileReader();

@@ -14,11 +14,13 @@ export class AuthService {
     const config: AuthConfig = {
       issuer: 'https://accounts.google.com',
       strictDiscoveryDocumentValidation: false,
-      clientId: '470163560091-l5ealrlq43mppc3q3slicb59qkda3te9.apps.googleusercontent.com',
-      redirectUri: window.location.origin + '/home',
+      clientId: '31695746487-jc39l5fo0m52oqo0fpt7ctpgjct9f0fn.apps.googleusercontent.com',
+      redirectUri: 'http://localhost:4200/home',
+      //redirectUri: window.location.origin + '/home',
       scope: 'openid profile email',
+      
     }
-
+    
     this.oauthService.configure(config);
     this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
@@ -26,6 +28,10 @@ export class AuthService {
 
   login() {
     this.oauthService.initLoginFlow();
+    console.log("En el servicio")
+    //this.oauthService.initImplicitFlow();
+    console.log("Pasó")
+    //window.location.href = this.oauthService.authorizationUrl!;
   }
 
   logout() {

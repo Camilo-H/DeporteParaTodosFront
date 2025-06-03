@@ -12,19 +12,24 @@
           <mat-icon>home</mat-icon>
           <span class="text-body-small-r opcion-espaciado-p">Home</span>
         </a>
-        <a mat-list-item (click)="redirectionTo('lista-instructores')" class="nav-item">
+        <a mat-list-item (click)="redirectionTo('lista-instructores')" class="nav-item" *ngIf="perfil === 'Administrador'" >
           <mat-icon>person</mat-icon>
           <span class="text-body-small-r opcion-espaciado-p">Instructores</span>
         </a>
      
-        <a mat-list-item (click)="redirectionTo('reportes')" class="nav-item">
+        <a mat-list-item (click)="redirectionTo('reportes')" class="nav-item" *ngIf="perfil === 'Administrador'" >
           <mat-icon>tune</mat-icon>
           <span class="text-body-small-r opcion-espaciado-p">Reportes</span>
         </a>
-        <a mat-list-item (click)="redirectionTo('info-instructor')" class="nav-item">
+        <a mat-list-item (click)="redirectionTo('info-instructor')" class="nav-item" *ngIf="perfil !== 'Estudiante'">
           <mat-icon>person</mat-icon>
           <span class="text-body-small-r opcion-espaciado-p">Mi información</span>
         </a>
+        <a mat-list-item (click)="redirectionTo('info-estudiante')" class="nav-item" *ngIf="perfil === 'Estudiante'" >
+          <mat-icon>person</mat-icon>
+          <span class="text-body-small-r opcion-espaciado-p">Mi información</span>
+        </a>
+        
       </mat-nav-list>
       </div>
     </div>
@@ -44,11 +49,11 @@
       </div>
       <div class="navbar-right">
         <ul>
-          <li><a (click)="redirectionTo('info-instructor')">Inicio</a></li>
-          <li><a (click)="redirectionTo ('listaCursos')">Noticias</a></li>
-          <li><a (click)="redirectionTo ('menu')">Nosotros</a></li>
-          <li><a (click)="redirectionTo('nuevoCursoCategoria')">Contáctanos </a></li>
-          <li><a (click)="redirectionTo('login')"> Cerrar Sesión
+          <li><a (click)="redirectionTo('')">Inicio</a></li>
+          <li><a (click)="redirectionTo ('')">Noticias</a></li>
+          <li><a (click)="redirectionTo ('https://vicecultura.unicauca.edu.co/viceculturav2/divisiones/deporte/deportiva')">Nosotros</a></li>
+          <li><a (click)="redirectionTo('https://vicecultura.unicauca.edu.co/viceculturav2/divisiones/deporte/deportiva')">Contáctanos </a></li>
+          <li><a (click)="redirectionTo('')"> Cerrar Sesión
               <!--<mat-icon>login</mat-icon>  Icono de inicio de sesión --> </a></li>
         </ul>
       </div>

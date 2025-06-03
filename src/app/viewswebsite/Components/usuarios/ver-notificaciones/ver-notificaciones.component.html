@@ -1,0 +1,15 @@
+
+
+<div class="notificaciones-modal">
+    <h2 mat-dialog-title>Notificaciones</h2>
+    <mat-dialog-content>
+      <div *ngFor="let notificacion of alertas"><!---->
+        <h3>{{ notificacion.asunto }}</h3>
+        <p>{{ notificacion.descripcion }}</p>
+        <mat-divider></mat-divider>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button  class="cancelar" (click)="onClose()">Cerrar</button>
+    </mat-dialog-actions>
+  </div>

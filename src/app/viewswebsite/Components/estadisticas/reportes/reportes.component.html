@@ -1,7 +1,7 @@
 <app-sidenav>
     <div class="report-container">
         <div class="data-visualization">
-            <h3>Información de modalidad</h3>
+            <h2>Tus reportes</h2>
             <table class="data-table" *ngIf="showTable">
                 <thead>
                     <tr>
@@ -24,11 +24,16 @@
                 </tbody>
             </table>
             <div *ngIf="!showTable" class="chart-container">
-                <ngx-charts-bar-vertical [results]="chartData" [xAxis]="true" [yAxis]="true" [legend]="true"
-                    [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="'Nombre'" [yAxisLabel]="'Atenciones'">
-                </ngx-charts-bar-vertical>
-
-
+                <div class="chart">
+                    <ngx-charts-bar-vertical [results]="filteredChartData" [xAxis]="true" [yAxis]="true" [legend]="true" [legendTitle]="'Estudiante'"
+                        [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="'Estudiante'" [yAxisLabel]="'Atenciones'"
+                        [animations]="false">
+                    </ngx-charts-bar-vertical>
+                </div>
+                <div class="chart">
+                    <ngx-charts-pie-chart [results]="filteredChartData" [legend]="true" [labels]="true" [animations]="false" [legendTitle]="'Estudiante'">
+                    </ngx-charts-pie-chart>
+                </div>
             </div>
             <div class="actions">
                 <button class="btn" (click)="toggleView('table')">Tabla de datos</button>
@@ -62,7 +67,8 @@
                 <input type="text" id="instructor" [(ngModel)]="selectedInstructor" />
             </div>
             <div class="contenedor">
-                <button class="btngenerar">Generar</button>
+                <button class="btngenerar" (click)="applyFilters()">Generar</button>
+                <button class="btngenerar" (click)="limpiarFiltros()">Limpiar</button>
             </div>
         </div>
     </div>

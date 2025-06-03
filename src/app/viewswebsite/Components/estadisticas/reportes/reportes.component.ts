@@ -14,7 +14,7 @@ import { SidenavComponent } from "../../../pages/sidenav/sidenav.component";
     NgxChartsModule,
     //BrowserAnimationsModule,
     SidenavComponent
-],
+  ],
   templateUrl: './reportes.component.html',
   styleUrls: ['./reportes.component.css'],
 })
@@ -32,14 +32,15 @@ export class ReportesComponent {
     // Otros datos...
   ];
 
-  
+
 
   chartData = this.reportData.map((item) => ({
     name: item.nombre,
     value: item.atenciones,
   }));
 
- 
+  filteredReportData = [...this.reportData];
+  filteredChartData = [...this.chartData];
 
 
   students = ['Camilo Anacona', 'Fabian Lasso', 'Kelvin Chilito'];
@@ -55,8 +56,33 @@ export class ReportesComponent {
   }
 
   getTotal(key: 'atenciones' | 'horas'): number {
-    return this.reportData.reduce((sum, item) => sum + item[key], 0);
+    return this.filteredReportData.reduce((sum, item) => sum + item[key], 0);
   }
+
+
+  applyFilters() {
+    this.filteredReportData = this.reportData.filter((item) => {
+      const byStudent = this.selectedStudent
+        ? item.nombre === this.selectedStudent
+        : true;
+      const byInstructor = this.selectedInstructor
+        ? item.nombre.toLowerCase().includes(this.selectedInstructor.toLowerCase())
+        : true;
+      // Puedes agregar lógica para sports y faculties si son aplicables
+
+      return byStudent && byInstructor;
+    });
+
+    this.filteredChartData = this.filteredReportData.map((item) => ({
+      name: item.nombre,
+      value: item.atenciones,
+    }));
+  }
+
+  limpiarFiltros(){
+this.filteredChartData;
+  }
+
   downloadData() {
     // Lógica para descargar datos en CSV o Excel
     console.log('Descargando datos...');

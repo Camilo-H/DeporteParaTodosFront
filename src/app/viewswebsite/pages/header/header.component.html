@@ -7,13 +7,22 @@
   </div>
   <div class="navbar-right">
       <ul>
-          <li><a (click)="redirectionTo('info-instructor')">Inicio</a></li>
-          <li><a (click)="redirectionTo ('cursos_deportivos')">Noticias</a></li>
-          <li><a (click)="redirectionTo ('menu')">Nosotros</a></li>
-          <li><a (click)="redirectionTo('nuevoCursoCategoria')">Contáctanos </a></li>
-          <li><a  (click)="redirectionTo('formulario')">Formulario</a></li>
+          <li><a (click)="redirectionTo('')">Inicio</a></li>
+          <li><a (click)="redirectionTo ('')">Noticias</a></li>
+          <li><a (click)="redirectionTo ('https://vicecultura.unicauca.edu.co/viceculturav2/divisiones/deporte/deportiva')">Nosotros</a></li>
+          <li><a (click)="redirectionTo('https://vicecultura.unicauca.edu.co/viceculturav2/divisiones/deporte/deportiva')">Contáctanos </a></li>
           <li><a  (click)="redirectionTo('login')"> Iniciar Sesión
             <!--<mat-icon>login</mat-icon>  Icono de inicio de sesión --> </a></li>
+            <li>
+              <mat-form-field appearance="outline">
+                <mat-label>Perfil</mat-label>
+                <mat-select [(value)]="selectedProfile" (selectionChange)="onProfileChange($event.value)">
+                  <mat-option value="Administrador">Administrador</mat-option>
+                  <mat-option value="Instructor">Instructor</mat-option>
+                  <mat-option value="Estudiante">Estudiante</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </li>
       </ul>
   </div>
 </nav>

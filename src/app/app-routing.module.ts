@@ -14,8 +14,10 @@ import { InformacinInstructorComponent } from './viewswebsite/Components/usuario
 import { InformacionCursoComponent } from './viewswebsite/Components/cursos/informacion-curso/informacion-curso.component';
 import { ListaInstructoresComponent } from './viewswebsite/Components/usuarios/lista-instructores/lista-instructores.component';
 import { ReportesComponent } from './viewswebsite/Components/estadisticas/reportes/reportes.component';
-import { ListaCursosComponent } from './viewswebsite/Components/cursos/lista-cursos/lista-cursos.component';
+//import { ListaCursosComponent } from './viewswebsite/Components/cursos/lista-cursos/lista-cursos.component';
 import { RegistroInstructorComponent } from './viewswebsite/Components/usuarios/registro-instructor/registro-instructor.component';
+import { InformacionEstudianteComponent } from './viewswebsite/Components/usuarios/informacion-estudiante/informacion-estudiante.component';
+import { FormAlertaComponent } from './viewswebsite/Components/usuarios/form-alerta/form-alerta.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'home',pathMatch:'full'},
@@ -33,8 +35,11 @@ const routes: Routes = [
   {path: 'info-curso', component: InformacionCursoComponent},
   {path: 'lista-instructores', component: ListaInstructoresComponent},
   {path: 'reportes', component:ReportesComponent},
-  {path: 'listaCursos', component:ListaCursosComponent},
-  {path: 'inscripcionInstructor', component: RegistroInstructorComponent}
+  //{path: 'listaCursos', component:ListaCursosComponent},
+  {path: 'inscripcionInstructor', component: RegistroInstructorComponent},
+  {path: 'info-estudiante', component: InformacionEstudianteComponent},
+  {path: 'notificacion', component: FormAlertaComponent},
+
 ];
 
 @NgModule({
