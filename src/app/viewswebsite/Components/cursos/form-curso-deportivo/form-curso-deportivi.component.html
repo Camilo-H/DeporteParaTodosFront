@@ -4,37 +4,41 @@
 
 <mat-dialog-content class="dialog-content">
   <header class="title-two">{{ isEditing ? 'Editar curso' : 'Registrar curso' }}</header>
-  <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm" class="form-content">
-    <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Nombre</mat-label>
-      <input matInput placeholder="Nombre">
-    </mat-form-field>
+  <form (ngSubmit)="onSubmit(cursoForm)" #cursoForm="ngForm" class="form-content">
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Descripción</mat-label>
-      <input matInput placeholder="Descripción" name="descripcion">
+      <mat-label>Nombre</mat-label>
+      <input matInput [disabled]="isEditing" placeholder="Nombre" [(ngModel)]="curso.nombre" name ="nombre" required>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Deporte</mat-label>
-      <mat-select>
-        <mat-option value="futbol">Fútbol 11</mat-option>
-        <mat-option value="sala">Fútbol sala</mat-option>
-        <mat-option value="Voleibol">Voleibol</mat-option>
-      </mat-select>
+      <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="curso.deporte" name="deporte" required="este campo es requerido"
+        (ngModelChange)="filtrarDeportes($event)" />
+
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let d of deporteFiltrado" [value]="d.nombre">
+          {{ d.nombre }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Descripción</mat-label>
+      <input matInput placeholder="Descripción" name="descripcion" [(ngModel)]="curso.descripcion" required>
     </mat-form-field>
 
     <div class="form-field buttonImage">
-      <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" />
-
+      <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" required />
       <div *ngIf="imagenPreview" class="preview">
         <img [src]="imagenPreview" alt="Vista previa" class="image-preview">
       </div>
     </div>
+    
+    <div class="form-buttons">
+      <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button class="aceptar" type="submit" [disabled]="!cursoForm.form.valid">Aceptar</button>
+      <!--<button mat-raised-button class="aceptar" type="submit">Aceptar</button>-->
+    </div>
   </form>
 </mat-dialog-content>
-
-<mat-card-actions class="form-buttons">
-  <button mat-raised-button class="aceptar">Aceptar</button>
-  <button mat-raised-button class="cancelar" matDialogClose>Cancelar</button>
-</mat-card-actions>

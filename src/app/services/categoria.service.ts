@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError, BehaviorSubject } from 'rxjs';
 import { CategoriaDTO } from '../Models/DTOs/categoria-dto';
 
 @Injectable({
@@ -10,6 +10,13 @@ export class CategoriaService {
   private apiUrl = 'http://127.0.0.1:8082/api/v2';
 
   constructor(private http: HttpClient) { }
+
+  private categoria = new BehaviorSubject<string>('');
+  varCategoria = this.categoria.asObservable();
+
+  serCategoria(titulo: string): void {
+    this.categoria.next(titulo);
+  }
 
   // Método para obtener la lista de categorías
   getCategorias(): Observable<CategoriaDTO[]> {
@@ -41,7 +48,7 @@ export class CategoriaService {
   }
 
   // Método para actualizar una categoría existente
-  updateCategoria(titulo: string,categoria: CategoriaDTO): Observable<CategoriaDTO> {
+  updateCategoria(titulo: string, categoria: CategoriaDTO): Observable<CategoriaDTO> {
     return this.http.put<CategoriaDTO>(`${this.apiUrl}/categoria?titulo=${titulo}`, categoria)
       .pipe(
         catchError((error) => {
@@ -56,7 +63,7 @@ export class CategoriaService {
 
   // Método para eliminar una categoría
   deleteCategoria(titulo: string): Observable<number> {
-    return this.http.delete<number>(`${this.apiUrl}/categoria?titulo=${titulo}`).pipe(
+    return this.http.delete<number>(`${this.apiUrl}/categoria?titulo=${encodeURIComponent(titulo)}`).pipe(
       catchError((error) => {
         console.error('Se produjo un error al eliminar el elemento ', titulo);
         return throwError(error);

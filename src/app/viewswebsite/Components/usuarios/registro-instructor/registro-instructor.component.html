@@ -1,9 +1,44 @@
-<div class="form-container">
+<button mat-icon-button class="close-button" matDialogClose style="float: right;">
+  <mat-icon>close</mat-icon>
+</button>
+
+<mat-dialog-content class="dialog-content">
+  <header class="title-two">{{ isEditing ? 'Editar Instructor' : 'Registrar Instructor' }}</header>
+  <form (ngSubmit)="onSubmit(cursoForm)" #cursoForm="ngForm" class="form-content">
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Nombre</mat-label>
+      <input matInput [disabled]="isEditing" placeholder="Nombre" [(ngModel)]="instructor.nombre" name ="nombre" required>
+    </mat-form-field>
+
+    <!-- <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Deporte</mat-label>
+      <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="curso.deporte" name="deporte" required="este campo es requerido"
+        (ngModelChange)="filtrarDeportes($event)" />
+
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let d of deporteFiltrado" [value]="d.nombre">
+          {{ d.nombre }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field> -->
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Correo</mat-label>
+      <input matInput placeholder="Combre" name="correo" [(ngModel)]="instructor.correo" required>
+    </mat-form-field>
+
+    
+    <div class="form-buttons">
+      <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button class="aceptar" type="submit" [disabled]="!cursoForm.form.valid">Aceptar</button>
+      <!--<button mat-raised-button class="aceptar" type="submit">Aceptar</button>-->
+    </div>
+  </form>
+</mat-dialog-content>
+
+<!-- <div class="form-container">
   <mat-card>
-    <!--
-    <button mat-icon-button class="close-button" aria-label="Cerrar">
-      <mat-icon>close</mat-icon>
-    </button>-->
     <mat-card-title class="form-title">Inscripción</mat-card-title>
     <form>
       <mat-form-field appearance="outline" class="form-field">
@@ -50,4 +85,4 @@
       <button mat-raised-button class="cancelar" >Cancelar</button>
     </div>
   </mat-card>
-</div>
+</div> -->

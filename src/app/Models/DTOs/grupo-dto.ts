@@ -1,14 +1,16 @@
-import { CursoDTO } from './curso-dto';
-import { ImagenDTO } from './imagen-dto';
-
 export interface GrupoDTO {
-  nombre: string;
-  anio: number;
-  iterable: number;
-  curso: CursoDTO;
-  imagen: ImagenDTO;
+  categoria: string;
+  curso: string;
+  anio: number | null;
+  iterable: number | null;
+  imagenGrupo?: number | null;
+  idInstructor?: string | null;
+  nombreInstructor?: string | null;
   cupos: number;
-  estado: string;
-  fechaCreacion: Date;
-  fechaFinalizacion: Date;
+  fechaCreacion: string | null;
+  fechaFinalizacion?: string | null;
+  fechaInscripcionApertura?: string | null;
+  fechaIncripcionCierre?: string | null;
+  imagenBase64?: string | null;
+  tipoArchivo?: string | null;
 }

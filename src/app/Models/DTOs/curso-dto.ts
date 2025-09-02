@@ -1,18 +1,18 @@
-import { CategoriaDTO } from './categoria-dto';
-import { DeporteDTO } from './deporte-dto';
-import { GrupoDTO } from './grupo-dto';
-import { ImagenDTO } from './imagen-dto';
 
 export interface CursoDTO {
   nombre: string;
 
-  deporte: DeporteDTO;
+  deporte: string;
 
-  categoria: CategoriaDTO;
+  categoriaCurso: string;
 
   descripcion: string;
 
-  imagen: ImagenDTO;
+  idImagen?: number | null;
 
-  grupos: GrupoDTO[];
+  eliminado?: number | null;
+
+  imagenBase64?: string | null;
+
+  tipoArchivo?: string | null;
 }

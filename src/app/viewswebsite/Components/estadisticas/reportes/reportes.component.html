@@ -1,75 +1,92 @@
 <app-sidenav>
-    <div class="report-container">
-        <div class="data-visualization">
-            <h2>Tus reportes</h2>
-            <table class="data-table" *ngIf="showTable">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Atenciones</th>
-                        <th>Horas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of reportData">
-                        <td>{{ item.nombre }}</td>
-                        <td>{{ item.atenciones }}</td>
-                        <td>{{ item.horas }}</td>
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td>{{ getTotal('atenciones') }}</td>
-                        <td>{{ getTotal('horas') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div *ngIf="!showTable" class="chart-container">
-                <div class="chart">
-                    <ngx-charts-bar-vertical [results]="filteredChartData" [xAxis]="true" [yAxis]="true" [legend]="true" [legendTitle]="'Estudiante'"
-                        [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisLabel]="'Estudiante'" [yAxisLabel]="'Atenciones'"
-                        [animations]="false">
-                    </ngx-charts-bar-vertical>
-                </div>
-                <div class="chart">
-                    <ngx-charts-pie-chart [results]="filteredChartData" [legend]="true" [labels]="true" [animations]="false" [legendTitle]="'Estudiante'">
-                    </ngx-charts-pie-chart>
-                </div>
-            </div>
-            <div class="actions">
-                <button class="btn" (click)="toggleView('table')">Tabla de datos</button>
-                <button class="btn" (click)="toggleView('chart')">Diagramas</button>
-                <button class="btn" (click)="downloadData()">Descargar datos</button>
-            </div>
-        </div>
+    <div class="report-layout">
+        <section class="report-content">
 
-        <div class="filters">
-            <h4>Genera tus reportes</h4>
-            <div class="filter">
-                <label for="student">Por estudiante</label>
-                <select id="student" [(ngModel)]="selectedStudent">
-                    <option *ngFor="let student of students" [value]="student">{{ student }}</option>
-                </select>
-            </div>
-            <div class="filter">
-                <label for="sport">Por curso deportivo</label>
-                <select id="sport" [(ngModel)]="selectedSport">
-                    <option *ngFor="let sport of sports" [value]="sport">{{ sport }}</option>
-                </select>
-            </div>
-            <div class="filter">
-                <label for="faculty">Facultades, programas y estamentos</label>
-                <select id="faculty" [(ngModel)]="selectedFaculty">
-                    <option *ngFor="let faculty of faculties" [value]="faculty">{{ faculty }}</option>
-                </select>
-            </div>
-            <div class="filter">
-                <label for="instructor">Por instructor</label>
-                <input type="text" id="instructor" [(ngModel)]="selectedInstructor" />
-            </div>
-            <div class="contenedor">
-                <button class="btngenerar" (click)="applyFilters()">Generar</button>
-                <button class="btngenerar" (click)="limpiarFiltros()">Limpiar</button>
-            </div>
-        </div>
+
+            <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="report-tabs">
+                <mat-tab label="Tabla">
+                    <div class="table-wrapper">
+                        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
+                            <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ col | titlecase }} </th>
+                                <td mat-cell *matCellDef="let row"> {{ row[col] }} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Gráfica">
+                    <div class="chart-wrapper">
+                        <ngx-charts-bar-vertical [results]="chartData" [xAxis]="true" [yAxis]="true" [legend]="false"
+                            [animations]="false">
+                        </ngx-charts-bar-vertical>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </section>
+
+        <aside class="filters-panel">
+            <form [formGroup]="filtros" class="filtros-form" (ngSubmit)="generarReporte()">
+                <h4 class="tituloFiltros">Genera tus reportes</h4>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Fecha inicio</mat-label>
+                    <input matInput [matDatepicker]="p1" formControlName="inicio" placeholder="Fecha inicio">
+                    <mat-datepicker-toggle matSuffix [for]="p1"></mat-datepicker-toggle>
+                    <mat-datepicker #p1></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Fecha fin</mat-label>
+                    <input matInput [matDatepicker]="p2" formControlName="fin" placeholder="Fecha fin">
+                    <mat-datepicker-toggle matSuffix [for]="p2"></mat-datepicker-toggle>
+                    <mat-datepicker #p2></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Categoría</mat-label>
+                    <mat-select formControlName="categoria">
+                        <mat-option *ngFor="let cat of categorias" [value]="cat.titulo">{{ cat.titulo }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Curso</mat-label>
+                    <mat-select formControlName="curso">
+                        <mat-option *ngFor="let c of cursos" [value]="c.nombre">{{ c.nombre }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Grupo</mat-label>
+                    <mat-select formControlName="grupo">
+                        <mat-option *ngFor="let g of grupos" [value]="g">
+                            {{ g.curso }}: {{ g.anio }}, {{ g.iterable }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Alumno</mat-label>
+                    <input matInput formControlName="alumno" placeholder="Id o nombre">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full">
+                    <mat-label>Instructor</mat-label>
+                    <input matInput formControlName="instructor" placeholder="Id o nombre">
+                </mat-form-field>
+
+                <div class="filtros-actions">
+                    <button mat-raised-button color="primary" type="submit"  class="cancelar"
+                        [disabled]="filtros.invalid">Generar</button>
+                    <button mat-stroked-button type="button"   class="cancelar" (click)="limpiarFiltros()">Limpiar</button>
+                </div>
+            </form>
+        </aside>
     </div>
 </app-sidenav>

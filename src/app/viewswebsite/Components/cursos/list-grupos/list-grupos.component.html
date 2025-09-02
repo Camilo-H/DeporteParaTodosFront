@@ -1,6 +1,6 @@
 <app-sidenav>
     <div class="cabecero">
-        <h1>Grupos de: {{ curso?.nombre }}</h1>
+        <h1>Grupos: {{ categoria }}, {{titulo}}</h1>
         <button class="btnAgregar" *ngIf="perfil === 'Administrador'" (click)="nuevoGrupo()">
             Nuevo Grupo +
         </button>
@@ -9,16 +9,26 @@
         <mat-grid-list [cols]="colsize" rowHeight="330">
             <mat-grid-tile *ngFor="let item of grupos" [colspan]="1" [rowspan]="1" [style.background]="">
                 <mat-card class="mycard shadow">
-                    <img mat-card-image src="./assets/imagesSystem/catDeportes.jpg"
-                        alt="" width="280" (click)="verEstudiantesGrupo('info-curso')" />
+
+                    <div class="img-container" (click)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)"> 
+                        <img *ngIf="!!item.imagenBase64; else imagenPorDefecto"
+                            [src]="'data:' + item.tipoArchivo + ';base64,' + item.imagenBase64" mat-card-image
+                            alt="Imagen de categoría" />
+
+                        <ng-template #imagenPorDefecto>
+                            <img class="img-container" src="./assets/imagesSystem/catDeportes.jpg" mat-card-image
+                                alt="Imagen por defecto" />
+                        </ng-template>
+                    </div>
+                    
                     <mat-card-content class="contenido">
                         <!-- Icono de configuración con el menú -->
 
-                        <button mat-icon-button [matMenuTriggerFor]="menu"  *ngIf="perfil === 'Administrador'">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="perfil === 'Administrador'">
                             <mat-icon>settings</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="onUpdate()">
+                            <button mat-menu-item (click)="onUpdate(item.anio!, item.iterable!)">
                                 <mat-icon>edit</mat-icon>
                                 <span>Actualizar</span>
                             </button>
@@ -29,15 +39,18 @@
                             </button>
                         </mat-menu>
 
-                        <mat-card-title class="card_title title-one">{{ item.nombre }}
+                        <mat-card-title class="card_title title-one">{{ item.anio}}-{{item.iterable}}
                         </mat-card-title>
+                        <p> Instructor: {{item.nombreInstructor}}</p>
                         <p>Lunes 09:00-11:00 Cancha 1</p>
                         <p>Viernes 09:00-11:00 Cancha 3</p>
-                        <div class="d-flex justify-content-center"  >
-                            <button class="btnInscripcion" *ngIf="perfil === 'Estudiante'" (click)="inscribirseAcurso()">
-                                {{ inscrito ? "" : "Inscribirme" }} 
+                        <div class="d-flex justify-content-center">
+                            <button class="btnInscripcion" *ngIf="perfil === 'Estudiante'"
+                                (click)="inscribirseAcurso()">
+                                {{ inscrito ? "" : "Inscribirme" }}
                             </button>
-                            <button class="btnInscripcion" *ngIf="perfil === 'Administrador'" (click)="inscribirseAcurso()">
+                            <button class="btnInscripcion" *ngIf="perfil === 'Administrador'"
+                                (click)="inscribirseAcurso()">
                                 Abrir inscripciones
                             </button>
                         </div>

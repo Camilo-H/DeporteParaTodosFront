@@ -1,8 +1,3 @@
-
-
-
-
-
 <div class="componente-inicio-sesion">
     <div class="contenido">
         <div class="iniciosesion">
@@ -33,48 +28,21 @@
                     </span>
                     <mat-form-field appearance="outline">
                         <input matInput placeholder="Ingrese su contraseña aquí" formControlName="contrasenia" required>
-                        <mat-error *ngIf="loginForm.get('contrasenia')?.invalid && loginForm.get('contrasenia')?.touched">
+                        <mat-error
+                            *ngIf="loginForm.get('contrasenia')?.invalid && loginForm.get('contrasenia')?.touched">
                             La contraseña es obligatoria.
                         </mat-error>
                     </mat-form-field>
                     <br>
-                    <button mat-raised-button color="primary" class="rounded-button-total" type="submit" [disabled]="loginForm.invalid">
+                    <button mat-raised-button color="primary" class="rounded-button-total" type="submit"
+                        [disabled]="loginForm.invalid">
                         Iniciar Sesión
                     </button>
                     <button class="w-100 btn btn-lg btn-google" (click)="login()">
                         <img src="https://img.icons8.com/color/22/000000/google-logo.png"> Ingresa con Google
                     </button>
+                   
                 </form>
-                <!--<form class="containerUsuarioContrasenia">
-                    <span class="title-three-nrs">Inicio de sesión</span>
-                    <br>
-                    <span class="text-body-small-sb">
-                        Usuario <span matTooltip="Este campo es obligatorio" matTooltipPosition="above"
-                            class="campoTooltip" matTooltipClass="warn-tooltip-is" style="cursor: pointer;">*</span>
-                    </span>
-                    <mat-form-field class="rounded-form-field" appearance="outline">
-                        <input matInput placeholder="Ingrese su correo aquí" formControlName="correo" required>
-                        <mat-error class="text-body-extra-small-r" *ngIf="validadorCorreo.invalid"></mat-error>
-                    </mat-form-field>
-                    <br>
-                    <span class="text-body-small-sb">
-                        Contraseña <span matTooltip="Este campo es obligatorio" matTooltipPosition="above"
-                            class="campoTooltip" matTooltipClass="warn-tooltip-is" style="cursor: pointer;">*</span>
-                    </span>
-                    <mat-form-field appearance="outline">
-                        <input matInput placeholder="Ingrese su contraseña aquí" formControlName="contrasenia" required>
-                       
-                        <mat-error class="text-body-extra-small-r" *ngIf="validadorContrasenia.invalid">
-                        </mat-error>
-                    </mat-form-field>
-                    <br>
-                    <button mat-raised-button color="primary" class="rounded-button-total" type="submit">
-                        Iniciar Sesión
-                    </button>
-                    <button class="w-100  btn btn-lg btn-google" (click)="login()">
-                        <img src="https://img.icons8.com/color/22/000000/google-logo.png"> Ingresa con google
-                    </button>
-                </form>-->
             </div>
         </div>
         <div class="imagen"></div>
@@ -114,50 +82,4 @@
                 Información - Comunícate con nuestro Soporte Técnico</span>
         </div>
     </div>
-</div>
-
-
-<!--
-
-<div class="text-center card container col-md-3">
-    <div class="mt-5 mb-5">
-        <img class="mb-4" src="./assets/imagesSystem/Logo-Universidad-del-Cauca-vertical.png" alt="" width="80"
-            height="100">
-        <h1 class="h3 mb-3 fw-normal">Inicio de sesión</h1>
-        <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com"
-                formControlName="user">
-            <label for="floatingInput">Email address</label>
-        </div>
-        <div class="form-floating mt-1">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
-                formControlName="password">
-            <label for="floatingPassword">Password</label>
-        </div>
-        <button class="w-100 btn btn-lg btn-primar" type="submit">Sign in</button>
-        <div class="or-container">
-            <div class="line-separator"></div>
-            otras opciones
-            <div class="line-separator"></div>
-        </div>
-
-        <button class="w-100  btn btn-lg btn-google" (click)="login()">
-            <img src="https://img.icons8.com/color/22/000000/google-logo.png"> Ingresa con google
-        </button>
-
-
-        <div class="hand-icon-container" (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false">
-            <img class="hand-gif" src="./assets/imagesSystem/Alert.gif" alt="Mano animada" />
-
-
-            <div class="tooltip-message" *ngIf="showTooltip">
-                ¡Haz clic para ingresar con Google!
-            </div>
-        </div>
-
-
-    </div>
-</div>
-
-
--->
+</div> 

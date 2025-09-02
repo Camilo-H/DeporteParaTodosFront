@@ -38,8 +38,8 @@ export class DialogComponent {
   ) {}
 
   confirmarEliminar(): void {
-    this.categoriaservice.deleteCategoria(this.data.identificador);
+    this.categoriaservice.deleteCategoria(this.data.identificador).subscribe(
+    );
     this.dialogRef.close({ confirmado: true, id: this.data.identificador });
   }
- 
 }

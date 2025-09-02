@@ -1,47 +1,56 @@
-::ng-deep .mat-dialog-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* Alinea los elementos */
-  height: auto;
-  /* Ajusta la altura según el contenido */
-  overflow: hidden;
-  /* Elimina el scroll */
-}
-
-.mat-dialog-content {
-  padding: 20px;
-  overflow: visible;
-  /* Asegura que el contenido no cause scroll */
-}
-
-.mat-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  /* Alinea los botones a la derecha */
-  padding: 10px 20px;
-}
-
-button {
-  min-width: 100px;
+.container {
+  position: relative;
+  padding: 1rem;
 }
 
 .btn-cerrar {
-  margin-right: 8px;
-  background-color: #d31212;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  box-shadow: none !important;
+}
+
+.close-button {
+  background: none;
+  box-shadow: none !important;
+  min-width: auto;
+  padding: 0;
+}
+
+mat-icon {
+  font-size: 24px;
+}
+
+.title-one {
+  text-align: left;
+  margin: 0.5rem 0;
+  color: #000066;
+  font-size: 22px !important;
+}
+
+.texConfirmation {
+  text-align: left;
+  margin: 0.5rem 0;
+  font-weight:bold;
+  color: #525151;
+}
+
+.btn-cancelar,
+.btn-confirmar {
   color: white !important;
+  margin-right: 10px;
+  min-width: 100px;
+  height: 40px;
+  font-size: 14px;
+  margin-left: 8px;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+.btn-cancelar {
+  background-color: #d31212;
 }
 
 .btn-confirmar {
   background-color: #000066 !important;
-  color: white !important;
-}
-
-.texConfirmation {
-  font-weight: bold;
-  color: #525151;
-}
-
-.title-one{
-  color: #000066;
 }

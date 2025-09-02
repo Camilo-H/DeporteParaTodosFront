@@ -19,54 +19,44 @@
     </div>
   </div>
 
-  <div class="deportistas">
-    <mat-card>
-      <mat-card-content>
-        <div class="acciones">
-          <h2>Instructores de programa</h2>
-          <button mat-raised-button class="btnAgregar">
-            <mat-icon>email</mat-icon> Notificación
-          </button>
-        </div>
+  <div class="listado">
+    <h2>Listado de instructores</h2>
+    <div class="tabla-container">
+      <table mat-table [dataSource]="instructores" class="mat-elevation-z8" matSort>
+        <!-- Columna Código -->
+        <ng-container matColumnDef="Identificacion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Identificación</th>
+          <td mat-cell *matCellDef="let instructor">{{ instructor.id }}</td>
+        </ng-container>
 
-        <table mat-table [dataSource]="deportistas" class="mat-elevation-z8">
-          <ng-container matColumnDef="nombre">
-            <th mat-header-cell *matHeaderCellDef>
-              Nombre completo de deportista
-            </th>
-            <td mat-cell *matCellDef="let deportista">
-              {{ deportista.nombre }}
-            </td>
-          </ng-container>
+        <!-- Columna Nombre -->
+        <ng-container matColumnDef="Nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let instructor">{{ instructor.nombre }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="atenciones">
-            <th mat-header-cell *matHeaderCellDef>Estado (Activo/Inactivo)</th>
-            <td mat-cell *matCellDef="let deportista">
-              <mat-checkbox [(ngModel)]="deportista.checked" (change)="onCheckboxChange($event)"></mat-checkbox>
-            </td>
-          </ng-container>
+        <!-- Columna Correo -->
+        <ng-container matColumnDef="Correo">
+          <th mat-header-cell *matHeaderCellDef>Correo</th>
+          <td mat-cell *matCellDef="let instructor">{{ instructor.correo }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef>Acciones</th>
-            <td mat-cell *matCellDef="let deportista">
-              <button mat-icon-button class="no-border">
-                <mat-icon>email</mat-icon>
-              </button>
-              <button mat-icon-button class="no-border">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="Acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let alumno">
+            <button mat-icon-button color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-        <div class="btnGuardar">
-          <button mat-raised-button [disabled]="!isButtonEnabled" (click)="guardar()">
-            Guardar
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
+        <!-- Header y celdas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
   </div>
 </app-sidenav>

@@ -1,13 +1,21 @@
-<button mat-icon-button class="close-button" matDialogClose style="float: right;">
-  <mat-icon>close</mat-icon>
-</button>
+<div class="container">
+
+  <div class="btn-cerrar">
+    <button mat-icon-button class="close-button" matDialogClose aria-label="Cerrar diálogo">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 
 
-<mat-dialog-content >
-  <h2 mat-dialog-title class="title-one" >Confirmar para eliminar el elemento</h2>
-  <p class="texConfirmation"> ¿Está seguro que desea eliminar {{data.elemento}} con el identificador "{{ data.identificador}}"?</p>
-</mat-dialog-content>
-<mat-dialog-actions  align="end">
-  <button mat-button mat-dialog-close class="btn-cerrar">Cancelar</button>
-  <button mat-button (click)="confirmarEliminar()" class="btn-confirmar">Aceptar</button>
-</mat-dialog-actions>
+  <mat-dialog-content  >
+    <div >
+      <h1 mat-dialog-title class="title-one">Confirmar para eliminar el elemento</h1>
+      <p class="texConfirmation"> ¿Está seguro que desea eliminar {{data.elemento}} con el identificador "{{
+        data.identificador}}"?</p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close class="btn-cancelar">Cancelar</button>
+    <button mat-button (click)="confirmarEliminar()" class="btn-confirmar">Aceptar</button>
+  </mat-dialog-actions>
+</div>

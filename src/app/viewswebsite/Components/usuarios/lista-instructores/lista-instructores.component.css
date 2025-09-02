@@ -2,47 +2,7 @@
 .containerButons {
   border-bottom: 1px solid rgb(122, 120, 120);
   padding: 10px;
-}
-
-/*
-.info-deporte,
-.descripcion-curso,
-.deportistas {
-  width: 100%;
-  
-}*/
-
-.acciones {
-  display: flex;
-  justify-content: space-between;
-}
-
-table {
-  width: 100%;
-  margin-top: 10px;
-}
-
-mat-card {
-  padding: 15px;
-}
-
-.fila {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0; /* Separador entre las filas */
-  background-color: #f5f5f5; /* Color de fondo para cada fila */
-  
-}
-
-mat-card {
-  max-width: 100%; /* Para que ocupe todo el ancho disponible */
-  overflow-x: auto;
-}
-
-mat-card-title {
-  font-weight: bold;
-  margin-bottom: 15px;
+  max-width: 100%;
 }
 
 .btnGuardar {
@@ -71,15 +31,32 @@ mat-card-title {
   cursor: not-allowed; /* Cambia el cursor cuando está deshabilitado */
 }
 
-.no-border {
-  background: none; /* Sin fondo */
-  box-shadow: none; /* Sin sombra */
-  border: none; /* Sin borde */
-  padding: 0; /* Elimina cualquier espacio extra */
-  min-width: 0; /* Elimina el ancho mínimo que Angular Material aplica a botones */
+
+.listado{
+  margin: 10px;
 }
 
-.no-border mat-icon {
-  color: inherit; /* Usa el color actual del texto (o ajusta el color si es necesario) */
-  font-size: 24px; /* Asegúrate de que el ícono mantenga un buen tamaño */
+
+.tabla-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.tabla-info {
+  border-collapse: collapse;
+  width: 40%;
+}
+
+.tabla-info td {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+.tabla-info td:first-child {
+  font-weight: bold;
+  background-color: #f5f5f5;
+  width: 40%;
 }

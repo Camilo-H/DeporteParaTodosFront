@@ -8,7 +8,6 @@ import { MatCardModule } from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { CategoriaDTO } from 'src/app/Models/DTOs/categoria-dto';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -47,14 +46,11 @@ export class NuevoCursoCategoriaComponent implements OnInit {
   constructor(
     private categoriaService: CategoriaService,
     private imagenService: ImagenService,
-    private route: ActivatedRoute,
-    private router: Router,
     private dialogRef: MatDialogRef<NuevoCursoCategoriaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { titulo: string }
   ) { }
 
   ngOnInit(): void {
-    // const titulo = this.route.snapshot.paramMap.get('titulo');
     if (this.data && this.data.titulo) {
       this.isEditing = true;
       this.loadCategoria(this.data.titulo);
@@ -84,6 +80,13 @@ export class NuevoCursoCategoriaComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     // Crear una copia del objeto categoría sin la propiedad imagen
+    if (this.isEditing) {
+      this.updateCategoria();
+    }
+    this.createCategoria();
+  }
+
+  private createCategoria(): void {
     if (this.selectedFile) {
       this.imagenService.postImagen(this.selectedFile).subscribe(
         (imagenResponse) => {
@@ -113,7 +116,7 @@ export class NuevoCursoCategoriaComponent implements OnInit {
       const nuevaCategoria: CategoriaDTO = {
         titulo: this.categoria.titulo,
         descripcion: this.categoria.descripcion,
-        imagenId: null
+        //imagenId: null
       };
       this.categoriaService.createCategoria(nuevaCategoria).subscribe(
         (response) => {
@@ -127,14 +130,56 @@ export class NuevoCursoCategoriaComponent implements OnInit {
     }
   }
 
+  private updateCategoria(): void {
+    if (this.selectedFile) {
+      this.imagenService.postImagen(this.selectedFile).subscribe(
+        (imagenResponse) => {
+          const idImagen = imagenResponse.id;
+
+          const nuevaCategoria: CategoriaDTO = {
+            titulo: this.categoria.titulo,
+            descripcion: this.categoria.descripcion,
+            imagenId: idImagen
+          };
+
+          this.categoriaService.updateCategoria(this.categoria.titulo, nuevaCategoria).subscribe(
+            (response) => {
+              console.log('Categoría actualizada con éxito', response);
+              this.dialogRef.close(true);
+            },
+            (error) => {
+              console.error('Error al actualizar la categoría', error);
+            }
+          );
+        },
+        (error) => {
+          console.error('Error al subir la imagen', error);
+        }
+      );
+    } else {
+      const nuevaCategoria: CategoriaDTO = {
+        titulo: this.categoria.titulo,
+        descripcion: this.categoria.descripcion,
+        imagenId: this.categoria.imagenId
+      };
+      this.categoriaService.updateCategoria(this.categoria.titulo, nuevaCategoria).subscribe(
+        (response) => {
+          console.log('Categoría actualizada con éxito', response);
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          console.error('Error al actualizar la categoría', error);
+        }
+      );
+    }
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files[0]) {
       this.imagenSeleccionada = input.files[0];
       this.selectedFile = input.files[0];
-
-      // Crear una URL para la vista previa de la imagen
       const reader = new FileReader();
       reader.onload = () => {
         this.imagenPreview = reader.result as string;

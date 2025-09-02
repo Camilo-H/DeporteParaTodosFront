@@ -34,6 +34,8 @@ import { ImagenService } from 'src/app/services/imagen.service';
     MatMenuModule,
     MatDialogModule,
     HeaderComponent,
+    //MatDatepickerModule,
+    //MatNativeDateModule
   ],
 
   templateUrl: './home.component.html',
@@ -53,7 +55,7 @@ export class HomeComponent {
     private categoriaService: CategoriaService,
     private imagenService: ImagenService,
     private dialog: MatDialog,
-    private perfilService: PerfilService
+    private perfilService: PerfilService,
   ) { }
 
   ngOnInit(): void {
@@ -133,10 +135,7 @@ export class HomeComponent {
       data: { elemento, identificador },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('Valor de confirmado ', result?.confirmado);
       if (result?.confirmado) {
-        console.log('Valor del identificador ', identificador);
-        this.categoriaService.deleteCategoria(identificador);
         this.loadCategorias();
       }
     });

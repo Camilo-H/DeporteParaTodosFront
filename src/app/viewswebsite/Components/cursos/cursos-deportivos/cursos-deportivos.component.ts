@@ -11,17 +11,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { DialogComponent } from '../../genericos/dialog/dialog.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { FormularioComponent } from '../../usuarios/formulario/formulario.component';
+import { MatDialog, MatDialogModule, } from '@angular/material/dialog';
 import { FormCursoDeportiviComponent } from '../../cursos/form-curso-deportivo/form-curso-deportivi.component';
 import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
 import { SidenavComponent } from 'src/app/viewswebsite/pages/sidenav/sidenav.component';
-import { CategoriaDTO } from 'src/app/Models/DTOs/categoria-dto';
-import { CategoriaService } from 'src/app/services/categoria.service';
 import * as bootstrap from 'bootstrap';
 import { CursoDTO } from 'src/app/Models/DTOs/curso-dto';
 import { GestionInscripcionesComponent } from '../gestion-inscripciones/gestion-inscripciones.component';
 import { PerfilService } from 'src/app/services/perfil.service';
+import { CursodeportivoService } from 'src/app/services/cursodeportivo.service';
+import { ImagenService } from 'src/app/services/imagen.service';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-cursos-deportivos',
@@ -37,37 +39,38 @@ import { PerfilService } from 'src/app/services/perfil.service';
     MatCardModule,
     MatIconModule,
     MatMenuModule,
-    DialogComponent,
+    //DialogComponent,
     MatDialogModule,
     //FormularioComponent,
     SidenavComponent,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatInputModule,
+
   ],
 })
 export class CursosDeportivosComponent implements OnInit {
-  categoria: CategoriaDTO | null = null;
   public colsize = 3;
   public isMobile: boolean = false;
-  public cursoSeleccionado: CursoDTO | null = null; // Variable para almacenar el curso
-  perfil?:string;
+  public cursos: CursoDTO[] = [];
+  public cursoSeleccionado: CursoDTO | null = null;
+  public titulo: string | null = null;
+  perfil?: string;
 
   constructor(
     private breakPointObserver: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
-    private categoriaService: CategoriaService,
+    private cursoService: CursodeportivoService,
     private dialog: MatDialog,
-    private perfilService: PerfilService
-  ) {}
+    private perfilService: PerfilService,
+    private imagenServise: ImagenService,
+  ) { }
 
   ngOnInit(): void {
-    const titulo = this.route.snapshot.paramMap.get('identificador');
-    if (titulo) {
-      this.categoriaService.getCategoria(titulo).subscribe(
-        (categoria) => {
-          this.categoria = categoria;
-        },
-        (error) => console.error('Error al obtener la categoría', error)
-      );
+    this.titulo = this.route.snapshot.paramMap.get('identificador');
+    if (this.titulo) {
+      this.loadCursos(this.titulo);
     }
 
     this.breakPointObserver
@@ -81,32 +84,51 @@ export class CursosDeportivosComponent implements OnInit {
         }
       });
 
-      this.perfilService.perfil$.subscribe(perfil => {
-        this.perfil = perfil;
-        // Lógica para mostrar/ocultar contenido basado en el perfil
-      });
+    this.perfilService.perfil$.subscribe(perfil => {
+      this.perfil = perfil;
+    });
+  }
+
+  private loadCursos(categoria: any): void {
+    this.cursoService.getCursos(categoria).subscribe(
+      (cursotemp) => {
+        this.cursos = cursotemp;
+
+        this.cursos.forEach(
+          (itemCurso) => {
+            if (itemCurso.idImagen != null) {
+              this.imagenServise.getimagen(itemCurso.idImagen).subscribe(
+                (imagenData) => {
+                  itemCurso.imagenBase64 = imagenData.datosBase64;
+                  itemCurso.tipoArchivo = imagenData.tipoArchivo;
+                },
+                (error) => {
+                  console.error(`Error al obtener la imagen del curso ${itemCurso.nombre}`, error);
+                }
+              );
+            }
+          }
+        );
+      },
+      (error) => console.error('Error al obtener los cursos', error)
+    );
   }
 
   verInformacion(item: CursoDTO): void {
-    this.cursoSeleccionado = item; // Almacenar la categoría seleccionada
+    this.cursoSeleccionado = item;
     const modalElement = document.getElementById('exampleModal');
     if (modalElement) {
-      const modal = new bootstrap.Modal(modalElement); // Inicializar modal
-      modal.show(); // Mostrar la modal
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
     }
   }
 
-  gruposCurso(identificador: string) {
-    this.router.navigate(['/list-grupos', identificador]);
+  gruposCurso(categoria: string, curso: string) {
+    this.router.navigate(['/list-grupos', categoria, curso]); //Mandar aquí el nombre de la categoría para listar los grupos
   }
 
   inscribirseAcurso(): void {
     const dialogRef = this.dialog.open(FormInscripcionesComponent, {
-      width: '30%',
-      height: '80%',
-      maxWidth: 'none',
-      panelClass: 'mi-dialogo',
-
       /*data: {name: this.name(), animal: this.animal()},*/
     });
   }
@@ -114,32 +136,39 @@ export class CursosDeportivosComponent implements OnInit {
   registroDeporte(): void {
     const dialogRef = this.dialog.open(FormCursoDeportiviComponent, {
 
-      /*data: {name: this.name(), animal: this.animal()},*/
+      data: { tituloCategoria: this.titulo },
     });
-  }
-
-  onUpdate() {
-    const dialogRef = this.dialog.open(FormCursoDeportiviComponent, {
-      /*data: {name: this.name(), animal: this.animal()},*/
-    });
-  }
-
-  onDelete() {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '40%',
-      height: '25%',
-      maxWidth: 'none',
-      /*data: {name: this.name(), animal: this.animal()},*/
-    });
-    /*dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-        this.animal.set(result);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCursos(this.titulo);
       }
-    });*/
+    });
   }
 
-  configurarInscripcion(){
+  onUpdate(nombrecurso: string) {
+    const dialogRef = this.dialog.open(FormCursoDeportiviComponent, {
+      data: { tituloCategoria: this.titulo, nombrecurso },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadCursos(this.titulo);
+      }
+    });
+  }
+
+  onDelete(identificador: string): void {
+    let elemento: string = ' el curso ';
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: { elemento, identificador },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirmado) {
+        this.loadCursos(identificador);
+      }
+    });
+  }
+
+  configurarInscripcion() {
     const dialogRef = this.dialog.open(GestionInscripcionesComponent, {
       /*data: {name: this.name(), animal: this.animal()},*/
     });

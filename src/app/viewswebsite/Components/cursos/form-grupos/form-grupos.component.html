@@ -4,28 +4,64 @@
 
 <mat-dialog-content class="dialog-content">
   <header class="title-two">{{ isEditing ? 'Editar grupo' : 'Registrar grupo' }}</header>
-  <form (ngSubmit)="onSubmit()" #categoriaForm="ngForm" class="form-content">
+
+  <form (ngSubmit)="onSubmit(grupoForm)" #grupoForm="ngForm" class="form-content">
+    <br>
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Nombre</mat-label>
-      <input matInput placeholder="Nombre">
+      <mat-label>Categoria</mat-label>
+      <input matInput [disabled]="true" placeholder="categoria" [(ngModel)]="categoriaGrupo" name="categoria">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Descripción</mat-label>
-      <input matInput placeholder="Descripción" name="descripcion">
+      <mat-label>Deporte</mat-label>
+      <input matInput [disabled]="true" placeholder="deporte" [(ngModel)]="cursoGrupo" name="deporte">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isEditing" appearance="outline" class="form-field">
+      <mat-label>Año</mat-label>
+      <input matInput [disabled]="true" placeholder="anio" [(ngModel)]="grupo.anio" name="anio">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Cupos</mat-label>
+      <input matInput placeholder="cupos" [(ngModel)]="grupo.cupos" name="cupos" type="number">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Instructor</mat-label>
+      <mat-select [(ngModel)]="grupo.idInstructor" name="instructor" placeholder="Instructor">
+        <mat-option *ngFor="let instr of instructores" [value]="instr.id">
+          {{ instr.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Fecha creación</mat-label>
+      <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="grupo.fechaCreacion"  [matDatepickerFilter]="validarFechaCreacion" name="fechaInicio">
+      <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerInicio></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Fecha cierre</mat-label>
+      <input matInput [matDatepicker]="pickerFin" [(ngModel)]="grupo.fechaFinalizacion" [matDatepickerFilter]="validarFechaCierre" name="fechaFin">
+      <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFin></mat-datepicker>
     </mat-form-field>
 
     <div class="form-field buttonImage">
-      <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" />
-
+      <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" required />
       <div *ngIf="imagenPreview" class="preview">
         <img [src]="imagenPreview" alt="Vista previa" class="image-preview">
       </div>
     </div>
+
+    <div class="form-buttons">
+      <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button class="aceptar" type="submit" [disabled]="!grupoForm.form.valid">Aceptar</button>
+      <!--<button mat-raised-button class="aceptar" type="submit">Aceptar</button>-->
+    </div>
   </form>
 </mat-dialog-content>
-
-<mat-card-actions class="form-buttons">
-  <button mat-raised-button class="aceptar">Aceptar</button>
-  <button mat-raised-button class="cancelar" matDialogClose>Cancelar</button>
-</mat-card-actions>

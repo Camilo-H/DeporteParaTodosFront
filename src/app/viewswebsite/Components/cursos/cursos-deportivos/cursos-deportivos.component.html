@@ -12,12 +12,16 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 d-flex justify-content-center" *ngIf=" perfil === 'Administrador'" >
+
+
+
+
+            <div class="col-lg-4 d-flex justify-content-center" *ngIf=" perfil === 'Administrador'">
                 <button class="btnAgregar" (click)="registroDeporte()">
                     Agregar curso +
                 </button>
             </div>
-            <div class="col-lg-4 d-flex justify-content-center"  *ngIf=" perfil === 'Administrador'" >
+            <div class="col-lg-4 d-flex justify-content-center" *ngIf=" perfil === 'Administrador'">
                 <button type="button" class="btn btn-light border"
                     (click)="configurarInscripcion()">Inscripciones</button>
             </div>
@@ -25,38 +29,48 @@
     </div>
 
     <div>
-        <h1 class="title-one text-center ">Categoría seleccionada: {{categoria?.titulo}}</h1>
+        <h1 class="title-one text-center ">Categoría seleccionada: {{titulo}}</h1>
     </div>
 
-    <div style="width: 70%; margin: 0 auto">
-        <mat-grid-list [cols]="colsize" rowHeight="360" gutterSize="20px"><!--gutterSize="20px"-->
-      
-            <mat-grid-tile *ngFor="let item of categoria?.descripcion" [colspan]="1" [rowspan]="1" [style.background]="" > 
-                <mat-card class="mycard shadow">
-                    <img mat-card-image src="./assets/imagesSystem/deporte.jpg" alt=""
-                        (click)="gruposCurso(item)" />
+    <div class="content-tarjet">
+        <mat-grid-list [cols]="colsize" rowHeight="300"><!-- gutterSize="20px" gutterSize="20px"-->
+            <mat-grid-tile *ngFor="let item of cursos" [colspan]="1" [rowspan]="1">
+                <mat-card class="mycard shadow fixed-card">
+
+                    <div class="img-container" (click)="gruposCurso(item.categoriaCurso, item.nombre)">
+                        <img *ngIf="!!item.imagenBase64; else imagenPorDefecto"
+                            [src]="'data:' + item.tipoArchivo + ';base64,' + item.imagenBase64" mat-card-image
+                            alt="Imagen de categoría" />
+
+                        <ng-template #imagenPorDefecto>
+                            <img class="img-container" src="assets/imagesSystem/deporte.jpg" mat-card-image
+                                alt="Imagen por defecto" />
+                        </ng-template>
+                    </div>
+
                     <mat-card-content class="contenido">
-                        
-                        <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="perfil === 'Administrador'" >
+                        <button class="btn-menu" mat-icon-button [matMenuTriggerFor]="menu"
+                            *ngIf="perfil === 'Administrador'">
                             <mat-icon>settings</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="onUpdate()">
+                            <button mat-menu-item (click)="onUpdate(item.nombre)">
                                 <mat-icon>edit</mat-icon>
                                 <span>Actualizar</span>
                             </button>
-                            <button mat-menu-item (click)="onDelete()">
+                            <button mat-menu-item (click)="onDelete(item.nombre)">
                                 <mat-icon>delete</mat-icon>
                                 <span>Eliminar</span>
                             </button>
                         </mat-menu>
-                        <mat-card-title class="card_title title-three-nrs">{{item}}</mat-card-title>
+                        <mat-card-title class="card_title title-three-nrs">{{item.nombre}}</mat-card-title>
 
                         <div class="d-flex justify-content-center">
-                            <!--<button type="button" class="btn btn-primary" (click)="verInformacion()" PARA MOSTRAR INFORMACIÓN DEL CURSO DE UNA CATEGORÍA
+                            <button type="button" class="btn btn-primary" (click)="verInformacion(item)" PARA MOSTRAR
+                                INFORMACIÓN DEL CURSO DE UNA CATEGORÍA
                                 style="border: none; background-color: transparent; color: black">
                                 Ver información
-                            </button>-->
+                            </button>
                         </div>
 
                     </mat-card-content>
@@ -64,11 +78,14 @@
             </mat-grid-tile>
         </mat-grid-list>
     </div>
+    <div style="width: 70%; margin: 0 auto">
 
-</app-sidenav>  
+    </div>
+
+</app-sidenav>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

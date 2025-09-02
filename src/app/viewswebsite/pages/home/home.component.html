@@ -11,13 +11,15 @@
             formación profesional para satisfacer sus necesidades e intereses de los
             sujetos vinculados, promoviendo la cultura de la práctica deportiva y el
             uso constructivo del tiempo libre.
+            
         </p>
     </div>
 </div>
-<div style="width: 80%; margin: 0 auto">
-    <mat-grid-list [cols]="colsize" rowHeight="355">
-        <mat-grid-tile *ngFor="let item of listaEscenarios" [colspan]="1" [rowspan]="1" [style.background]="">
-            <mat-card class="mycard shadow">
+
+<div class="content-tarjet">
+    <mat-grid-list [cols]="colsize" rowHeight="400">
+        <mat-grid-tile *ngFor="let item of listaEscenarios" [colspan]="1" [rowspan]="1" >
+            <mat-card class="mycard shadow fixed-card">
 
                 <div class="img-container" (click)="abrirCursosDeportivos(item.titulo)">
                     <img *ngIf="!!item.imagenBase64; else imagenPorDefecto"
@@ -25,13 +27,13 @@
                         alt="Imagen de categoría" />
 
                     <ng-template #imagenPorDefecto>
-                        <img src="assets/imagesSystem/deporte.jpg" mat-card-image alt="Imagen por defecto" />
+                        <img class="img-container" src="assets/imagesSystem/deporte.jpg" mat-card-image alt="Imagen por defecto" />
                     </ng-template>
                 </div>
 
                 <mat-card-content class="contenido">
                     <!--Menu de configuracion en tarjeta-->
-                    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="perfil === 'Administrador'">
+                    <button class="btn-menu" mat-icon-button [matMenuTriggerFor]="menu" *ngIf="perfil === 'Administrador'">
                         <mat-icon>settings</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">

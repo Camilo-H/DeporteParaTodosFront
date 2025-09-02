@@ -1,10 +1,90 @@
-.report-container {
-  display: flex;
-  flex-direction: row; /* Cambiado a fila para que los elementos estén uno al lado del otro */
-  gap: 1rem; /* Espaciado entre secciones */
+/* layout principal: izquierda 80% - derecha 20% */
+.report-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px; /* 320px ~ 20% en pantallas grandes; ajusta si quieres % exacto */
+  gap: 16px;
+  height: calc(100vh - 64px); /* ajusta si tu sidenav tiene header */
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-h2{
+/* area izquierda */
+.report-content {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* tabla */
+.table-wrapper {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* grafica */
+.chart-wrapper {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  height: 100%;
+}
+
+/* area derecha (filtros) */
+.filters-panel {
+  background: #fafafa;
+  border-left: 1px solid rgba(0,0,0,0.04);
+  padding: 18px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* inputs full width dentro del panel de filtros */
+.filtros-form .full {
+  width: 100%;
+  margin-bottom: 12px;
+  margin: 1px;
+}
+
+.filtros-form .tituloFiltros{
+  text-align: center;
+}
+
+/* acciones de filtros alineadas */
+.filtros-actions {
+  justify-content: center;
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* responsive: en pantallas pequeñas apilar verticalmente */
+@media (max-width: 900px) {
+  .report-layout {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .filters-panel {
+    order: 2;
+  }
+}
+
+
+
+
+
+
+/*
+
+.report-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+h2 {
   text-align: center;
 }
 
@@ -12,20 +92,20 @@ h2{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem; /* Espaciado entre gráficos */
-  max-width: 100%; /* Asegura que los gráficos no desborden */
+  gap: 1rem;
+  max-width: 100%;
 }
 
 .chart {
-  width: 100%; /* Asegura que cada gráfico ocupe todo el ancho disponible */
-  height: 300px; /* Ajusta la altura según sea necesario */
-  overflow: hidden; /* Evita que el contenido desborde */
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
 }
 
 ngx-charts-bar-vertical,
 ngx-charts-pie-chart {
-  width: 100%; /* Asegura que los gráficos ocupen todo el ancho del contenedor */
-  height: 100%; /* Ajusta la altura para que no sean demasiado grandes */
+  width: 100%;
+  height: 100%;
 }
 
 .data-visualization {
@@ -81,7 +161,7 @@ ngx-charts-pie-chart {
 .actions {
   margin-top: 20px;
   display: flex;
-  justify-content: center; /* Centra el contenido horizontalmente */
+  justify-content: center;
   align-items: center;
 }
 
@@ -91,13 +171,13 @@ ngx-charts-pie-chart {
   border-radius: 20px !important;
   width: 100px;
   height: 40px;
-  text-align: center; /* Asegura el centrado del texto */
+  text-align: center;
 }
 
 .contenedor {
   display: flex;
-  justify-content: center; /* Centra el contenido horizontalmente */
-  align-items: center; /* Centra el contenido verticalmente */
+  justify-content: center;
+  align-items: center;
   gap: 18px;
 }
 
@@ -110,12 +190,12 @@ ngx-charts-pie-chart {
   text-align: center;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  
+
 }
 
 .actions {
   display: flex;
   justify-content: center;
-  gap: 1rem; /* Espaciado entre botones */
+  gap: 1rem;
   margin-top: 1rem;
-}
+}*/

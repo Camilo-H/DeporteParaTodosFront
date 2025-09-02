@@ -1,58 +1,66 @@
-/*.form-container {
+.dialog-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  justify-content: flex-start;
   padding: 20px;
-}*/
-
-mat-card {
-  position: relative;
-  padding: 20px 40px;
-  max-width: 600px;
   width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  overflow: auto;
 }
 
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #757575;
-}
-
-.form-title {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
+.form-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .form-field {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
-.form-buttons {
+mat-dialog-content {
+  max-height: none;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
+  width: 100%;
 }
 
-button {
-  min-width: 120px;
+.image-preview {
+  max-width: 80%; /* Limita el tamaño máximo de la imagen */
+  max-height: 40vh;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-button[color="primary"] {
-  background-color: #3f51b5;
-  color: white;
-}
+/* Diseño responsivo */
+@media (max-width: 600px) {
+  .form-content {
+    padding: 10px;
+    /* Añadir un pequeño padding en pantallas pequeñas */
+  }
 
-button[color="warn"] {
-  background-color: #f44336;
-  color: white;
+  .form-field {
+    width: 100%;
+    /* Asegura que los campos ocupen el 100% en dispositivos pequeños */
+  }
+
+  .image-preview {
+    max-height: 40vh;
+    /* Reducir el tamaño de la imagen en pantallas pequeñas */
+  }
 }

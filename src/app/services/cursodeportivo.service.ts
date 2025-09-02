@@ -1,18 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, throwError, tap } from 'rxjs';
 import { CursoDTO } from '../Models/DTOs/curso-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CursodeportivoService {
-  private apiUrl = 'http://127.0.0.1:8082/api/cursos';
+  private apiUrl = 'http://127.0.0.1:8082/api/v2';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getCursos(): Observable<CursoDTO[]> {
-    return this.http.get<CursoDTO[]>(this.apiUrl).pipe(
+  getAllCursos():Observable<CursoDTO[]>{
+    return this.http.get<CursoDTO[]>(`${this.apiUrl}/cursos`).pipe(
+      catchError((error) => {
+        console.error('Se produjo un error al recuperar los elementos ');
+        return throwError(error);
+      })
+    );
+  }
+
+  getCursos(prmCategoria: string): Observable<CursoDTO[]> {
+    return this.http.get<CursoDTO[]>(`${this.apiUrl}/cursosbycategoria?prmCategoria=${encodeURIComponent(prmCategoria)}`).pipe(
       catchError((error) => {
         console.error('Se produjo un error al recuperar los elementos ');
         return throwError(error);
@@ -21,7 +30,7 @@ export class CursodeportivoService {
   }
 
   crearCurso(curso: CursoDTO): Observable<CursoDTO> {
-    return this.http.post<CursoDTO>(`${this.apiUrl}`, curso).pipe(
+    return this.http.post<CursoDTO>(`${this.apiUrl}/curso`, curso).pipe(
       catchError((error) => {
         console.error('Se produjo un error al crear el elemento ');
         return throwError(error);
@@ -29,14 +38,14 @@ export class CursodeportivoService {
     );
   }
 
-  getCurso(identificador: string): Observable<CursoDTO> {
-    console.log("Valor del parametro en el service: "+identificador)
-    return this.http.get<CursoDTO>(`${this.apiUrl}/${identificador}`).pipe(
+  getCurso(categoria: string, nombreCurso: string): Observable<CursoDTO> {
+    return this.http.get<CursoDTO>(`${this.apiUrl}/curso?prmCategoria=${encodeURIComponent(categoria)}&prmCurso=${encodeURIComponent(nombreCurso)}`).pipe(
+       tap((response) => {
+        console.log("Respuesta en el servicio desde back", response);
+      }
+      ),
       catchError((error) => {
-        console.error(
-          'Se produjo un error al recuperar el elemento ',
-          identificador
-        );
+        console.error('Se produjo un error al recuperar el elemento ');
         return throwError(error);
       })
     );

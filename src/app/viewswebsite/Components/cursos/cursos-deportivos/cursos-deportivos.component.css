@@ -1,3 +1,38 @@
+.fixed-card {
+  width: 300px;
+  height: 355px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.img-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contenido {
+  border: rgb(219, 218, 218) 0.5px solid;
+  background-color: rgb(249, 250, 250);
+  padding: 10px;
+}
+
+.btn-menu {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.shadow {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
 .containerButons {
   border-bottom: 1px solid rgb(122, 120, 120);
   padding: 10px;
@@ -14,18 +49,18 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) !important;
 }
 
-.shadow {
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) !important;
-}
-
 img,p {
   cursor: pointer;
 }
 
 .card_title {
-  justify-content: center; 
-  align-items: center;     
-  text-align: center;                   
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /* Número de líneas que quieres mostrar */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 .text-center{
