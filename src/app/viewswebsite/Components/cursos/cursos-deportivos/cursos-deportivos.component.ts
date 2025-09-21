@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { DialogComponent } from '../../genericos/dialog/dialog.component';
+import { DialogComponent } from '../../dialog/dialog.component';
 import { MatDialog, MatDialogModule, } from '@angular/material/dialog';
 import { FormCursoDeportiviComponent } from '../../cursos/form-curso-deportivo/form-curso-deportivi.component';
 import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
@@ -124,7 +124,7 @@ export class CursosDeportivosComponent implements OnInit {
   }
 
   gruposCurso(categoria: string, curso: string) {
-    this.router.navigate(['/list-grupos', categoria, curso]); //Mandar aquí el nombre de la categoría para listar los grupos
+    this.router.navigate(['/list-grupos', categoria, curso]);
   }
 
   inscribirseAcurso(): void {
@@ -156,14 +156,14 @@ export class CursosDeportivosComponent implements OnInit {
     });
   }
 
-  onDelete(identificador: string): void {
+  onDelete(nombreElemento: string): void {
     let elemento: string = ' el curso ';
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: { elemento, identificador },
+      data: { elemento, nombreElemento, tipoElemento: 'curso', categoria:this.titulo},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmado) {
-        this.loadCursos(identificador);
+        this.loadCursos(this.titulo);
       }
     });
   }

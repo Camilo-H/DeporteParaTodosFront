@@ -5,7 +5,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
-import { HttpClientModule } from '@angular/common/http';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { CategoriaDTO } from 'src/app/Models/DTOs/categoria-dto';
 import {
@@ -23,7 +22,6 @@ import { ImagenService } from 'src/app/services/imagen.service';
     MatCardModule,
     MatIconModule,
     FormsModule,
-    HttpClientModule,
     MatInputModule,
     MatFormFieldModule,
     MatDialogModule,
@@ -79,7 +77,6 @@ export class NuevoCursoCategoriaComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    // Crear una copia del objeto categoría sin la propiedad imagen
     if (this.isEditing) {
       this.updateCategoria();
     }

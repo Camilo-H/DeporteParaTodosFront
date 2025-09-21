@@ -1,53 +1,53 @@
-<div class="form-container">
-  <mat-card>
-    <!--
-    <button mat-icon-button class="close-button" aria-label="Cerrar">
-      <mat-icon>close</mat-icon>
-    </button>-->
-    <mat-card-title class="form-title">Inscripción</mat-card-title>
-    <form>
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Nombre" required>
-      </mat-form-field>
+<button mat-icon-button class="close-button" matDialogClose style="float: right;">
+  <mat-icon>close</mat-icon>
+</button>
 
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Correo electrónico</mat-label>
-        <input matInput type="email" placeholder="Correo electrónico" required>
-      </mat-form-field> 
+<mat-dialog-content class="dialog-content">
+  <header class="title-two">{{ isEditing ? 'Editar usuario' : 'Registro de usuario' }}</header>
+  <form (ngSubmit)="onSubmit(inscripcionForm)" #inscripcionForm="ngForm" class="form-content">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Nombre</mat-label>
+      <input matInput [disabled]="isEditing" placeholder="Nombre" [(ngModel)]="perfil.nombre" name="nombre" required />
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Tipo identificación</mat-label>
-        <mat-select>
-          <mat-option value="C.C">Cédula ciudadanía</mat-option>
-          <mat-option value="Tarjeta identidad">Tarjeta identidad</mat-option>
-          <mat-option value="C.Extranjería">Cédula extranjera</mat-option>
-          <mat-option value="otro">Otro</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Correo institucional</mat-label>
+      <input matInput placeholder="Correo institucional" [(ngModel)]="perfil.correo" name="correo" type="email" required />
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Número identificación</mat-label>
-        <input matInput placeholder="Número ID" required>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Tipo de identificación</mat-label>
+      <mat-select [(ngModel)]="perfil.tipoId" name="tipodocumento" placeholder="Tipo de documento">
+        <mat-option *ngFor="let tipo of tipoDocumento" [value]="tipo">
+          {{ tipo }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Sexo</mat-label>
-        <mat-select>
-          <mat-option value="Masculino">Masculino</mat-option>
-          <mat-option value="Femenino">Femenino</mat-option>
-          <mat-option value="Otro">Otro</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Numero identificación</mat-label>
+      <input matInput placeholder="Número identidad" [(ngModel)]="perfil.id" name="identificacion" required />
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Código</mat-label>
-        <input matInput placeholder="Código" required>
-      </mat-form-field>
-    </form>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Sexo</mat-label>
+      <mat-select [(ngModel)]="perfil.sexo" name="sexo" placeholder="Sexo">
+        <mat-option *ngFor="let tipo of sexo" [value]="tipo">
+          {{ tipo }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Código institucional</mat-label>
+      <input matInput placeholder="Código institucional" [(ngModel)]="perfil.alumnoCodigo" name="codigo" required />
+    </mat-form-field>
+
+
     <div class="form-buttons">
-      <button mat-raised-button class="aceptar" (click)="guardar()">Aceptar</button>
-      <button mat-raised-button class="cancelar" >Cancelar</button>
+      <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button class="aceptar" type="submit" [disabled]="!inscripcionForm.form.valid">Aceptar</button>
+      <!--<button mat-raised-button class="aceptar" type="submit">Aceptar</button>-->
     </div>
-  </mat-card>
-</div>
+  </form>
+</mat-dialog-content>

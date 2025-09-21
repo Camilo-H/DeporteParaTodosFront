@@ -15,7 +15,6 @@ export class DeporteService {
   getDeportes(): Observable<DeporteDTO[]> {
     return this.http.get<DeporteDTO[]>(`${this.url}/deportes`).pipe(
       catchError((error) => {
-        console.error("Se produjo un error al consultar los deportes.");
         return throwError(error);
       })
     );
@@ -24,7 +23,6 @@ export class DeporteService {
   crearDeporte(deporte: DeporteDTO): Observable<DeporteDTO> {
     return this.http.post<DeporteDTO>(`${this.url}/deportes`, deporte).pipe(
       catchError((error) => {
-        console.error('Se produjo un error al crear el elemento ');
         return throwError(error);
       })
     );

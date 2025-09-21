@@ -28,9 +28,6 @@ export class InformacinInstructorComponent {
     const courseData = [
       { nombre: 'Sala masculino ', tipo: 'Semillero - Grupo A', horario: 'Lunes 09:00 - 11:00, Viernes 09:00 - 11:00 Cancha 1' },
       { nombre: 'Natación nivel 1 ', tipo: 'Seleccionado - Grupo A', horario: 'Lunes 14:00 - 16:00 Piscina' },
-      // { nombre: 'Futbol 11 masculino', tipo: 'Semillero', horario: '07:00 - 09:00' },
-      // { nombre: 'Futbol sala masculino', tipo: 'Recreativo', horario: 'por definir' },
-      // { nombre: 'Futbol sala femenino', tipo: 'Seleccionado', horario: '8:00 - 10:00' }
     ];
     this.courses.data = courseData;
   }

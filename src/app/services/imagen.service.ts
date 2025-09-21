@@ -15,13 +15,10 @@ export class ImagenService {
   getimagen(idImagen: number): Observable<ImagenDTO> {
     return this.http.get<ImagenDTO>(`${this.apiUrl}/imagen?idImagen=${idImagen}`).pipe(
       catchError((error) => {
-        console.error(
-          'Se produjo un error al obtener la imagen de la categoría'
-        );
         return throwError(error);
       })
     );
-    
+
   }
 
   postImagen(file: File): Observable<ImagenDTO> {
@@ -30,13 +27,10 @@ export class ImagenService {
     formData.append('nombre', file.name);
     formData.append('tipoArchivo', file.type);
     formData.append('longitud', file.size.toString());
-
     return this.http.post<ImagenDTO>(`${this.apiUrl}/imagenMultipart`, formData).pipe(
       catchError((error) => {
-        console.error('Se produjo un error al crear la imagen en el sistema', error);
         return throwError(() => error);
       })
     );
   }
-  //this.http.get<ImagenDTO>(`${this.apiUrl}/imagen/${idImagen}`)
 }

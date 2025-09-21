@@ -1,19 +1,21 @@
 <app-sidenav>
     <div class="report-layout">
         <section class="report-content">
-
-
             <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="report-tabs">
                 <mat-tab label="Tabla">
                     <div class="table-wrapper">
                         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
-                            <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ col | titlecase }} </th>
-                                <td mat-cell *matCellDef="let row"> {{ row[col] }} </td>
+                            <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    {{ columnLabels[column] || column }}
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element[column] }}
+                                </td>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
 
                         <mat-paginator [pageSize]="10" showFirstLastButtons></mat-paginator>
@@ -82,11 +84,25 @@
                 </mat-form-field>
 
                 <div class="filtros-actions">
-                    <button mat-raised-button color="primary" type="submit"  class="cancelar"
+                    <button mat-raised-button color="primary" type="submit" class="cancelar"
                         [disabled]="filtros.invalid">Generar</button>
-                    <button mat-stroked-button type="button"   class="cancelar" (click)="limpiarFiltros()">Limpiar</button>
+                    <button mat-stroked-button type="button" class="cancelar"
+                        (click)="limpiarFiltros()">Limpiar</button>
+
+                </div>
+                <div class="exportar">
+                    <button mat-raised-button class="cancelar" type="button" (click)="exportarPDF()">
+                        Exportar PDF
+                    </button>
                 </div>
             </form>
         </aside>
     </div>
+    <!-- copia oculta de la gráfica usada solo para exportar -->
+    <div #exportChart class="export-chart" aria-hidden="true">
+        <ngx-charts-bar-vertical [results]="chartData" [xAxis]="true" [yAxis]="true" [legend]="false"
+            [animations]="false" [view]="[900,400]">
+        </ngx-charts-bar-vertical>
+    </div>
+
 </app-sidenav>

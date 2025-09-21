@@ -2,22 +2,16 @@
 <div class="container d-flex justify-content-center">
     <div class="text-home col-lg-10 shadow p-3 mb-5 bg-white rounded">
         <h1 class="title-one">Deporte para todos</h1>
+        <!--El contenido del siguiete parafo que se muestra en la interfaz debe ser gestionado por el admin. Esta funcionalidad se debe desarrollar-->
         <p>
-            En la División de la Gestión de la Recreación y el Deporte se busca
-            fortalecer la formación integral y el bienestar de todas aquellas personas
-            que hacen parte de la comunidad universitaria mediante procesos y
-            manifestaciones lúdicas, motrices y deportivas que complementen el
-            desarrollo integral, que se implementan como procesos contribuyentes a la
-            formación profesional para satisfacer sus necesidades e intereses de los
-            sujetos vinculados, promoviendo la cultura de la práctica deportiva y el
-            uso constructivo del tiempo libre.
             
+            NOTA: El contenido (texto) de este componente se debe poder gestionar por el administrador del sistema. Se debe implementar la gestión.
         </p>
     </div>
 </div>
 
 <div class="content-tarjet">
-    <mat-grid-list [cols]="colsize" rowHeight="400">
+    <mat-grid-list [cols]="colsize" rowHeight="450">
         <mat-grid-tile *ngFor="let item of listaEscenarios" [colspan]="1" [rowspan]="1" >
             <mat-card class="mycard shadow fixed-card">
 

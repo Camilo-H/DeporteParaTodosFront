@@ -14,7 +14,6 @@ export class HorarioService {
   getHorarios(categoria: string, curso: string, anio: number, iterable: number): Observable<HorarioDTO[]> {
     return this.http.get<HorarioDTO[]>(`${this.apiUrl}/horarios?categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(curso)}&anio=${anio}&iterable=${iterable}`).pipe(
       catchError((error) => {
-        console.error('Se produjo un error al recuperar los elementos ');
         return throwError(error);
       })
     );

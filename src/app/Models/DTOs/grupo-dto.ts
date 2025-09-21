@@ -1,3 +1,4 @@
+import { HorarioDTO } from "./horario-dto";
 export interface GrupoDTO {
   categoria: string;
   curso: string;
@@ -13,4 +14,5 @@ export interface GrupoDTO {
   fechaIncripcionCierre?: string | null;
   imagenBase64?: string | null;
   tipoArchivo?: string | null;
+  horarios?: HorarioDTO[];
 }

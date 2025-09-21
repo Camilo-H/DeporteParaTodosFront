@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule, } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule, } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { filter } from 'rxjs';
+import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -45,9 +44,12 @@ export class LoginComponent implements OnInit {
   private userProfile: any;
   //form: FormGroup;
   userInfo: any;
+  isAuthenticated: boolean = false;
+  userProfileId: Observable<any> = of(null);
+
   constructor(
     private authGoogleService: AuthService,
-    private oauthService: OAuthService,
+    //private oauthService: OAuthService,
     private fb: FormBuilder,
     private http: HttpClient,
     private formBuilder: FormBuilder,
@@ -65,13 +67,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    const usuario = this.authGoogleService.getInfoUsuario();
-    console.log('Usuario en componente:', usuario);
-  }
+    }
 
   login(): void {
     this.authGoogleService.login();
-    this.authGoogleService.getInfoUsuario();
   }
 
 }

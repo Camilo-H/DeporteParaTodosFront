@@ -15,10 +15,7 @@ export class InstructorServisce {
 
     getInstructores(): Observable<InstructorDTO[]> {
         return this.http.get<InstructorDTO[]>(`${this.apiUrl}/instructores`).pipe(
-            // tap((respuesta) => {
-            // }),
             catchError((error) => {
-                console.error('Se produjo al obtener el listado de Instructores');
                 return throwError(error);
             })
         );
@@ -27,7 +24,6 @@ export class InstructorServisce {
     getInstructor(id: string): Observable<InstructorDTO> {
         return this.http.get<InstructorDTO>(`${this.apiUrl}/instructor?idInstructor=${encodeURIComponent(id)}`).pipe(
             catchError((error) => {
-                console.error('Se produjo al obtener el instructor');
                 return throwError(error);
             })
         );

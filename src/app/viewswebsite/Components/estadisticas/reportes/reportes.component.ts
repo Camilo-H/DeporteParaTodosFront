@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Observable } from 'rxjs';
-//import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidenavComponent } from "../../../pages/sidenav/sidenav.component";
 import { ReportesService } from 'src/app/services/reportes.service';
 import { Router } from '@angular/router';
@@ -25,6 +24,10 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-reportes',
@@ -45,7 +48,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     ReactiveFormsModule,
     MatTabsModule,
     MatTableModule,
-
+    MatSnackBarModule
   ],
 
   providers: [
@@ -60,17 +63,18 @@ import { MatTabsModule } from '@angular/material/tabs';
 export class ReportesComponent implements OnInit {
   filtros!: FormGroup;
   dataSource = new MatTableDataSource<EstadisticasDTO>();
-  displayedColumns: string[] = ['leyenda1', 'clases', 'duracion'];
+  displayedColumns: string[] = ['Nombre', 'clases', 'duracion'];
   chartData: { name: string; value: number }[] = [];
   selectedTabIndex = 0;
 
+  @ViewChild('exportChart', { static: false }) exportChartRef!: ElementRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   categorias: CategoriaDTO[] = [];
   cursos: CursoDTO[] = [];
   grupos: GrupoDTO[] = [];
-
+  fechaActual: Date = new Date();
 
   dtoEstadisticas: EstadisticasDTO = {
     leyenda1: '',
@@ -83,7 +87,14 @@ export class ReportesComponent implements OnInit {
     duracion: 0,
   }
 
-  fechaActual: Date = new Date();
+  columnLabels: { [key: string]: string } = {
+    nombre: 'Nombre',
+    leyenda1: 'Categoría',
+    leyenda2: 'Curso',
+    leyenda3: 'Grupo',
+    clases: 'Clases',
+    duracion: 'Duración (h)'
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -93,8 +104,8 @@ export class ReportesComponent implements OnInit {
     private grupoService: GrupoService,
     private router: Router,
     private datepipe: DatePipe,
+    private snackBar: MatSnackBar,
   ) { }
-
 
 
   ngOnInit(): void {
@@ -102,8 +113,49 @@ export class ReportesComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.cargarCategorias();
-    this.cargarCursos();
-    this.cargarGrupos();
+    this.filtros.get('categoria')?.valueChanges.subscribe(categoria => {
+      if (categoria) {
+        this.cursosService.getCursos(categoria).subscribe(
+          (response) => {
+            this.cursos = response;
+            this.filtros.get('curso')?.reset();
+            this.grupos = [];
+            this.filtros.get('grupo')?.reset();
+          },
+          (error) => {
+            console.error('Error cargando cursos por categoría', error);
+            this.cursos = [];
+          }
+        );
+      } else {
+        this.cursos = [];
+        this.grupos = [];
+        this.filtros.get('curso')?.reset();
+        this.filtros.get('grupo')?.reset();
+      }
+    });
+
+    // Escuchar cambios de curso
+    this.filtros.get('curso')?.valueChanges.subscribe(curso => {
+      const categoria = this.filtros.get('categoria')?.value;
+
+      if (categoria && curso) {
+        this.grupoService.getGrupos(categoria, curso).subscribe(
+          (response) => {
+            this.grupos = response;
+            this.filtros.get('grupo')?.reset();
+          },
+          (error) => {
+            console.error('Error cargando grupos', error);
+            this.grupos = [];
+          }
+        );
+      } else {
+        this.grupos = [];
+        this.filtros.get('grupo')?.reset();
+      }
+    });
+
   }
 
   private initForm() {
@@ -112,6 +164,7 @@ export class ReportesComponent implements OnInit {
       fin: [this.datepipe.transform(new Date(), 'yyyy-MM-dd'), Validators.required],
       categoria: [''],
       curso: [''],
+      grupo: [''],
       anio: [null],
       iterable: [null],
       alumno: [''],
@@ -146,28 +199,37 @@ export class ReportesComponent implements OnInit {
   generarReporte() {
     const { inicio, fin, categoria, curso, anio, iterable, alumno, instructor } = this.filtros.value;
 
-    // Ejemplo: escogemos la llamada según los filtros llenados
-    let obs$: Observable<EstadisticasDTO[]>;
-    if (categoria && !curso) {
-      obs$ = this.repotesService.getEstadisticasCategoria(inicio, fin, categoria);
-      this.displayedColumns = ['leyenda1', 'clases', 'duracion'];
-    } else if (categoria && curso && !anio) {
-      obs$ = this.repotesService.getEstadisticasCursos(inicio, fin, categoria, curso);
-      this.displayedColumns = ['leyenda1', 'leyenda2', 'clases', 'duracion'];
-    } else if (categoria && curso && anio != null && iterable != null) {
-      obs$ = this.repotesService.getEstadisticasGrupos(inicio, fin, categoria, curso, anio, iterable);
-      this.displayedColumns = ['leyenda1', 'leyenda2', 'leyenda3', 'leyenda4', 'clases', 'duracion'];
-    } else if (alumno) {
-      obs$ = this.repotesService.getEstadisticasAlumnos(inicio, fin, alumno);
-      this.displayedColumns = ['leyenda1', 'clases', 'duracion'];
-    } else if (instructor) {
-      obs$ = this.repotesService.getEstadisticasInstructores(inicio, fin, instructor);
-      this.displayedColumns = ['leyenda1', 'clases', 'duracion'];
-    } else {
-      // manejas error o llamada default
-      return;
-    }
+    const fechaInicioForamteada: string = this.FormatDate(inicio);
+    const fechaFinFormateada: string = this.FormatDate(fin);
 
+    let obs$: Observable<EstadisticasDTO[]>;
+    if (categoria && !curso && !anio && !iterable && !alumno && !instructor) {
+      obs$ = this.repotesService.getEstadisticasCategoria(fechaInicioForamteada, fechaFinFormateada, categoria);
+      this.displayedColumns = ['leyenda1', 'clases', 'duracion'];
+    } else
+      if (categoria && curso && !anio && !iterable && !alumno && !instructor) {
+        obs$ = this.repotesService.getEstadisticasCursos(fechaInicioForamteada, fechaFinFormateada, categoria, curso);
+        this.displayedColumns = ['leyenda1', 'leyenda2', 'clases', 'duracion'];
+      } else
+        if (categoria && curso && anio && iterable && !alumno && !instructor) {
+          obs$ = this.repotesService.getEstadisticasGrupos(fechaInicioForamteada, fechaFinFormateada, categoria, curso, anio, iterable);
+          this.displayedColumns = ['leyenda1', 'leyenda2', 'leyenda3', 'clases', 'duracion'];
+        } else
+          if (!categoria && !curso && !anio && !iterable && alumno && !instructor) {
+            obs$ = this.repotesService.getEstadisticasAlumno(fechaInicioForamteada, fechaFinFormateada, alumno);
+            this.displayedColumns = ['nombre', 'clases', 'duracion'];
+          } else
+            if (!categoria && !curso && !anio && !iterable && !alumno && instructor) {
+              obs$ = this.repotesService.getEstadisticasInstructore(fechaInicioForamteada, fechaFinFormateada, instructor);
+              this.displayedColumns = ['nombre', 'clases', 'duracion'];
+            } else {
+              this.snackBar.open(
+                'Algo salió mal. Diligencie el formulario e intente nuevamente',
+                'Cerrar',
+                { duration: 5000 }
+              );
+              return;
+            }
     obs$.subscribe(datos => {
       this.dataSource.data = datos;
       this.chartData = datos.map(d => ({
@@ -177,15 +239,6 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  showTable():void {
-
-  }
-
-  showChart():void{
-    
-  }
-
-
   limpiarFiltros() {
     const hoy = new Date();
     this.filtros.reset({
@@ -193,16 +246,13 @@ export class ReportesComponent implements OnInit {
       fin: hoy,
       categoria: '',
       curso: '',
-      grupo: null,
+      grupo: '',
       alumno: '',
       instructor: ''
     });
-    // Nota: no cambiamos selectedTabIndex ni dataSource; si quieres borrar la tabla también:
-    // this.dataSource.data = [];
-    // this.chartData = [];
   }
 
-  private FormatDate(fecha: string): string {
+  private FormatDate(fecha: Date): string {
     return this.datepipe.transform(fecha, 'yyyy-MM-dd')!;
   }
 
@@ -214,9 +264,123 @@ export class ReportesComponent implements OnInit {
     return !fecha || fecha >= this.fechaActual;
   }
 
+  async exportarPDF() {
+    try {
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const fecha = this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm') || '';
+      doc.setFontSize(16);
+      doc.text('Reporte del programa Formación deportiva', 14, 20);
+      doc.setFontSize(10);
+      doc.text(`Fecha: ${fecha}`, 14, 28);
 
-  downloadData() {
-    // Lógica para descargar datos en CSV o Excel
-    console.log('Descargando datos...');
+      //Exportar la tabla con autoTable
+      const header = this.displayedColumns.map(c => this.columnLabels[c] || c);
+      const body = (this.dataSource.data || []).map((row: any) =>
+        this.displayedColumns.map(col => (row && row[col] !== undefined && row[col] !== null) ? String(row[col]) : '')
+      );
+
+      autoTable(doc, {
+        head: [header],
+        body,
+        startY: 35,
+        styles: { fontSize: 9 },
+        margin: { left: 14, right: 14 },
+      });
+
+      // Generación de gráfica
+      doc.addPage();
+      doc.text('Gráfica del reporte', 14, 20);
+      const exportContainer: HTMLElement | null = this.exportChartRef ? this.exportChartRef.nativeElement : null;
+
+      let imgData: string | null = null;
+      if (exportContainer) {
+        const svgEl = exportContainer.querySelector<SVGElement>('svg');
+        if (svgEl) {
+          try {
+            imgData = await this.svgToPngDataUrl(svgEl, 900, 400);
+          } catch (err) {
+            console.warn('Error al generar el gráfico del reporte', err);
+          }
+        }
+        if (!imgData) {
+          const canvas = await html2canvas(exportContainer, { backgroundColor: '#ffffff', useCORS: true, scale: 2 });
+          imgData = canvas.toDataURL('image/png');
+        }
+      }
+
+      if (imgData) {
+        const pdfWidth = doc.internal.pageSize.getWidth() - 28;
+        const props = (doc as any).getImageProperties(imgData);
+        const pdfHeight = (props.height * pdfWidth) / props.width;
+        doc.addImage(imgData, 'PNG', 14, 30, pdfWidth, pdfHeight);
+      } else {
+        this.snackBar.open('No se encontró gráfica en el reporte', 'Cerrar', { duration: 4000 });
+      }
+
+      doc.save('Formacion deportica.pdf');
+    } catch (err) {
+      console.error('Error exportando PDF:', err);
+      this.snackBar.open('Error generando PDF.', 'Cerrar', { duration: 5000 });
+    }
+  }
+
+  // método para cabecera del reporte
+  private toTitleCase(s: string): string {
+    return String(s).replace(/[_\-]/g, ' ').replace(/\b\w/g, ch => ch.toUpperCase());
+  }
+
+  private svgToPngDataUrl(svg: SVGElement, forcedWidth?: number, forcedHeight?: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      try {
+        const clone = svg.cloneNode(true) as SVGElement;
+        // inlinear estilos: mapear elementos originales y clonado
+        const origElems = Array.from(svg.querySelectorAll<HTMLElement>('*'));
+        const cloneElems = Array.from(clone.querySelectorAll<HTMLElement>('*'));
+        origElems.forEach((origEl, i) => {
+          const computed = window.getComputedStyle(origEl);
+          let cssText = computed.cssText;
+          if (!cssText) {
+            cssText = Array.from(computed).reduce((acc, prop) => acc + `${prop}:${computed.getPropertyValue(prop)};`, '');
+          }
+          if (cloneElems[i]) cloneElems[i].setAttribute('style', cssText);
+        });
+        clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        const bbox = svg.getBoundingClientRect();
+        const widthAttr = svg.getAttribute('width');
+        const heightAttr = svg.getAttribute('height');
+        const w = forcedWidth || (widthAttr ? parseFloat(widthAttr) : bbox.width || 900);
+        const h = forcedHeight || (heightAttr ? parseFloat(heightAttr) : bbox.height || 400);
+        clone.setAttribute('width', String(w));
+        clone.setAttribute('height', String(h));
+
+        const serialized = new XMLSerializer().serializeToString(clone);
+        const svgBase64 = btoa(unescape(encodeURIComponent(serialized)));
+        const imgSrc = 'data:image/svg+xml;base64,' + svgBase64;
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject('No se pudo obtener el gráfico.');
+            return;
+          }
+          ctx.fillStyle = '#ffffff'; //fondo del reporte
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = (e) => {
+          reject(e);
+        };
+        img.src = imgSrc;
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 }
+
+
+

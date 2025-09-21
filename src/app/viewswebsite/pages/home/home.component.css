@@ -1,11 +1,11 @@
 .container {
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 10px;
 }
 
 .fixed-card {
-  width: 300px;
-  height: 355px;
+  width: 400px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -76,7 +76,6 @@ p {
 
 .shadow {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  /* Cambia los valores según el efecto de sombra que desees */
 }
 
 .no-underline {
@@ -86,3 +85,5 @@ p {
 .titlleModal {
   text-align: center;
 }
+
+/*spacearound, espaceBetwen, spaceEvnely, */

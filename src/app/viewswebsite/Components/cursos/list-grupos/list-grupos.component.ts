@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGruposComponent } from '../../cursos/form-grupos/form-grupos.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogComponent } from '../../genericos/dialog/dialog.component';
+import { DialogComponent } from '../../dialog/dialog.component';
 import { SidenavComponent } from 'src/app/viewswebsite/pages/sidenav/sidenav.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CursoDTO } from 'src/app/Models/DTOs/curso-dto';
@@ -45,7 +45,6 @@ export class ListGruposComponent implements OnInit {
   public colsize = 3;
   public isMobile: boolean = false;
   public grupos: GrupoDTO[] = [];
-  public horario: HorarioDTO[] = [];
   categoria: string | null = '';
   titulo: string | null = '';
   perfil?: string;
@@ -110,7 +109,7 @@ export class ListGruposComponent implements OnInit {
 
             this.horarioservice.getHorarios(categoria, nombreCurso, itemgrupo.anio!, itemgrupo.iterable!).subscribe(
               (horarios) => {
-                this.horario = horarios;
+                itemgrupo.horarios = horarios;
               }
             );
 

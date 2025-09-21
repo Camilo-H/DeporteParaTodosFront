@@ -267,146 +267,8 @@
 }
 
 .btn-google {
-  display: flex; /* Usamos Flexbox para alinear los elementos */
-  align-items: center; /* Alinea verticalmente los elementos al centro */
-  justify-content: center; /* Alinea los elementos horizontalmente */
-  border: 1px solid #5b5c5e;
-  border-radius: 5px;
-  padding: 10px 20px;
-  transition: border-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition: box-shadow 0.2s ease;
-  margin: 1%;
-  margin-top: 2%;
-}
-
-.icon {
-  margin-right: 8px; /* Añadimos un espacio entre el ícono y el texto */
-}
-
-.btn-google:hover {
-  background-color: #777779 !important;
-}
-
-
-.text-body {
-  font-family: "FiraSans-Regular";
-  font-size: 20px;
-}
-
-
-/*********************************/
-/* Estilo para el contenedor del gif */
-.hand-icon-container {
-  position: relative;
-  display: inline-block;
-  margin-top: 10px; /* Ajusta la distancia desde el botón de Google */
-}
-
-/* Estilo del gif de la mano */
-.hand-gif {
-  width: 40px; /* Ajusta el tamaño del gif */
-  height: auto;
-  cursor: pointer; /* Muestra el puntero al pasar el cursor */
-}
-
-/* Estilo del mensaje emergente */
-.tooltip-message {
-  position: absolute;
-  bottom: 50px; /* Ajusta la distancia del mensaje desde el gif */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333; /* Fondo oscuro */
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 14px;
-  display: none;
-  white-space: nowrap;
-}
-
-/* Mostrar el mensaje emergente solo cuando el cursor esté sobre el gif */
-.hand-icon-container:hover .tooltip-message {
-  display: block;
-}
-
-
-
-/*
-.card{
-  margin-top: 5%;
-}
-.btn-google {
-border: 1px solid #5b5c5e; 
-border-radius: 5px;
-padding: 10px 20px; 
-transition: border-color 0.3s ease;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
-transition: box-shadow 0.2s ease; 
-margin: 1%;
-}
-.btn-primar {
-margin: 2%;
-background-color: #000066 !important; 
-color: #fcfcfd; 
-border: 1px solid #000066; 
-transition: background-color 0.3s ease; 
-}
-
-.btn-primar:hover {
-background-color: #333399 !important; 
-border-color: #333399 !important; 
-}
-.btn-google:hover {
-  background-color: #777779 !important;
-}
-
-
-
-.hand-icon-container {
-position: relative;
-display: inline-block;
-margin-top: 10px; 
-}
-
-
-.hand-gif {
-width: 40px; 
-height: auto;
-cursor: pointer; 
-}
-
-
-.tooltip-message {
-position: absolute;
-bottom: 50px; 
-left: 50%;
-transform: translateX(-50%);
-background-color: #333;
-color: white;
-padding: 5px 10px;
-border-radius: 5px;
-font-size: 14px;
-display: none;
-white-space: nowrap;
-}
-
-
-.hand-icon-container:hover .tooltip-message {
-display: block;
-}
-
-.componente-inicio-sesion {
-  height: 100%;
-  width: 100%;
-  background-color: #ffffff;
-}
-
-
-
-.btn-google {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: center;
   border: 1px solid #5b5c5e;
   border-radius: 5px;
@@ -419,12 +281,14 @@ display: block;
 }
 
 .icon {
-  margin-right: 8px; 
+  margin-right: 8px;
 }
 
 .btn-google:hover {
   background-color: #777779 !important;
 }
 
-
-*/
+.text-body {
+  font-family: "FiraSans-Regular";
+  font-size: 20px;
+}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlumnoDTO } from 'src/app/Models/DTOs/alumno-dto';
@@ -12,6 +12,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { GrupoDTO } from 'src/app/Models/DTOs/grupo-dto';
 import { GrupoService } from 'src/app/services/grupo.service';
 import { InstructorServisce } from 'src/app/services/instructor.service';
+import { HorarioService } from 'src/app/services/horario.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
+import { InscripcionesService } from 'src/app/services/inscripciones.service';
+import { InscripcionDTO } from 'src/app/Models/DTOs/inscripcion-dto';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-list-deportistasde-curso',
@@ -23,7 +29,12 @@ import { InstructorServisce } from 'src/app/services/instructor.service';
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatCheckboxModule
+  ],
+  providers: [
+    DatePipe,
   ],
   templateUrl: './list-deportistasde-curso.component.html',
   styleUrls: ['./list-deportistasde-curso.component.css'],
@@ -35,7 +46,9 @@ export class ListDeportistasdeCursoComponent implements OnInit {
   anio: number | null = null;
   iterable: number | null = null;
   alumnos: AlumnoDTO[] = [];
-  displayedColumns: string[] = ['Código', 'Nombre', 'Correo', 'Acciones'];
+  seleccionados: any[] = [];
+  displayedColumns: string[] = ['Código', 'Nombre', 'Correo', 'Faltas', 'Asistencia', 'Acciones'];
+  fechaActual: Date = new Date();
 
   grupo: GrupoDTO = {
     categoria: '',
@@ -57,7 +70,10 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     private route: ActivatedRoute,
     private grupoService: GrupoService,
     private instructorService: InstructorServisce,
-
+    private horarioSerive: HorarioService,
+    private inscripcionService: InscripcionesService,
+    private datepipe: DatePipe,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -74,6 +90,11 @@ export class ListDeportistasdeCursoComponent implements OnInit {
       (grupoTemp) => {
         this.grupo = grupoTemp;
         this.consultarInstructor(grupoTemp.idInstructor!);
+        this.horarioSerive.getHorarios(this.categoria!, this.titulo!, this.anio!, this.iterable!).subscribe(
+          (horario) => {
+            grupoTemp.horarios = horario;
+          }
+        );
       }
     );
 
@@ -92,6 +113,40 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     );
   }
 
+  inscribirAlumno() {
+    const dialogRef = this.dialog.open(FormInscripcionesComponent, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(
+      (resultado) => {
+        if (resultado.confirmacionCreacion) {
+
+          const inscripcion: InscripcionDTO = {
+            fechaInscripcion: this.FormatDate(this.fechaActual!),
+            fechaDesvinculacion: '',
+            alumnoId: resultado.idAlumno,
+            categoria: this.categoria!,
+            curso: this.titulo!,
+            anio: this.anio!,
+            iterable: this.iterable!,
+            eliminado: 0,
+          }
+          this.inscripcionService.postInscripcion(inscripcion).subscribe(
+            (response) => {
+              if (response != null) {
+                this.ngOnInit();
+              }
+            }
+          );
+        }
+      });
+  }
+
+  private FormatDate(fecha: Date): string {
+    return this.datepipe.transform(fecha, 'yyyy-MM-dd')!;
+  }
+
   editarAlumno() {
     console.log('Editar',);
     // Lógica para editar
@@ -101,5 +156,23 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     console.log('Eliminar',);
     // Lógica para eliminar
   }
+
+  toggleSelection(alumno: any, event: any) {
+    if (event.checked) {
+      this.seleccionados.push(alumno);
+    } else {
+      this.seleccionados = this.seleccionados.filter(a => a !== alumno);
+    }
+  }
+
+  isSelected(alumno: any): boolean {
+    return this.seleccionados.includes(alumno);
+  }
+
+  registrarAsistencia() {
+    console.log("Alumnos seleccionados:", this.seleccionados);
+    this.seleccionados = [];
+  }
+
 
 }

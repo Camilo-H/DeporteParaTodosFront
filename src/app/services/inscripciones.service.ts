@@ -12,9 +12,7 @@ export class InscripcionesService {
 
   postInscripcion(data: InscripcionDTO): Observable<InscripcionDTO> {
     return this.http.post<InscripcionDTO>(`${this.apiUrl}/inscripcion`, data).pipe(
-
       catchError((error) => {
-        console.error('Se produjo un error al crear la inscripcion');
         return throwError(error);
       })
     );
@@ -23,7 +21,6 @@ export class InscripcionesService {
   eliminarInscripcion(data: InscripcionDTO): Observable<InscripcionDTO> {
     return this.http.put<InscripcionDTO>(`${this.apiUrl}/desvincularInscripcion`, data).pipe(
       catchError((error) => {
-        console.error('No se pudo eliminar la inscripcion');
         return throwError(error);
       })
     );

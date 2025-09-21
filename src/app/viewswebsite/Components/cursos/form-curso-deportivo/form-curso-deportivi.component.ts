@@ -108,15 +108,16 @@ export class FormCursoDeportiviComponent implements OnInit {
   onSubmit(form: NgForm): void {
     if (this.isEditing) {
       this.updateCurso();
+    } else {
+      this.crearCurso();
     }
-    this.crearCurso();
+
   }
 
   private crearCurso(): void {
     if (this.selectedFile) {
       this.imagenService.postImagen(this.selectedFile).subscribe(
         (imagenResponse) => {
-          console.log("Respuesta al guardar imagen", imagenResponse)
           const idImagen = imagenResponse.id;
 
           const nuevoCurso: CursoDTO = {
@@ -126,7 +127,6 @@ export class FormCursoDeportiviComponent implements OnInit {
             descripcion: this.curso.descripcion,
             idImagen: idImagen
           };
-
           this.cursodeportivoserce.crearCurso(nuevoCurso).subscribe(
             (response) => {
               console.log('Curso creado con éxito', response);
@@ -174,24 +174,45 @@ export class FormCursoDeportiviComponent implements OnInit {
             idImagen: idImagen
           };
 
-          this.cursodeportivoserce.crearCurso(nuevoCurso).subscribe(
+          this.cursodeportivoserce.updateCurso(this.data.tituloCategoria, this.data.nombrecurso, nuevoCurso).subscribe(
             (response) => {
               console.log('Curso actualizado con éxito', response);
               this.dialogRef.close(true);
             },
             (error) => {
               console.error('Error al actualizar el curso deportivo', error);
+              this.ntfMatsnackBar.open(
+                'Verifique que los datos del formulario estén completos para hacer el registro. La imagen es obligatoria.',
+                'Cerrar',
+                { duration: 5000 }
+              );
             }
           );
         }
       );
-    }
-    this.ntfMatsnackBar.open(
-      'Verifique que los datos del formulario estén completos para hacer el registro. La imagen es obligatoria.',
-      'Cerrar',
-      { duration: 5000 }
-    );
+    } else {
+      const nuevoCurso: CursoDTO = {
+        nombre: this.curso.nombre,
+        deporte: this.curso.deporte,
+        categoriaCurso: this.data.tituloCategoria,
+        descripcion: this.curso.descripcion,
+        idImagen: this.curso.idImagen,
+      };
 
+      this.cursodeportivoserce.updateCurso(this.data.tituloCategoria, this.data.nombrecurso, nuevoCurso).subscribe(
+        (response) => {
+          console.log('Curso actualizado con éxito', response);
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          this.ntfMatsnackBar.open(
+            'Verifique que los datos del formulario estén completos para hacer el registro. La imagen es obligatoria.',
+            'Cerrar',
+            { duration: 5000 }
+          );
+        }
+      );
+    }
   }
 
   filtrarDeportes(valor: string) {

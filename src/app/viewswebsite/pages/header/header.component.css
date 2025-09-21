@@ -2,34 +2,34 @@
 a{
     cursor:pointer;
 }
-/**/
+
 .navbar {
-    display: flex; /* Hace que los elementos se organicen en una línea */
-    justify-content: space-between; /* Coloca espacio entre los elementos */
-    align-items: center; /* Centra verticalmente los elementos */
-    padding: 10px 20px; /* Añade un poco de espacio alrededor */
-    background-color: #000066; /* Color de fondo del navbar */
-    color: white; /* Color del texto */
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px 20px; 
+    background-color: #000066; 
+    color: white;
 }
 
 .navbar-left {
-    flex: 1; /* El logo se expande para ocupar el espacio disponible */
+    flex: 1; 
 }
 
 .navbar-right ul {
-    list-style-type: none; /* Elimina los puntos de la lista */
+    list-style-type: none; 
     padding: 0;
     margin: 0;
 }
 
 .navbar-right ul li {
-    display: inline; /* Hace que los elementos de la lista se muestren en línea */
-    margin-left: 20px; /* Añade espacio entre los elementos */
+    display: inline; 
+    margin-left: 20px; 
 }
 
 .navbar-right ul li:first-child {
-    margin-left: 0; /* Elimina el margen izquierdo del primer elemento */
+    margin-left: 0; 
 }
 .navbar-right ul li a mat-icon {
-    margin-right: 8px; /* Espacio entre el ícono y el texto */
+    margin-right: 8px;
 }

@@ -12,10 +12,6 @@
                 </div>
             </div>
 
-
-
-
-
             <div class="col-lg-4 d-flex justify-content-center" *ngIf=" perfil === 'Administrador'">
                 <button class="btnAgregar" (click)="registroDeporte()">
                     Agregar curso +
@@ -33,7 +29,7 @@
     </div>
 
     <div class="content-tarjet">
-        <mat-grid-list [cols]="colsize" rowHeight="300"><!-- gutterSize="20px" gutterSize="20px"-->
+        <mat-grid-list [cols]="colsize" rowHeight="430"><!-- gutterSize="20px" gutterSize="20px"-->
             <mat-grid-tile *ngFor="let item of cursos" [colspan]="1" [rowspan]="1">
                 <mat-card class="mycard shadow fixed-card">
 
@@ -79,7 +75,6 @@
         </mat-grid-list>
     </div>
     <div style="width: 70%; margin: 0 auto">
-
     </div>
 
 </app-sidenav>

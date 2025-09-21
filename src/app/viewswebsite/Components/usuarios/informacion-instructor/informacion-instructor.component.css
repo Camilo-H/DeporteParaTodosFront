@@ -42,8 +42,8 @@
   }
   
   th {
-    background-color: #0c3f69; /* Color original para las cabeceras */
-    color: #000066; /* Color del texto en la cabecera */
+    background-color: #0c3f69;
+    color: #000066;
     font-weight: bold;
   }
   
@@ -53,8 +53,8 @@
   }
   
   tr.mat-header-row {
-    background-color: #2196f3; /* Color personalizado para la fila de cabecera */
-    color: rgb(121, 54, 54); /* Color del texto en la cabecera */
+    background-color: #2196f3; 
+    color: rgb(121, 54, 54); 
   }
   
   .mat-elevation-z8 {

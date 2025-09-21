@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
-import { filter } from 'rxjs';
-
-declare const google: any;
+import { HttpClient } from '@angular/common/http';
+import { PerfilDTO } from '../Models/DTOs/perfil-tdo';
+import { catchError, throwError, Observable, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // urlApi: string = 'http://127.0.0.1:8082/api/v2';
-  usuarioLogued: any;
+  urlApi: string = 'http://127.0.0.1:8082/api/v2';
 
-  constructor(private oauthService: OAuthService) {
+  constructor(
+    private oauthService: OAuthService,
+    private http: HttpClient,
+  ) {
     this.initLogin();
   }
 
@@ -27,19 +29,22 @@ export class AuthService {
     this.oauthService.configure(config);
     this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
-      if (this.oauthService.hasValidAccessToken()) {
-        const claims: any = this.oauthService.getIdentityClaims();
+      const claims: any = this.oauthService.getIdentityClaims();
+      if (claims) {
         console.log('Usuario autenticado:', claims);
-        this.usuarioLogued=claims;
+      } else {
+        console.log('No hay usuario autenticado');
       }
-      console.log('No hay usuario autenticado');
-      // const claims: any = this.oauthService.getIdentityClaims();
-      // if (claims) {
-      //   console.log('Usuario autenticado:', claims);
-      // } else {
-      //   console.log('No hay usuario autenticado', claims);
-      // }
     });
+  }
+
+  verificarUsuario(email: string) {
+    this.http.get<PerfilDTO>(`${this.urlApi}/login?email=${encodeURIComponent(email)}`).pipe(
+    ).subscribe(
+      (data) => {
+        console.log('Respuesta del servico de autenticación backend', data);
+      }
+    );
   }
 
   login() {
@@ -54,7 +59,13 @@ export class AuthService {
     return this.oauthService.getIdentityClaims();
   }
 
-  getInfoUsuario():any{
-    console.log('Datos del usuario logueado', this.usuarioLogued)
+  isAuthenticated(): boolean {
+    return this.oauthService.hasValidAccessToken() && this.oauthService.hasValidIdToken();
+  }
+
+  getUserProfile(): Observable<any> {
+    return from(this.oauthService.loadUserProfile());
   }
 }
+
+

@@ -7,35 +7,33 @@
 
 .btnGuardar {
   display: flex;
-  justify-content:end; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
-  height: 90px; /* Altura del contenedor */
+  justify-content:end;
+  align-items: center;
+  height: 90px;
 }
 
 .btnGuardar button {
-  width: 100px; /* Ancho personalizado */
-  height: 40px; /* Altura personalizada */
-  background-color: #000066 !important; /* Fondo azul */
-  color: rgb(251, 251, 252) !important; /* Texto blanco */
-  border-radius: 20px !important; /* Bordes redondeados */
-  border: none; /* Sin borde */
-  text-align: center; /* Alineación del texto */
-  font-size: 16px; /* Tamaño del texto */
-  font-weight: bold; /* Texto en negrita */
-  cursor: pointer; /* Cambia el cursor a "puntero" */
+  width: 100px; 
+  height: 40px; 
+  background-color: #000066 !important; 
+  color: rgb(251, 251, 252) !important; 
+  border-radius: 20px !important; 
+  border: none; 
+  text-align: center; 
+  font-size: 16px; 
+  font-weight: bold; 
+  cursor: pointer;
 }
 
 .btnGuardar button:disabled {
-  background-color: #cccccc !important; /* Fondo gris deshabilitado */
-  color: #666666 !important; /* Texto gris deshabilitado */
-  cursor: not-allowed; /* Cambia el cursor cuando está deshabilitado */
+  background-color: #cccccc !important;
+  color: #666666 !important; 
+  cursor: not-allowed;
 }
-
 
 .listado{
   margin: 10px;
 }
-
 
 .tabla-container {
     overflow-x: auto;

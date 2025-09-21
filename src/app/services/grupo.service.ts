@@ -14,7 +14,6 @@ export class GrupoService {
   getGrupos(prmNombreCategoria: string, prmNombreCurso: string): Observable<GrupoDTO[]> {
     return this.http.get<GrupoDTO[]>(`${this.apiUrl}/gruposCurso?prmCategoria=${encodeURIComponent(prmNombreCategoria)}&prmCurso=${encodeURIComponent(prmNombreCurso)}`).pipe(
       catchError((error) => {
-        console.error('Se produjo un error al recuperar los elementos ');
         return throwError(error);
       })
     );
@@ -22,11 +21,7 @@ export class GrupoService {
 
   createGrupo(grupo: GrupoDTO): Observable<GrupoDTO> {
     return this.http.post<GrupoDTO>(`${this.apiUrl}/grupo`, grupo).pipe(
-      tap ((respuesta) =>{
-        //console.log("Respuesta desde el backend", respuesta)
-      }),
       catchError((error) => {
-        console.error('Se produjo al crear el elemento', grupo);
         return throwError(error);
       })
     );
@@ -35,11 +30,7 @@ export class GrupoService {
   getGrupo(prmNombreCategoria: string, prmNombreCurso: string, anio: number, iterable: number): Observable<GrupoDTO> {
     return this.http.get<GrupoDTO>(
       `${this.apiUrl}/grupo?categoria=${encodeURIComponent(prmNombreCategoria)}&curso=${encodeURIComponent(prmNombreCurso)}&anio=${(anio)}&iterable=${(iterable)}`).pipe(
-        // tap((respuesta) => {
-        //   console.log('Respuesta del backend:', respuesta);
-        // }),
         catchError((error) => {
-          console.error('Se produjo al obtener el elemento');
           return throwError(error);
         })
       );
@@ -48,7 +39,6 @@ export class GrupoService {
   updateGrupo(prmNombreCategoria: string, prmNombreCurso: string, grupo: GrupoDTO): Observable<GrupoDTO> {
     return this.http.put<GrupoDTO>(`${this.apiUrl}/grupo?prmCategoria=${encodeURIComponent(prmNombreCategoria)}&prmCurso=${encodeURIComponent(prmNombreCurso)}`, grupo).pipe(
       catchError((error) => {
-        console.error('Se produjo al actualizar el curso con los siguientes datos: ', grupo);
         return throwError(error);
       })
     );
@@ -57,7 +47,6 @@ export class GrupoService {
   deleteGrupo(prmNombreCategoria: string, prmNombreCurso: string): Observable<number> {
     return this.http.delete<number>(`${this.apiUrl}/grupo`).pipe(
       catchError((error) => {
-        console.error('Se produjo al actualizar el curso con los siguientes datos: ');
         return throwError(error);
       })
     );

@@ -40,7 +40,7 @@ img {
 }
 
 .sidebar-dropdown {
-  padding-left: 32px; /* Añade espacio para anidar visualmente */
+  padding-left: 32px;
 }
 
 .text-body-small-r {
@@ -49,37 +49,32 @@ img {
   color: #f4f4f8;
 }
 
-.opcion-espaciado-p{
+.opcion-espaciado-p {
   padding-left: 10%;
 }
 
-/* Estilo para los enlaces dentro del mat-nav-list */
 mat-nav-list a.nav-item {
-  color: white !important; 
-  text-decoration: none; 
+  color: white !important;
+  text-decoration: none;
 }
 
-/* Estilo para los íconos dentro de los enlaces */
 mat-nav-list a.nav-item mat-icon {
-  color: white !important; 
-  margin-right: 8px; 
+  color: white !important;
+  margin-right: 8px;
 }
 
-/* Asegurarse de que el enlace no cambie de color al hacer hover */
 mat-nav-list a.nav-item:hover {
-  color: white !important; 
+  color: white !important;
 }
 
-/* Asegurarse de que no haya ningún subrayado */
 mat-nav-list a.nav-item:link,
 mat-nav-list a.nav-item:visited,
 mat-nav-list a.nav-item:active {
   text-decoration: none;
 }
 
-/*Estilos toolbar*/
-a{
-  cursor:pointer;
+a {
+  cursor: pointer;
 }
 
 .navbar {
@@ -89,7 +84,7 @@ a{
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #000066; 
+  background-color: #000066;
   color: white;
 }
 
@@ -109,6 +104,5 @@ a{
 }
 
 .navbar-right ul li a {
-  color: white; /* Mantener el texto en blanco */
+  color: white;
 }
-

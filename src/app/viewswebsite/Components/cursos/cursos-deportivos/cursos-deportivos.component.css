@@ -1,6 +1,7 @@
+
 .fixed-card {
-  width: 300px;
-  height: 355px;
+  width: 380px;
+  height: 380px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -18,58 +19,52 @@
   object-fit: cover;
 }
 
-.contenido {
-  border: rgb(219, 218, 218) 0.5px solid;
-  background-color: rgb(249, 250, 250);
-  padding: 10px;
-}
-
 .btn-menu {
   border: none !important;
   background-color: transparent !important;
 }
 
-.shadow {
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-}
-
-.containerButons {
-  border-bottom: 1px solid rgb(122, 120, 120);
-  padding: 10px;
-  width: 99.8%;
-}
-
-.mycard {
-  width: 100%; 
-  height: 350px; 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  align-items: center;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) !important;
-}
-
-img,p {
+img,
+p {
   cursor: pointer;
 }
 
 .card_title {
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  /* Número de líneas que quieres mostrar */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
 }
 
-.text-center{
-  padding: 3px;
+.text-info {
+  text-align: justify;
+  justify-content: center;
+  background-color: rgb(240, 242, 242);
+}
+
+.contenido {
+  border: rgb(219, 218, 218) 0.5px solid;
+  background-color: rgb(249, 250, 250);
+  padding: 10px;
 }
 
 p {
   text-align: center;
   color: black;
+}
+
+.shadow {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.titlleModal {
+  text-align: center;
 }
 
 .btnInscripcion {
@@ -80,9 +75,14 @@ p {
   background-color: #000066 !important;
   color: rgb(251, 251, 252) !important;
   border-radius: 20px !important;
-  padding: 10px 15px; /* Ajusta el padding */
+  padding: 10px 15px;
   font-size: 16px;
   max-width:150px;
   width: 100%;
 }
 
+.containerButons {
+  border-bottom: 1px solid rgb(122, 120, 120);
+  padding: 10px;
+  width: 99.8%;
+}

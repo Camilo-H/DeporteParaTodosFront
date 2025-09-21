@@ -43,9 +43,7 @@ table {
 
 th {
   background-color: #0c3f69;
-  /* Color original para las cabeceras */
   color: #000066;
-  /* Color del texto en la cabecera */
   font-weight: bold;
 }
 
@@ -57,9 +55,7 @@ th {
 
 tr.mat-header-row {
   background-color: #2196f3;
-  /* Color personalizado para la fila de cabecera */
   color: rgb(121, 54, 54);
-  /* Color del texto en la cabecera */
 }
 
 .mat-elevation-z8 {
@@ -71,8 +67,8 @@ tr.mat-header-row {
 
 .btnGuardar {
   display: flex;
-  justify-content: flex-end; /* Alinea el contenido a la derecha */
-  padding: 20px; /* Añade un poco de padding alrededor del div */
+  justify-content: flex-end; 
+  padding: 20px; 
 }
 
 .btnGuardar button {

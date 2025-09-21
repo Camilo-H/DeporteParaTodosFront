@@ -7,4 +7,5 @@ export interface PerfilDTO{
     facultad: string;
     tipoAlumno: string;
     role: string;
+    alumnoCodigo: string;
 }

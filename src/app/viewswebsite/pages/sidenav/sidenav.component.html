@@ -21,7 +21,7 @@
           <mat-icon>tune</mat-icon>
           <span class="text-body-small-r opcion-espaciado-p">Reportes</span>
         </a>
-        <a mat-list-item (click)="redirectionTo('info-instructor')" class="nav-item" *ngIf="perfil !== 'Estudiante'">
+        <a mat-list-item (click)="redirectionTo('info-instructor')" class="nav-item" *ngIf="perfil === 'Instructor'">
           <mat-icon>person</mat-icon>
           <span class="text-body-small-r opcion-espaciado-p">Mi información</span>
         </a>

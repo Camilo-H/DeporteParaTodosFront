@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoriaService } from 'src/app/services/categoria.service';
+import { CursodeportivoService } from 'src/app/services/cursodeportivo.service';
 
 @Component({
   selector: 'app-dialog',
@@ -33,13 +34,23 @@ import { CategoriaService } from 'src/app/services/categoria.service';
 export class DialogComponent {
   constructor(
     private categoriaservice: CategoriaService,
+    private cursoService: CursodeportivoService,
     private dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { elemento: string, identificador: any }
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: { elemento: string, nombreElemento: any, tipoElemento: string, categoria?:string,}
+  ) { }
 
   confirmarEliminar(): void {
-    this.categoriaservice.deleteCategoria(this.data.identificador).subscribe(
-    );
-    this.dialogRef.close({ confirmado: true, id: this.data.identificador });
+    if (this.data.tipoElemento == 'categoria') {
+      this.categoriaservice.deleteCategoria(this.data.nombreElemento).subscribe(
+      );
+      this.dialogRef.close({ confirmado: true, id: this.data.nombreElemento });
+    }
+
+    if (this.data.tipoElemento == 'curso') {
+      this.cursoService.deleteCurso(this.data.categoria!, this.data.nombreElemento).subscribe(
+      );
+      this.dialogRef.close({ confirmado: true, id: this.data.nombreElemento});
+    }
+
   }
 }

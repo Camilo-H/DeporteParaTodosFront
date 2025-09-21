@@ -16,11 +16,6 @@ export class AlumnoService {
 
     getAlumnosGrupo(categoria: string, curso: string, anio: number, iterable: number): Observable<AlumnoDTO[]> {
         return this.http.get<AlumnoDTO[]>(`${this.apiUrl}/alumnosGrupo?categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(curso)}&anio=${anio}&iterable=${iterable}`).pipe(
-            catchError((error) => {
-                console.log("Error al importar los alumnos del grupo ", error);
-                return throwError(error);
-            })
         );
-
     }
 }

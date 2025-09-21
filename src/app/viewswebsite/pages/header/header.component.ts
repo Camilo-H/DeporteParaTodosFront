@@ -35,10 +35,6 @@ export class HeaderComponent {
     this.perfilservice.setPerfil(perfil);
   }
 
-  /*redirectionTo(param:any){
-    this.router.navigate([param]);
-  }*/
-
   redirectionTo(url: string): void {
     window.location.href = url;
   }

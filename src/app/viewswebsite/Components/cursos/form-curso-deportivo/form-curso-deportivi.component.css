@@ -40,7 +40,7 @@ mat-dialog-content {
 }
 
 .image-preview {
-  max-width: 80%; /* Limita el tamaño máximo de la imagen */
+  max-width: 80%;
   max-height: 40vh;
   object-fit: contain;
   border: 1px solid #ccc;
@@ -51,16 +51,13 @@ mat-dialog-content {
 @media (max-width: 600px) {
   .form-content {
     padding: 10px;
-    /* Añadir un pequeño padding en pantallas pequeñas */
   }
 
   .form-field {
     width: 100%;
-    /* Asegura que los campos ocupen el 100% en dispositivos pequeños */
   }
 
   .image-preview {
     max-height: 40vh;
-    /* Reducir el tamaño de la imagen en pantallas pequeñas */
   }
 }

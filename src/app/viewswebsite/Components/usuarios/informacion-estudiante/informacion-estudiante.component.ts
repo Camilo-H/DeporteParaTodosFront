@@ -30,8 +30,6 @@ constructor(
     const courseData = [
       { nombre: 'Sala masculino ', tipo: 'Seleccionado - Grupo A', horario: 'Lunes 09:00 - 11:00, Viernes 09:00 - 11:00 Cancha 3' },
        { nombre: 'Futbol 11 masculino', tipo: 'Recreativo - Grupo A', horario: 'Martes 07:00 - 09:00 Cancha 1, Jueves 18:00 Cancha 3'},
-      // { nombre: 'Futbol sala masculino', tipo: 'Recreativo', horario: 'por definir' },
-      // { nombre: 'Futbol sala femenino', tipo: 'Seleccionado', horario: '8:00 - 10:00' }
     ];
     this.courses.data = courseData;
   }

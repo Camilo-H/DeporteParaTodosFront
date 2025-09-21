@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { SidenavComponent } from '../../../pages/sidenav/sidenav.component';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { RegistroInstructorComponent } from '../registro-instructor/registro-instructor.component';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { InstructorDTO } from 'src/app/Models/DTOs/instructor-dto';
 import { InstructorServisce } from 'src/app/services/instructor.service';
+import { FormInscripcionesComponent } from '../form-inscripciones/form-inscripciones.component';
 
 @Component({
   selector: 'app-lista-instructores',
@@ -54,21 +53,10 @@ export class ListaInstructoresComponent implements OnInit {
     );
   }
 
-  
-  // onCheckboxChange(event: any) {
-  //   this.isButtonEnabled = event.checked; 
-  //   this.isButtonEnabled = this.instructores.some();
-  // }
-
   registroInstructor() {
-    const dialogRef = this.dialog.open(RegistroInstructorComponent, {
+    const dialogRef = this.dialog.open(FormInscripcionesComponent, {
 
     });
   }
 
-
-  // guardar() {
-  //   this.deportistas.forEach(deportista => (deportista.checked = false)); // Desactiva todos los checkboxes
-  //   this.isButtonEnabled = false; // Desactiva el botón
-  // }
 }

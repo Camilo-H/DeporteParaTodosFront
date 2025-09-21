@@ -11,7 +11,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogComponent } from '../../Components/genericos/dialog/dialog.component';
+import { DialogComponent } from '../../Components/dialog/dialog.component';
 import { NuevoCursoCategoriaComponent } from '../../Components/cursos/nuevo-curso-categoria/nuevo-curso-categoria.component';
 import { HeaderComponent } from '../header/header.component';
 import { CategoriaService } from 'src/app/services/categoria.service';
@@ -34,8 +34,6 @@ import { ImagenService } from 'src/app/services/imagen.service';
     MatMenuModule,
     MatDialogModule,
     HeaderComponent,
-    //MatDatepickerModule,
-    //MatNativeDateModule
   ],
 
   templateUrl: './home.component.html',
@@ -71,7 +69,6 @@ export class HomeComponent {
     });
   }
 
-  // Método para cargar las categorías desde el servicio
   loadCategorias(): void {
     this.categoriaService.getCategorias().subscribe(
       (data) => {
@@ -97,7 +94,6 @@ export class HomeComponent {
     );
   }
 
-  // Método para abrir la modal y mostrar la descripción
   verInformacion(item: CategoriaDTO): void {
     this.categoriaSeleccionada = item;
     const modalElement = document.getElementById('exampleModal');
@@ -111,12 +107,10 @@ export class HomeComponent {
     this.router.navigate(['/configuracionCatCurso']);
   }
 
-  //Método para cargar los cursos de la categoría
   abrirCursosDeportivos(identificador: string): void {
     this.router.navigate(['/cursos_deportivos', identificador]);
   }
 
-  //Método para actualizar la categoría
   onUpdate(titulo: string): void {
     const dialogRef = this.dialog.open(NuevoCursoCategoriaComponent, {
       data: { titulo },
@@ -128,11 +122,10 @@ export class HomeComponent {
     });
   }
 
-  //Método para eliminar la categoría
-  onDelete(identificador: string): void {
+  onDelete(nombreElemento: string): void {
     let elemento: string = ' la categoría';
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: { elemento, identificador },
+      data: { elemento, nombreElemento, tipoElemento: 'categoria' },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmado) {

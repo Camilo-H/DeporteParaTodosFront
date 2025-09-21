@@ -54,10 +54,6 @@ export class SidenavComponent implements OnInit {
       shareReplay()
     );
 
-  /*redirectionTo(param: any) {
-    this.router.navigate([param]);
-  }*/
-
   redirectionTo(url: string): void {
     window.location.href = url;
   }
