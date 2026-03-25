@@ -8,7 +8,7 @@ import { DeporteDTO } from '../Models/DTOs/deporte-dto';
 })
 export class DeporteService {
 
-  private url = 'http://127.0.0.1:8082/api';
+  private url = 'http://127.0.0.1:8082/api/v2';
 
   constructor(private http: HttpClient) { }
 
