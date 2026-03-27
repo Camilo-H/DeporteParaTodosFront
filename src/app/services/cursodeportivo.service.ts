@@ -22,6 +22,7 @@ export class CursodeportivoService {
   }
 
   crearCurso(curso: CursoDTO): Observable<CursoDTO> {
+    console.log("curso en el service", curso);
     return this.http.post<CursoDTO>(`${this.apiUrl}/curso`, curso).pipe(
     );
   }

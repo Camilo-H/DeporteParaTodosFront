@@ -20,6 +20,7 @@ import {
 import { DeporteDTO } from 'src/app/Models/DTOs/deporte-dto';
 import { ImagenService } from 'src/app/services/imagen.service';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { catchError } from 'rxjs';
 
 
 @Component({
@@ -115,6 +116,16 @@ export class FormCursoDeportiviComponent implements OnInit {
   }
 
   private crearCurso(): void {
+    /**
+     * TODO: Al crear un curso deportivo se requiere que si el deporte no se encuentra en el listado, el usuario pueda ingresar el nombre del nuevo deporte.
+     *       Actualmente el sistema esta generando un error por violación de llave foranea. Esto se debe solucionar.
+     */
+    if(!this.ValidarExistenciaDeporte(this.curso.deporte)){
+      const nuevoDeporte: DeporteDTO={nombre: this.curso.deporte}
+      this.deporteServise.crearDeporte(nuevoDeporte).subscribe(
+        (response)=>{response;}
+      );
+    }
     if (this.selectedFile) {
       this.imagenService.postImagen(this.selectedFile).subscribe(
         (imagenResponse) => {
@@ -220,6 +231,10 @@ export class FormCursoDeportiviComponent implements OnInit {
     this.deporteFiltrado = this.deportes.filter((d) =>
       d.nombre.toLowerCase().includes(filtro)
     );
+  }
+
+  ValidarExistenciaDeporte(deporte: String){
+    return this.deportes.some(d=>d.nombre.toLowerCase()=== deporte.toLowerCase());
   }
 
   onFileSelected(event: Event): void {
