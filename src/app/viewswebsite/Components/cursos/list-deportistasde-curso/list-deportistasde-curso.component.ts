@@ -108,7 +108,7 @@ export class ListDeportistasdeCursoComponent implements OnInit {
   consultarInstructor(id: string): void {
     this.instructorService.getInstructor(id).subscribe(
       (instructor) => {
-        this.grupo.nombreInstructor = instructor.nombre;
+        this.grupo.nombreInstructor = instructor.perfil.nombre;
       }
     );
   }

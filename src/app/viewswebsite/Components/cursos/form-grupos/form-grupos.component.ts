@@ -88,7 +88,7 @@ export class FormGruposComponent implements OnInit {
       this.isEditing = true;
       this.loadGrupo(this.categoriaGrupo, this.cursoGrupo, this.data.anio, this.data.iterable);
     }
-
+//obteniendo instructoress
     this.instructorService.getInstructores().subscribe(
       (response) => {
         this.instructores = response;

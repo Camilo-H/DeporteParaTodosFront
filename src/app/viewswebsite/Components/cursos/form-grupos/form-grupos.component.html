@@ -30,8 +30,8 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Instructor</mat-label>
       <mat-select [(ngModel)]="grupo.idInstructor" name="instructor" placeholder="Instructor">
-        <mat-option *ngFor="let instr of instructores" [value]="instr.id">
-          {{ instr.nombre }}
+        <mat-option *ngFor="let instr of instructores" [value]="instr.inst_codigo">
+          {{ instr.perfil.nombre }}
         </mat-option>
       </mat-select>
     </mat-form-field>

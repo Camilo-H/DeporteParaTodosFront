@@ -103,7 +103,7 @@ export class ListGruposComponent implements OnInit {
           (itemgrupo) => {
             this.instructorService.getInstructor(itemgrupo.idInstructor!).subscribe(
               (instructor) => {
-                itemgrupo.nombreInstructor = instructor.nombre;
+                itemgrupo.nombreInstructor = instructor.perfil.nombre;
               }
             );
 
