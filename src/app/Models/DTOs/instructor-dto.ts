@@ -9,6 +9,8 @@ export interface PerfilInstructor {
 }
 
 export interface InstructorDTO {
-    inst_codigo: string;
-    perfil: PerfilInstructor;
+    id: string;
+    nombre: string;
+    correo: string;
+    sexo: string;
 }
