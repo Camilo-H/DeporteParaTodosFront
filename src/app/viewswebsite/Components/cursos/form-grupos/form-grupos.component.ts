@@ -49,7 +49,12 @@ export class FormGruposComponent implements OnInit {
   selectedFile: File | null = null;
   categoriaGrupo: string | null = '';
   cursoGrupo: string | null = '';
-  instructores: InstructorDTO[] = [];
+  // BUG 1 FIX: any[] porque el backend devuelve estructura plana {id, nombre, ...}
+  // distinta a lo que define InstructorDTO { inst_codigo, perfil: {...} }
+  instructores: any[] = [];
+  // BUG 2 FIX: variables Date separadas para los mat-datepicker (GrupoDTO usa string | null)
+  fechaCreacionDate: Date | null = new Date();
+  fechaFinalizacionDate: Date | null = null;
 
   grupo: GrupoDTO = {
     categoria: '',
@@ -82,7 +87,8 @@ export class FormGruposComponent implements OnInit {
   ngOnInit(): void {
     this.categoriaGrupo = this.data.categoria;
     this.cursoGrupo = this.data.curso;
-    this.grupo.fechaCreacion = new Date().toISOString().split('T')[0];;
+    // BUG 2 FIX: inicializar la variable Date (no el string del DTO)
+    this.fechaCreacionDate = new Date();
 
     if (this.data.anio != 0) {
       this.isEditing = true;
@@ -132,10 +138,19 @@ export class FormGruposComponent implements OnInit {
         (imagenResponse) => {
 
           const idImagen = imagenResponse.id;
-          const fechaFormateada = this.FormatDate(this.grupo.fechaCreacion!);
+          // BUG 2 FIX: formatear desde la variable Date usando cast indicado por el usuario
+          const fechaFormateada = this.FormatDate(
+            this.fechaCreacionDate instanceof Date
+              ? this.fechaCreacionDate.toISOString().split('T')[0]
+              : ''
+          );
           let fechaCierre = null;
-          if (this.grupo.fechaFinalizacion != null) {
-            fechaCierre = this.FormatDate(this.grupo.fechaFinalizacion);
+          if (this.fechaFinalizacionDate != null) {
+            fechaCierre = this.FormatDate(
+              this.fechaFinalizacionDate instanceof Date
+                ? this.fechaFinalizacionDate.toISOString().split('T')[0]
+                : ''
+            );
           }
 
           const nuevoGrupo: GrupoDTO = {

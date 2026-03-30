@@ -30,23 +30,25 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Instructor</mat-label>
       <mat-select [(ngModel)]="grupo.idInstructor" name="instructor" placeholder="Instructor">
-        <mat-option *ngFor="let instr of instructores" [value]="instr.inst_codigo">
-          {{ instr.perfil.nombre }}
+        <!-- BUG 1 FIX: backend devuelve estructura plana, no tiene .perfil anidado -->
+        <mat-option *ngFor="let instr of instructores" [value]="instr.id">
+          {{ instr.nombre }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
 
+    <!-- BUG 2 FIX: bindear a variables Date del componente, no al string del DTO -->
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Fecha creación</mat-label>
-      <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="grupo.fechaCreacion"  [matDatepickerFilter]="validarFechaCreacion" name="fechaInicio">
+      <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaCreacionDate" [matDatepickerFilter]="validarFechaCreacion" name="fechaInicio">
       <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
       <mat-datepicker #pickerInicio></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Fecha cierre</mat-label>
-      <input matInput [matDatepicker]="pickerFin" [(ngModel)]="grupo.fechaFinalizacion" [matDatepickerFilter]="validarFechaCierre" name="fechaFin">
+      <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFinalizacionDate" [matDatepickerFilter]="validarFechaCierre" name="fechaFin">
       <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
       <mat-datepicker #pickerFin></mat-datepicker>
     </mat-form-field>
