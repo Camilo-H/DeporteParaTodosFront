@@ -4,7 +4,7 @@ import { AlumnoService } from 'src/app/services/alumno.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlumnoDTO } from 'src/app/Models/DTOs/alumno-dto';
 import { SidenavComponent } from 'src/app/viewswebsite/pages/sidenav/sidenav.component';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,7 +45,7 @@ export class ListDeportistasdeCursoComponent implements OnInit {
   titulo: string | null = '';
   anio: number | null = null;
   iterable: number | null = null;
-  alumnos: AlumnoDTO[] = [];
+  alumnos = new MatTableDataSource<AlumnoDTO>([]);
   seleccionados: any[] = [];
   displayedColumns: string[] = ['Código', 'Nombre', 'Correo', 'Faltas', 'Asistencia', 'Acciones'];
   fechaActual: Date = new Date();
@@ -85,7 +85,11 @@ export class ListDeportistasdeCursoComponent implements OnInit {
         this.iterable = Number(params.get('iterable'));
       }
     );
+    this.cargarDatos();
+  }
 
+  cargarDatos(): void {
+    //Cargar información del grupo
     this.grupoService.getGrupo(this.categoria!, this.titulo!, this.anio!, this.iterable!).subscribe(
       (grupoTemp) => {
         this.grupo = grupoTemp;
@@ -99,8 +103,14 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     );
 
     this.alumnoService.getAlumnosGrupo(this.categoria!, this.titulo!, this.anio!, this.iterable!).subscribe(
-      (alumno) => {
-        this.alumnos = alumno;
+      {
+        next: (data) => {
+          this.alumnos.data = Array.isArray(data) ? data : [];
+        },
+        error: (err) => {
+          console.error('Error al traer alumnos:', err);
+          this.alumnos.data = [];
+        }
       }
     );
   }
