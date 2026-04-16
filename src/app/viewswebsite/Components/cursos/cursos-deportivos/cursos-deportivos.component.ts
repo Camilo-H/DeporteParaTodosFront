@@ -157,9 +157,13 @@ export class CursosDeportivosComponent implements OnInit {
   }
 
   onDelete(nombreElemento: string): void {
+    if (!this.titulo) {
+      console.warn('No se puede eliminar el curso: la categoría no está definida.');
+      return;
+    }
     let elemento: string = ' el curso ';
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: { elemento, nombreElemento, tipoElemento: 'curso', categoria:this.titulo},
+      data: { elemento, nombreElemento, tipoElemento: 'curso', categoria: this.titulo },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmado) {
