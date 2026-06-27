@@ -81,11 +81,6 @@ export class FormInscripcionesComponent {
   cancelar(): void {
     this.router.navigate(['/cursos_deportivos']);
   }
-  guardar() {
-    this.dialogref.close();
-    this.router.navigate(['/info-curso']);
-  }
-
   onCancel(): void {
     this.dialogref.close();
   }

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -10,6 +10,8 @@ import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/fo
 import { FormsModule, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormAlertaComponent } from '../../usuarios/form-alerta/form-alerta.component';
+import { InscripcionesService } from 'src/app/services/inscripciones.service';
+import { InscripcionDTO } from 'src/app/Models/DTOs/inscripcion-dto';
 
 @Component({
   selector: 'app-informacion-curso',
@@ -26,15 +28,35 @@ import { FormAlertaComponent } from '../../usuarios/form-alerta/form-alerta.comp
   ],
   templateUrl: './informacion-curso.component.html',
   styleUrls: ['./informacion-curso.component.css'],
+  providers: [DatePipe],
 })
-export class InformacionCursoComponent {
-  isButtonEnabled = false; // Controla si el botón "Guardar" está habilitado
+export class InformacionCursoComponent implements OnInit {
+  isButtonEnabled = false;
   displayedColumns: string[] = ['nombre', 'atenciones', 'acciones'];
+
+  categoria: string | null = null;
+  curso: string | null = null;
+  anio: number | null = null;
+  iterable: number | null = null;
+  fechaActual: Date = new Date();
+
   constructor(
     private router: Router,
-    private dialog: MatDialog
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private inscripcionService: InscripcionesService,
+    private datepipe: DatePipe,
   ){}
   
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      this.categoria = params.get('categoria');
+      this.curso = params.get('curso');
+      this.anio = Number(params.get('anio')) || null;
+      this.iterable = Number(params.get('iterable')) || null;
+    });
+  }
+
   deportistas = [
     { nombre: 'Camilo Hernán Anacona', checked : false},
     { nombre: 'Juan Carlos Lopez carrillo', checked : false },
@@ -52,10 +74,30 @@ export class InformacionCursoComponent {
     this.isButtonEnabled = this.deportistas.some(deportista => deportista.checked);
   }
 
-  inscribir(){
-    const dialogRef = this.dialog.open(FormInscripcionesComponent, {
-          /*data: {name: this.name(), animal: this.animal()},*/
-        });
+  inscribir() {
+    const dialogRef = this.dialog.open(FormInscripcionesComponent, {});
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado?.confirmacionCreacion) {
+        const inscripcion: InscripcionDTO = {
+          fechaInscripcion: this.FormatDate(this.fechaActual),
+          fechaDesvinculacion: '',
+          alumnoId: resultado.idAlumno,
+          categoria: this.categoria!,
+          curso: this.curso!,
+          anio: this.anio!,
+          iterable: this.iterable!,
+          eliminado: 0,
+        };
+        this.inscripcionService.postInscripcion(inscripcion).subscribe(
+          (response) => {
+            if (response != null) {
+              this.ngOnInit();
+            }
+          }
+        );
+      }
+    });
   }
 
   guardar(){
@@ -66,5 +108,9 @@ export class InformacionCursoComponent {
   crearNotificacion(param:any){
     const dialogRef = this.dialog.open(FormAlertaComponent);
     this.router.navigate(param);
+  }
+
+  private FormatDate(fecha: Date): string {
+    return this.datepipe.transform(fecha, 'yyyy-MM-dd')!;
   }
 }
