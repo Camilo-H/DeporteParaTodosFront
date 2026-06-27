@@ -133,3 +133,6 @@ app-home {
   max-width: 220px;
   width: 100%;
 }
+
+.snack-success .mdc-snackbar__surface { background-color: #4caf50; color: white; }
+.snack-error   .mdc-snackbar__surface { background-color: #f44336; color: white; }

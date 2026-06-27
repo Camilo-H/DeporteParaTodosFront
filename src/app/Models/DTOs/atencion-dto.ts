@@ -1,6 +1,5 @@
-import { AlumnoDTO } from "./alumno-dto";
 export interface AtencionDTO {
-    alumno: AlumnoDTO;
+    idPerfil: string;
     idClase: number;
-    estadoAtendido: boolean;
+    estaAtendido: boolean;
 }

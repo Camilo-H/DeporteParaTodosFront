@@ -14,10 +14,15 @@ import { GrupoService } from 'src/app/services/grupo.service';
 import { InstructorServisce } from 'src/app/services/instructor.service';
 import { HorarioService } from 'src/app/services/horario.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { InscripcionDTO } from 'src/app/Models/DTOs/inscripcion-dto';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ClaseService } from 'src/app/services/clase.service';
+import { AsistenciaService } from 'src/app/services/asistencia.service';
+import { ClaseDTO } from 'src/app/Models/DTOs/clase-dto';
+import { AtencionDTO } from 'src/app/Models/DTOs/atencion-dto';
 
 @Component({
   selector: 'app-list-deportistasde-curso',
@@ -31,7 +36,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBarModule
   ],
   providers: [
     DatePipe,
@@ -74,6 +80,9 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     private inscripcionService: InscripcionesService,
     private datepipe: DatePipe,
     private dialog: MatDialog,
+    private claseService: ClaseService,
+    private asistenciaService: AsistenciaService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -180,8 +189,51 @@ export class ListDeportistasdeCursoComponent implements OnInit {
   }
 
   registrarAsistencia() {
-    console.log("Alumnos seleccionados:", this.seleccionados);
-    this.seleccionados = [];
+    const claseData: ClaseDTO = {
+      codigo: 0,
+      idGrupoCategoria: this.categoria!,
+      idGrupoCurso: this.titulo!,
+      idGrupoAnio: this.anio!,
+      idGrupoIterable: this.iterable!,
+      idInstructor: this.grupo.idInstructor!,
+      fecha: this.FormatDate(this.fechaActual),
+      horas: 1,
+      minutos: 0,
+      observacion: '',
+      eliminado: 0,
+    };
+
+    this.claseService.postClase(claseData).subscribe({
+      next: (clase) => {
+        const atenciones: AtencionDTO[] = this.seleccionados.map((alumno: AlumnoDTO) => ({
+          idPerfil: String(alumno.id),
+          idClase: clase.codigo,
+          estaAtendido: true,
+        }));
+
+        this.asistenciaService.registrarAsistencias(clase.codigo, atenciones).subscribe({
+          next: () => {
+            this.seleccionados = [];
+            this.snackBar.open('Asistencia registrada correctamente', 'Cerrar', {
+              duration: 3000,
+              panelClass: ['snack-success'],
+            });
+          },
+          error: () => {
+            this.snackBar.open('Error al registrar asistencia, intente de nuevo', 'Cerrar', {
+              duration: 3000,
+              panelClass: ['snack-error'],
+            });
+          }
+        });
+      },
+      error: () => {
+        this.snackBar.open('Error al crear la clase, intente de nuevo', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snack-error'],
+        });
+      }
+    });
   }
 
 
