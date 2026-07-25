@@ -21,6 +21,12 @@ export class CursodeportivoService {
     );
   }
 
+  getTodosCursosDeCategoria(prmCategoria: string): Observable<CursoDTO[]> {
+    return this.http.get<CursoDTO[]>(`${this.apiUrl}/cursosbycategoria/todos?prmCategoria=${encodeURIComponent(prmCategoria)}`).pipe(
+      catchError((error) => throwError(error))
+    );
+  }
+
   crearCurso(curso: CursoDTO): Observable<CursoDTO> {
     console.log("curso en el service", curso);
     return this.http.post<CursoDTO>(`${this.apiUrl}/curso`, curso).pipe(
@@ -51,12 +57,26 @@ export class CursodeportivoService {
   }
 
   deleteCurso(categoria: string, identificador: string): Observable<CursoDTO> {
-    return this.http.delete<CursoDTO>(`${this.apiUrl}/curso?categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(identificador)}`).pipe(
-      catchError((error) => {
-        console.error(
-          'Se produjo un error al eliminar el elemento ', identificador);
-        return throwError(error);
-      })
+    return this.http.delete<CursoDTO>(`${this.apiUrl}/curso?prmCategoria=${encodeURIComponent(categoria)}&prmCurso=${encodeURIComponent(identificador)}`).pipe(
+      catchError((error) => throwError(error))
+    );
+  }
+
+  cambiarEstadoCurso(categoria: string, curso: string, estado: 'ACTIVO' | 'INACTIVO' | 'CERRADO'): Observable<CursoDTO> {
+    return this.http.patch<CursoDTO>(
+      `${this.apiUrl}/curso/estado?prmCategoria=${encodeURIComponent(categoria)}&prmCurso=${encodeURIComponent(curso)}&prmEstado=${estado}`,
+      null
+    ).pipe(
+      catchError((error) => throwError(error))
+    );
+  }
+
+  cambiarEstadoInscripciones(categoria: string, curso: string, estado: 'ABIERTO' | 'CERRADO'): Observable<CursoDTO> {
+    return this.http.patch<CursoDTO>(
+      `${this.apiUrl}/curso/inscripciones?prmCategoria=${encodeURIComponent(categoria)}&prmCurso=${encodeURIComponent(curso)}&prmEstado=${estado}`,
+      null
+    ).pipe(
+      catchError((error) => throwError(error))
     );
   }
 }

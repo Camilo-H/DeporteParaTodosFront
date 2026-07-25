@@ -24,6 +24,7 @@ import { ImagenService } from 'src/app/services/imagen.service';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cursos-deportivos',
@@ -46,6 +47,7 @@ import { MatInputModule } from '@angular/material/input';
     MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
+    MatSnackBarModule,
 
   ],
 })
@@ -65,13 +67,11 @@ export class CursosDeportivosComponent implements OnInit {
     private dialog: MatDialog,
     private perfilService: PerfilService,
     private imagenServise: ImagenService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
     this.titulo = this.route.snapshot.paramMap.get('identificador');
-    if (this.titulo) {
-      this.loadCursos(this.titulo);
-    }
 
     this.breakPointObserver
       .observe([Breakpoints.Handset])
@@ -86,11 +86,18 @@ export class CursosDeportivosComponent implements OnInit {
 
     this.perfilService.perfil$.subscribe(perfil => {
       this.perfil = perfil;
+      if (this.titulo) {
+        this.loadCursos(this.titulo);
+      }
     });
   }
 
   private loadCursos(categoria: any): void {
-    this.cursoService.getCursos(categoria).subscribe(
+    const request$ = this.perfil === 'Administrador'
+      ? this.cursoService.getTodosCursosDeCategoria(categoria)
+      : this.cursoService.getCursos(categoria);
+
+    request$.subscribe(
       (cursotemp) => {
         this.cursos = cursotemp;
 
@@ -168,7 +175,51 @@ export class CursosDeportivosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmado) {
         this.loadCursos(this.titulo);
+      } else if (result?.errorStatus !== undefined) {
+        const status = result.errorStatus;
+        if (status === 409) {
+          this.snackBar.open('El curso ya se encuentra eliminado', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        } else if (status === 404) {
+          this.snackBar.open('El curso no existe', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        } else {
+          this.snackBar.open('Error al eliminar el curso, intente de nuevo', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        }
       }
+    });
+  }
+
+  // TODO (sprint futuro): revisar si 'Habilitar' debería poder
+  // reactivar un curso en estado CERRADO (eliminado lógicamente),
+  // o si eliminar y deshabilitar deberían ser flujos completamente
+  // separados. Decisión consciente tomada el 2026-07-09: se permite
+  // por ahora, solo accesible para rol Administrador.
+  toggleEstadoCurso(item: CursoDTO): void {
+    if (!this.titulo) return;
+    const nuevoEstado = item.estadoCurso === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
+    this.cursoService.cambiarEstadoCurso(this.titulo, item.nombre, nuevoEstado).subscribe({
+      next: (updated) => {
+        item.estadoCurso = updated.estadoCurso;
+        const accion = updated.estadoCurso === 'ACTIVO' ? 'habilitado' : 'deshabilitado';
+        this.snackBar.open(`Curso ${accion} correctamente`, 'Cerrar', { duration: 3000, panelClass: ['snack-success'] });
+      },
+      error: () => {
+        this.snackBar.open('Error al cambiar el estado del curso', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+      },
+    });
+  }
+
+  toggleInscripciones(item: CursoDTO): void {
+    if (!this.titulo) return;
+    const nuevoEstado = item.estadoInscripciones === 'ABIERTO' ? 'CERRADO' : 'ABIERTO';
+    this.cursoService.cambiarEstadoInscripciones(this.titulo, item.nombre, nuevoEstado).subscribe({
+      next: (updated) => {
+        item.estadoInscripciones = updated.estadoInscripciones;
+        const accion = updated.estadoInscripciones === 'ABIERTO' ? 'abiertas' : 'cerradas';
+        this.snackBar.open(`Inscripciones ${accion} correctamente`, 'Cerrar', { duration: 3000, panelClass: ['snack-success'] });
+      },
+      error: () => {
+        this.snackBar.open('Error al cambiar el estado de inscripciones', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+      },
     });
   }
 

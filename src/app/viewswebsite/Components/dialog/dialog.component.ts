@@ -47,9 +47,10 @@ export class DialogComponent {
     }
 
     if (this.data.tipoElemento == 'curso') {
-      this.cursoService.deleteCurso(this.data.categoria!, this.data.nombreElemento).subscribe(
-      );
-      this.dialogRef.close({ confirmado: true, id: this.data.nombreElemento});
+      this.cursoService.deleteCurso(this.data.categoria!, this.data.nombreElemento).subscribe({
+        next: () => this.dialogRef.close({ confirmado: true, id: this.data.nombreElemento }),
+        error: (err) => this.dialogRef.close({ confirmado: false, errorStatus: err?.status }),
+      });
     }
 
   }

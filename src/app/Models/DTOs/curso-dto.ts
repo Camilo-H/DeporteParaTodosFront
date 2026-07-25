@@ -12,6 +12,12 @@ export interface CursoDTO {
 
   eliminado?: number | null;
 
+  estadoCurso?: 'ACTIVO' | 'INACTIVO' | 'CERRADO';
+
+  horario?: string | null;
+
+  estadoInscripciones?: 'ABIERTO' | 'CERRADO';
+
   imagenBase64?: string | null;
 
   tipoArchivo?: string | null;

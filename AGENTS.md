@@ -106,10 +106,10 @@ Swagger del backend disponible en: `http://localhost:8082/swagger-ui.html`
 |---|---|---|
 | `alumno.service.ts` | Alumno (deportista) | `getAlumnosGrupo()` |
 | `alerta-service.service.ts` | Alerta (notificación local) | `guardarAlerta()`, `retornarAlerta()` — sin HTTP |
-| `asistencia.service.ts` | Atencion (asistencia) | Sin métodos implementados aún |
+| `asistencia.service.ts` | Atencion (asistencia) | `registrarAsistencias(idClase, atenciones[])` → `POST /atenciones?idClase=X` |
 | `auth.service.ts` | Perfil / sesión OAuth | `login()`, `logout()`, `getProfile()`, `isAuthenticated()`, `verificarUsuario()` |
 | `categoria.service.ts` | Categoria | `getCategorias()`, `createCategoria()`, `getCategoria()`, `updateCategoria()`, `deleteCategoria()` |
-| `clase.service.ts` | Clase | `postClase()`, `getClase()` — tiene bug de `&` faltante en URL |
+| `clase.service.ts` | Clase | `postClase()`, `getClase()` |
 | `cursodeportivo.service.ts` | Curso deportivo | `getAllCursos()`, `getCursos()`, `crearCurso()`, `getCurso()`, `updateCurso()`, `deleteCurso()` |
 | `deporte.service.ts` | Deporte | `getDeportes()`, `crearDeporte()` |
 | `grupo.service.ts` | Grupo | `getGrupos()`, `createGrupo()`, `getGrupo()`, `updateGrupo()`, `deleteGrupo()` |
@@ -132,8 +132,8 @@ Swagger del backend disponible en: `http://localhost:8082/swagger-ui.html`
 | `SidenavComponent` | (global) | Menú lateral de navegación |
 | `CursosDeportivosComponent` | `/cursos_deportivos/:identificador` | Tarjetas de cursos por categoría; permite crear, editar, eliminar cursos y gestionar inscripciones |
 | `ListGruposComponent` | `/list-grupos/:categoria/:curso` | Listado de grupos de un curso con instructor y horario; permite inscribirse |
-| `ListDeportistasdeCursoComponent` | `/listaDeportistasCurso/:categoria/:curso/:anio/:iterable` | Deportistas inscritos en un curso; restringido a roles no-estudiante |
-| `InformacionCursoComponent` | `/info-curso` | Detalle de información de un curso |
+| `ListDeportistasdeCursoComponent` | `/listaDeportistasCurso/:categoria/:curso/:anio/:iterable` | Deportistas inscritos en un grupo; permite agregar deportistas vía modal, registrar asistencia (crea clase + registra atenciones en un clic) con feedback visual via MatSnackBar; restringido a roles no-estudiante |
+| `InformacionCursoComponent` | `/info-curso?categoria=X&curso=Y&anio=N&iterable=N` | Detalle de un curso con lista de deportistas (hardcodeada aún); el botón "Agregar Atleta" abre `FormInscripcionesComponent` y al confirmar llama a `postInscripcion()` con `afterClosed()` implementado; recibe el grupo activo por query params |
 | `FormCursoDeportiviComponent` | `/registroDeCursoDeportivo` | Formulario de creación/edición de curso deportivo |
 | `FormGruposComponent` | (modal/dialog) | Formulario de creación/edición de grupos |
 | `NuevoCursoCategoriaComponent` | `/nuevoCursoCategoria` | Formulario para crear o editar una categoría deportiva |
@@ -223,6 +223,21 @@ Swagger del backend disponible en: `http://localhost:8082/swagger-ui.html`
 - Los roles se gestionan en `PerfilService`
 - Actualmente **no hay guards de ruta**; la lógica de restricción está en cada componente
 - Al agregar funcionalidad sensible por rol, verificar el rol en `ngOnInit()` del componente
+
+---
+
+## Implementaciones completadas en el frontend
+
+Las siguientes tareas ya están implementadas en el código. No repetir ni sobrescribir.
+
+| Tarea | Archivos modificados | Descripción |
+|---|---|---|
+| Registro de asistencia | `asistencia.service.ts`, `clase.service.ts`, `list-deportistasde-curso.component.ts` | `registrarAsistencia()` crea una clase vía `POST /claseGrupo` y luego registra atenciones vía `POST /atenciones?idClase=X`. Feedback con MatSnackBar verde/rojo (3 s). |
+| Corrección URL `getClase()` | `clase.service.ts` | Bug `$iterable` → `&iterable=` corregido en línea 19. |
+| Corrección `AtencionDTO` | `atencion-dto.ts` | Campos correctos para el backend: `idPerfil: string`, `idClase: number`, `estaAtendido: boolean`. El campo anterior `alumno: AlumnoDTO` fue eliminado. |
+| Flujo inscripción en `informacion-curso` | `informacion-curso.component.ts` | `inscribir()` ahora suscribe `afterClosed()` y llama `inscripcionesService.postInscripcion()`. Lee grupo activo de query params (`?categoria&curso&anio&iterable`). |
+| Limpieza `form-inscripciones` | `form-inscripciones.component.ts` | Eliminado `guardar()` que cerraba el dialog sin resultado y navegaba a `/info-curso`. El único cierre válido ahora es `onSubmit()` retornando `{ confirmacionCreacion: true, idAlumno }`. |
+| Colores MatSnackBar | `src/styles.css` | Clases `.snack-success` y `.snack-error` agregadas para colorear el snackbar globalmente. |
 
 ---
 

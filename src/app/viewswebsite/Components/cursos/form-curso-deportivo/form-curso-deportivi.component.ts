@@ -59,7 +59,8 @@ export class FormCursoDeportiviComponent implements OnInit {
     deporte: '',
     categoriaCurso: '',
     descripcion: '',
-    idImagen: null
+    idImagen: null,
+    horario: '',
   }
 
   constructor(
@@ -136,7 +137,8 @@ export class FormCursoDeportiviComponent implements OnInit {
             deporte: this.curso.deporte,
             categoriaCurso: this.data.tituloCategoria,
             descripcion: this.curso.descripcion,
-            idImagen: idImagen
+            idImagen: idImagen,
+            horario: this.curso.horario,
           };
           this.cursodeportivoserce.crearCurso(nuevoCurso).subscribe(
             (response) => {
@@ -158,6 +160,7 @@ export class FormCursoDeportiviComponent implements OnInit {
         deporte: this.curso.deporte,
         categoriaCurso: this.data.tituloCategoria,
         descripcion: this.curso.descripcion,
+        horario: this.curso.horario,
       };
       this.cursodeportivoserce.crearCurso(nuevoCurso).subscribe(
         (response) => {
@@ -182,7 +185,8 @@ export class FormCursoDeportiviComponent implements OnInit {
             deporte: this.curso.deporte,
             categoriaCurso: this.data.tituloCategoria,
             descripcion: this.curso.descripcion,
-            idImagen: idImagen
+            idImagen: idImagen,
+            horario: this.curso.horario,
           };
 
           this.cursodeportivoserce.updateCurso(this.data.tituloCategoria, this.data.nombrecurso, nuevoCurso).subscribe(
@@ -208,6 +212,7 @@ export class FormCursoDeportiviComponent implements OnInit {
         categoriaCurso: this.data.tituloCategoria,
         descripcion: this.curso.descripcion,
         idImagen: this.curso.idImagen,
+        horario: this.curso.horario,
       };
 
       this.cursodeportivoserce.updateCurso(this.data.tituloCategoria, this.data.nombrecurso, nuevoCurso).subscribe(
