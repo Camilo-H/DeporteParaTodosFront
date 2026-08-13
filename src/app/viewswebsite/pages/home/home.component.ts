@@ -11,6 +11,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogComponent } from '../../Components/dialog/dialog.component';
 import { NuevoCursoCategoriaComponent } from '../../Components/cursos/nuevo-curso-categoria/nuevo-curso-categoria.component';
 import { HeaderComponent } from '../header/header.component';
@@ -33,6 +34,7 @@ import { ImagenService } from 'src/app/services/imagen.service';
     MatIconModule,
     MatMenuModule,
     MatDialogModule,
+    MatSnackBarModule,
     HeaderComponent,
   ],
 
@@ -54,6 +56,7 @@ export class HomeComponent {
     private imagenService: ImagenService,
     private dialog: MatDialog,
     private perfilService: PerfilService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -130,6 +133,15 @@ export class HomeComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.confirmado) {
         this.loadCategorias();
+      } else if (result?.errorStatus !== undefined) {
+        const status = result.errorStatus;
+        if (status === 409) {
+          this.snackBar.open('La categoría ya se encuentra eliminada', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        } else if (status === 404) {
+          this.snackBar.open('La categoría no existe', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        } else {
+          this.snackBar.open('Error al eliminar la categoría, intente de nuevo', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        }
       }
     });
   }

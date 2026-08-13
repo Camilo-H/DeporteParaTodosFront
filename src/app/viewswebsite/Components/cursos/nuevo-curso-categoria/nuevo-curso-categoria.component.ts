@@ -79,8 +79,9 @@ export class NuevoCursoCategoriaComponent implements OnInit {
   onSubmit(form: NgForm): void {
     if (this.isEditing) {
       this.updateCategoria();
+    } else {
+      this.createCategoria();
     }
-    this.createCategoria();
   }
 
   private createCategoria(): void {

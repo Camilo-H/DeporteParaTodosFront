@@ -1,0 +1,69 @@
+<button mat-icon-button style="float: right;" (click)="onCerrar()">
+  <mat-icon>close</mat-icon>
+</button>
+
+<mat-dialog-content class="dialog-content">
+  <header class="title-two">Gestionar Horarios</header>
+
+  <!-- Horarios existentes -->
+  <section class="seccion-horarios">
+    <h4 class="subtitle">Horarios registrados</h4>
+
+    <div *ngFor="let h of horarios" class="horario-row">
+      <span class="horario-text">{{ h.dia }} · {{ h.horaInicio }} - {{ h.horaFin }} · {{ h.escenario }}</span>
+
+      <div *ngIf="confirmandoEliminacionId === h.id; else botonEliminar" class="confirmar-row">
+        <span class="confirmar-label">¿Eliminar?</span>
+        <button mat-button color="warn" (click)="eliminarHorario(h.id)">Sí</button>
+        <button mat-button (click)="cancelarEliminacion()">No</button>
+      </div>
+      <ng-template #botonEliminar>
+        <button mat-icon-button (click)="confirmarEliminacion(h.id)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </ng-template>
+    </div>
+
+    <p *ngIf="horarios.length === 0" class="sin-datos">Sin horarios registrados.</p>
+  </section>
+
+  <!-- Agregar nuevo horario -->
+  <section>
+    <h4 class="subtitle">Agregar horario</h4>
+
+    <div class="dias-chips">
+      <span *ngFor="let d of dias"
+            class="dia-chip"
+            [class.dia-activo]="d.seleccionado"
+            (click)="d.seleccionado = !d.seleccionado">
+        {{ d.label }}
+      </span>
+    </div>
+
+    <div class="row-times">
+      <mat-form-field appearance="outline" class="form-field-half">
+        <mat-label>Hora inicio</mat-label>
+        <input matInput type="time" [(ngModel)]="horaInicio" name="horaInicio">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field-half">
+        <mat-label>Hora fin</mat-label>
+        <input matInput type="time" [(ngModel)]="horaFin" name="horaFin">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Escenario</mat-label>
+      <mat-select [(ngModel)]="escenarioSeleccionado" name="escenario">
+        <mat-option *ngFor="let e of escenarios" [value]="e.nombre">{{ e.nombre }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCerrar()">Cerrar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="!puedeGuardar()">
+    Agregar
+  </button>
+</mat-dialog-actions>

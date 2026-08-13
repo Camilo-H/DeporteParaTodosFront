@@ -46,16 +46,25 @@ export class ListaInstructoresComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.cargarInstructores();
+  }
+
+  private cargarInstructores(): void {
     this.instructorservice.getInstructores().subscribe(
-      (instructor) => {
-        this.instructores = instructor;
+      (instructores: any) => {
+        this.instructores = Array.isArray(instructores) ? instructores : [];
       }
     );
   }
 
   registroInstructor() {
     const dialogRef = this.dialog.open(FormInscripcionesComponent, {
-
+      data: { rol: 'Instructor' }
+    });
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado?.confirmacionCreacion) {
+        this.cargarInstructores();
+      }
     });
   }
 

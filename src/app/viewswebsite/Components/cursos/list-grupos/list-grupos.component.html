@@ -29,14 +29,20 @@
                                 *ngIf="perfil === 'Administrador'">
                                 <mat-icon>settings</mat-icon>
                             </button>
-                            <mat-card-title class="card_title title-three-nrs">{{
-                                item.anio}}-{{item.iterable}}</mat-card-title>
+                            <mat-card-title class="card_title title-three-nrs">
+                                {{ item.anio }}-{{ item.periodo }} · Grupo {{ letraDeIterable(item.iterable) }}
+                            </mat-card-title>
                         </div>
 
                         <mat-menu #menu="matMenu">
                             <button mat-menu-item (click)="onUpdate(item.anio!, item.iterable!)">
                                 <mat-icon>edit</mat-icon>
                                 <span>Actualizar</span>
+                            </button>
+
+                            <button mat-menu-item (click)="gestionarHorarios(item)">
+                                <mat-icon>schedule</mat-icon>
+                                <span>Gestionar horarios</span>
                             </button>
 
                             <button mat-menu-item (click)="onDelete()">

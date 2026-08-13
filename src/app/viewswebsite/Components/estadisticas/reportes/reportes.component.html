@@ -68,7 +68,7 @@
                     <mat-label>Grupo</mat-label>
                     <mat-select formControlName="grupo">
                         <mat-option *ngFor="let g of grupos" [value]="g">
-                            {{ g.curso }}: {{ g.anio }}, {{ g.iterable }}
+                            {{ g.curso }}: {{ g.anio }}-{{ g.periodo }} · Grupo {{ letraDeIterable(g.iterable) }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

@@ -4,6 +4,7 @@ export interface GrupoDTO {
   curso: string;
   anio: number | null;
   iterable: number | null;
+  periodo?: number | null;
   imagenGrupo?: number | null;
   idInstructor?: string | null;
   nombreInstructor?: string | null;

@@ -18,4 +18,10 @@ export class AlumnoService {
         return this.http.get<AlumnoDTO[]>(`${this.apiUrl}/alumnosGrupo?categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(curso)}&anio=${anio}&iterable=${iterable}`).pipe(
         );
     }
+
+    actualizarAlumno(id: number, data: { nombre: string, correo: string, tipoAlumno: string }): Observable<any> {
+        return this.http.put<any>(`${this.apiUrl}/alumnos/${id}`, data).pipe(
+            catchError((error) => throwError(error))
+        );
+    }
 }

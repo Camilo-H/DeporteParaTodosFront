@@ -21,6 +21,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { InstructorServisce } from 'src/app/services/instructor.service';
 import { HorarioService } from 'src/app/services/horario.service';
 import { HorarioDTO } from 'src/app/Models/DTOs/horario-dto';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormHorarioComponent } from '../form-horario/form-horario.component';
 
 @Component({
   selector: 'app-list-grupos',
@@ -36,6 +38,7 @@ import { HorarioDTO } from 'src/app/Models/DTOs/horario-dto';
     NgIf,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSnackBarModule,
   ],
   templateUrl: './list-grupos.component.html',
   styleUrls: ['./list-grupos.component.css'],
@@ -59,6 +62,7 @@ export class ListGruposComponent implements OnInit {
     private imagenService: ImagenService,
     private instructorService: InstructorServisce,
     private horarioservice: HorarioService,
+    private snackBar: MatSnackBar,
   ) { }
 
   inscrito: boolean = false; // Estado de la inscripción
@@ -108,8 +112,8 @@ export class ListGruposComponent implements OnInit {
             );
 
             this.horarioservice.getHorarios(categoria, nombreCurso, itemgrupo.anio!, itemgrupo.iterable!).subscribe(
-              (horarios) => {
-                itemgrupo.horarios = horarios;
+              (horarios: any) => {
+                itemgrupo.horarios = Array.isArray(horarios) ? horarios : [];
               }
             );
 
@@ -126,6 +130,25 @@ export class ListGruposComponent implements OnInit {
       },
       (error) => console.error('Error al obtener los grupos', error)
     );
+  }
+
+  gestionarHorarios(item: GrupoDTO): void {
+    const dialogRef = this.dialog.open(FormHorarioComponent, {
+      data: {
+        categoria: this.categoria,
+        curso: this.titulo,
+        anio: item.anio!,
+        iterable: item.iterable!,
+      },
+      width: '500px',
+    });
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        this.horarioservice
+          .getHorarios(this.categoria!, this.titulo!, item.anio!, item.iterable!)
+          .subscribe((horarios: any) => { item.horarios = Array.isArray(horarios) ? horarios : []; });
+      }
+    });
   }
 
   onUpdate(anio: number, iterable: number): void {
@@ -147,6 +170,11 @@ export class ListGruposComponent implements OnInit {
         this.ngOnInit();
       }
     });
+  }
+
+  letraDeIterable(n: number | null): string {
+    if (!n || n < 1) return '?';
+    return String.fromCharCode(64 + n);
   }
 
   alumnosGrupo(categoria: string, curso: string, anio: number, iterable: number): void {

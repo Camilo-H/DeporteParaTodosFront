@@ -7,7 +7,7 @@
   <form (ngSubmit)="onSubmit(inscripcionForm)" #inscripcionForm="ngForm" class="form-content">
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Nombre</mat-label>
-      <input matInput [disabled]="isEditing" placeholder="Nombre" [(ngModel)]="perfil.nombre" name="nombre" required />
+      <input matInput placeholder="Nombre" [(ngModel)]="perfil.nombre" name="nombre" required />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
@@ -15,7 +15,7 @@
       <input matInput placeholder="Correo institucional" [(ngModel)]="perfil.correo" name="correo" type="email" required />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="form-field">
+    <mat-form-field *ngIf="!isEditing" appearance="outline" class="form-field">
       <mat-label>Tipo de identificación</mat-label>
       <mat-select [(ngModel)]="perfil.tipoId" name="tipodocumento" placeholder="Tipo de documento">
         <mat-option *ngFor="let tipo of tipoDocumento" [value]="tipo">
@@ -24,12 +24,12 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="form-field">
+    <mat-form-field *ngIf="!isEditing" appearance="outline" class="form-field">
       <mat-label>Numero identificación</mat-label>
       <input matInput placeholder="Número identidad" [(ngModel)]="perfil.id" name="identificacion" required />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="form-field">
+    <mat-form-field *ngIf="!isEditing" appearance="outline" class="form-field">
       <mat-label>Sexo</mat-label>
       <mat-select [(ngModel)]="perfil.sexo" name="sexo" placeholder="Sexo">
         <mat-option *ngFor="let tipo of sexo" [value]="tipo">
@@ -38,7 +38,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="form-field">
+    <mat-form-field *ngIf="!isEditing" appearance="outline" class="form-field">
       <mat-label>Código institucional</mat-label>
       <input matInput placeholder="Código institucional" [(ngModel)]="perfil.alumnoCodigo" name="codigo" required />
     </mat-form-field>

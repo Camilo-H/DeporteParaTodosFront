@@ -196,6 +196,11 @@ export class ReportesComponent implements OnInit {
     );
   }
 
+  letraDeIterable(n: number | null): string {
+    if (!n || n < 1) return '?';
+    return String.fromCharCode(64 + n);
+  }
+
   generarReporte() {
     const { inicio, fin, categoria, curso, anio, iterable, alumno, instructor } = this.filtros.value;
 

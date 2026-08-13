@@ -25,4 +25,8 @@ export class PerfilService {
     return this.http.post<PerfilDTO>(`${this.apiUrl}/RegistroPerfilAlumno`, datos).pipe(
     );
   }
+
+  registrarInstructor(datos: PerfilDTO): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/RegistroPerfilInstructor`, datos);
+  }
 }

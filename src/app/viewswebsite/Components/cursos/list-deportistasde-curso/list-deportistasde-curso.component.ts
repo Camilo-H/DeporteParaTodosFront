@@ -16,6 +16,7 @@ import { HorarioService } from 'src/app/services/horario.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
+import { DialogComponent } from '../../dialog/dialog.component';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { InscripcionDTO } from 'src/app/Models/DTOs/inscripcion-dto';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -166,14 +167,43 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     return this.datepipe.transform(fecha, 'yyyy-MM-dd')!;
   }
 
-  editarAlumno() {
-    console.log('Editar',);
-    // Lógica para editar
+  letraDeIterable(n: number | null): string {
+    if (!n || n < 1) return '?';
+    return String.fromCharCode(64 + n);
   }
 
-  eliminarAlumno() {
-    console.log('Eliminar',);
-    // Lógica para eliminar
+  editarAlumno(alumno: AlumnoDTO) {
+    const dialogRef = this.dialog.open(FormInscripcionesComponent, {
+      data: { modo: 'editar', alumno },
+    });
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado?.actualizado) {
+        this.cargarDatos();
+        this.snackBar.open('Datos del deportista actualizados', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] });
+      }
+    });
+  }
+
+  eliminarAlumno(alumno: AlumnoDTO) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        elemento: ' al estudiante',
+        nombreElemento: this.titulo!,
+        tipoElemento: 'inscripcion',
+        categoria: this.categoria!,
+        alumnoId: alumno.id,
+        anio: this.anio!,
+        iterable: this.iterable!,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.confirmado) {
+        this.cargarDatos();
+        this.snackBar.open('Deportista desvinculado del grupo', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] });
+      } else if (result?.errorStatus !== undefined) {
+        this.snackBar.open('Error al desvincular al deportista, intente de nuevo', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+      }
+    });
   }
 
   toggleSelection(alumno: any, event: any) {

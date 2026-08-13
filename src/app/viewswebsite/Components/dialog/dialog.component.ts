@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { CursodeportivoService } from 'src/app/services/cursodeportivo.service';
+import { InscripcionesService } from 'src/app/services/inscripciones.service';
 
 @Component({
   selector: 'app-dialog',
@@ -35,15 +36,25 @@ export class DialogComponent {
   constructor(
     private categoriaservice: CategoriaService,
     private cursoService: CursodeportivoService,
+    private inscripcionService: InscripcionesService,
     private dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { elemento: string, nombreElemento: any, tipoElemento: string, categoria?:string,}
+    @Inject(MAT_DIALOG_DATA) public data: {
+      elemento: string,
+      nombreElemento: any,
+      tipoElemento: string,
+      categoria?: string,
+      alumnoId?: number,
+      anio?: number,
+      iterable?: number,
+    }
   ) { }
 
   confirmarEliminar(): void {
     if (this.data.tipoElemento == 'categoria') {
-      this.categoriaservice.deleteCategoria(this.data.nombreElemento).subscribe(
-      );
-      this.dialogRef.close({ confirmado: true, id: this.data.nombreElemento });
+      this.categoriaservice.deleteCategoria(this.data.nombreElemento).subscribe({
+        next: () => this.dialogRef.close({ confirmado: true, id: this.data.nombreElemento }),
+        error: (err) => this.dialogRef.close({ confirmado: false, errorStatus: err?.status }),
+      });
     }
 
     if (this.data.tipoElemento == 'curso') {
@@ -53,5 +64,17 @@ export class DialogComponent {
       });
     }
 
+    if (this.data.tipoElemento == 'inscripcion') {
+      this.inscripcionService.eliminarInscripcion({
+        alumnoId: this.data.alumnoId!,
+        categoria: this.data.categoria!,
+        curso: this.data.nombreElemento,
+        anio: this.data.anio!,
+        iterable: this.data.iterable!,
+      } as any).subscribe({
+        next: () => this.dialogRef.close({ confirmado: true }),
+        error: (err) => this.dialogRef.close({ confirmado: false, errorStatus: err?.status }),
+      });
+    }
   }
 }
