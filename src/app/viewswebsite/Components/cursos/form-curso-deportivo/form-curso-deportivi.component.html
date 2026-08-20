@@ -33,6 +33,14 @@
       <input matInput placeholder="Ej: Lunes y Miércoles 8:00 - 10:00" name="horario" [(ngModel)]="curso.horario">
     </mat-form-field>
 
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Estado de inscripciones</mat-label>
+      <mat-select [(ngModel)]="curso.estadoInscripciones" name="estadoInscripciones">
+        <mat-option value="ABIERTO">Abierto</mat-option>
+        <mat-option value="CERRADO">Cerrado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div class="form-field buttonImage">
       <input type="file" id="imagen" (change)="onFileSelected($event)" accept="image/*" required />
       <div *ngIf="imagenPreview" class="preview">

@@ -80,6 +80,16 @@
                             </span>
                         </div>
 
+                        <div class="mt-1 mb-2 text-center">
+                            <span class="badge"
+                                [ngClass]="{
+                                    'bg-primary': item.estadoInscripciones === 'ABIERTO',
+                                    'bg-warning text-dark': item.estadoInscripciones === 'CERRADO'
+                                }">
+                                {{ item.estadoInscripciones === 'ABIERTO' ? 'Inscripciones abiertas' : 'Inscripciones cerradas' }}
+                            </span>
+                        </div>
+
                         <div class="d-flex justify-content-center">
                             <button type="button"
                                 style="border: none; background-color: transparent; color: black"
