@@ -56,7 +56,9 @@ test.describe('SCRUM-137 — Registrar instructor', () => {
     // La tabla recarga (cargarInstructores) y muestra una fila más
     await expect(page.locator('tr[mat-row]')).toHaveCount(filasPrevias + 1, { timeout: 8_000 });
 
-    // El nombre del instructor nuevo aparece en la tabla
-    await expect(page.locator(`td:has-text("${TEST_INSTRUCTOR_BASE.nombre}")`)).toBeVisible();
+    // El nombre del instructor nuevo aparece en la tabla.
+    // .first() evita strict-mode violation: pueden existir instructores
+    // con el mismo nombre de runs anteriores (el backend no valida nombre único).
+    await expect(page.locator(`td:has-text("${TEST_INSTRUCTOR_BASE.nombre}")`).first()).toBeVisible();
   });
 });

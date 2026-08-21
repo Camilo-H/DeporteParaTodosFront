@@ -54,9 +54,9 @@ test.describe('SCRUM-134/135 — Crear horario con selector de escenario', () =>
     await expect(page.locator('mat-snack-bar-container')).toContainText('Horario(s) agregado(s) correctamente', { timeout: 8_000 });
 
     // El horario aparece en "Horarios registrados" dentro del dialog.
-    // No usamos .first() porque puede haber horarios preexistentes encabezando la lista.
-    // Buscamos el elemento específico que contiene 'LUNES'.
-    const horarioNuevo = page.locator('.horario-text', { hasText: 'LUNES' });
+    // .first() evita strict-mode violation: runs anteriores acumularon múltiples
+    // entradas LUNES 08:00-10:00 (la acumulación es conocida y documentada).
+    const horarioNuevo = page.locator('.horario-text', { hasText: 'LUNES' }).first();
     await expect(horarioNuevo).toBeVisible({ timeout: 8_000 });
     await expect(horarioNuevo).toContainText('08:00');
     await expect(horarioNuevo).toContainText('10:00');
