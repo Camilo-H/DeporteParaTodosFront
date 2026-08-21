@@ -64,8 +64,9 @@ test.describe('SCRUM-134/135 — Crear horario con selector de escenario', () =>
       await expect(horarioNuevo).toContainText(nombreEscenario);
     }
 
-    // Cerrar el dialog
-    await page.locator('button[mat-button]:has-text("Cerrar")').click();
+    // Cerrar el dialog — se acota al dialog-container para no colisionar con el
+    // botón "Cerrar" del snackbar que permanece visible al mismo tiempo.
+    await page.locator('mat-dialog-container button[mat-button]:has-text("Cerrar")').click();
     await expect(page.locator('header.title-two', { hasText: 'Gestionar Horarios' })).not.toBeVisible();
 
     // El horario recargado también aparece en la tarjeta del grupo

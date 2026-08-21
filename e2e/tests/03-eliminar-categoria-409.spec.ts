@@ -1,35 +1,39 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
 import { injectPerfil } from '../support/auth-setup';
-import { API_BASE, TEST_CATEGORIA } from '../support/test-data';
+import { API_BASE } from '../support/test-data';
 
 // SCRUM-141: eliminar categoría y verificar manejo de 409.
 //
 // Estrategia (autocontenida, sin mocks):
-//   beforeAll : crea TEST_CATEGORIA vía HTTP real → backend la marca activa (eliminado=0)
-//   test      : primera eliminación vía UI real → backend responde 200 → card desaparece del DOM
+//   beforeAll : crea la categoría con nombre único por ejecución (timestamp) vía HTTP real
+//               → el backend la guarda con eliminado=0 → visible en /home
+//   test      : primera eliminación vía UI real → backend responde 200 → card desaparece
 //               segunda eliminación vía page.request.delete() real → backend responde 409
 //
+// Nombre único por run: evita el problema de soft-delete del run anterior.
+// En runs anteriores la categoría quedaba con eliminado=1; un POST del mismo título
+// devuelve 409 y el beforeAll lo aceptaba como OK, pero la card no aparecía en la UI.
+//
 // Nota: el snackbar 'La categoría ya se encuentra eliminada' solo es verificable en la UI
-// si la tarjeta sigue visible en el DOM tras la primera eliminación. HomeComponent llama
-// loadCategorias() inmediatamente al confirmar, por lo que la tarjeta desaparece antes
-// de que podamos hacer un segundo click. Se verifica el 409 a nivel HTTP.
-// Para verificar el snackbar de forma aislada, el componente necesitaría un estado
-// donde la tarjeta persista en pantalla tras el delete — fuera del alcance de este sprint.
+// si la tarjeta sigue visible tras la primera eliminación. HomeComponent llama
+// loadCategorias() inmediatamente, por lo que la tarjeta desaparece antes del segundo click.
+// Se verifica el 409 a nivel HTTP. Fuera del alcance de este sprint la verificación visual.
 test.describe('SCRUM-141 — Eliminar categoría con manejo de 409', () => {
   let apiContext: APIRequestContext;
+  let categoriaNombre: string;
 
   test.beforeAll(async ({ playwright }) => {
-    // Sin baseURL: se usan URLs absolutas completas para evitar que el /api/v2
-    // sea descartado por la resolución estándar de URLs con paths que inician en '/'
+    // Nombre único por ejecución → el backend siempre crea una nueva fila con eliminado=0
+    categoriaNombre = `CategoriaE2E${Date.now()}`;
+
+    // Sin baseURL: URLs absolutas completas para evitar que /api/v2 sea descartado
     apiContext = await playwright.request.newContext();
-    // imagenId: 201 es obligatorio en el backend (todas las categorías existentes lo usan)
+    // imagenId: 201 es obligatorio (todas las categorías existentes lo usan)
     const res = await apiContext.post(`${API_BASE}/categoria`, {
-      data: { titulo: TEST_CATEGORIA, descripcion: 'Categoría creada por Playwright E2E', imagenId: 201 },
+      data: { titulo: categoriaNombre, descripcion: 'Categoría creada por Playwright E2E', imagenId: 201 },
     });
-    // Si ya existía de una ejecución anterior fallida, el 409 aquí no es un problema —
-    // la categoría sigue existiendo en la BD lista para ser eliminada en el test.
-    if (!res.ok() && res.status() !== 409) {
-      throw new Error(`Error al crear categoría de test: ${res.status()}`);
+    if (!res.ok()) {
+      throw new Error(`Error al crear categoría de test: ${res.status()} — ${await res.text()}`);
     }
   });
 
@@ -45,7 +49,7 @@ test.describe('SCRUM-141 — Eliminar categoría con manejo de 409', () => {
     await page.goto('/home');
 
     // Verificar que la tarjeta de la categoría de test está visible
-    const tarjeta = page.locator('mat-card', { hasText: TEST_CATEGORIA });
+    const tarjeta = page.locator('mat-card', { hasText: categoriaNombre });
     await expect(tarjeta).toBeVisible({ timeout: 10_000 });
 
     // --- Primera eliminación (flujo UI completo) ---
@@ -64,7 +68,7 @@ test.describe('SCRUM-141 — Eliminar categoría con manejo de 409', () => {
     // La tarjeta ya no existe en el DOM. Se llama directamente al backend para
     // verificar que el sistema responde 409 en un segundo intento de eliminación.
     const resp = await page.request.delete(
-      `${API_BASE}/categoria?titulo=${encodeURIComponent(TEST_CATEGORIA)}`
+      `${API_BASE}/categoria?titulo=${encodeURIComponent(categoriaNombre)}`
     );
     expect(resp.status()).toBe(409);
   });
