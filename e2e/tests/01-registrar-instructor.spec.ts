@@ -10,8 +10,12 @@ test.describe('SCRUM-137 — Registrar instructor', () => {
   });
 
   test('registra nuevo instructor y aparece en la tabla sin recargar página', async ({ page }) => {
-    // Correo único por ejecución para evitar 409 en runs sucesivos de CI
-    const correo = `instructor.e2e.${Date.now()}@unicauca.edu.co`;
+    // Correo e identificación únicos por ejecución.
+    // El backend valida la identificación (cédula) como llave única, no solo el correo.
+    const ts = Date.now();
+    const correo = `instructor.e2e.${ts}@unicauca.edu.co`;
+    const id = String(ts).slice(-10); // 10 dígitos finales del timestamp → válido como CC
+    const alumnoCodigo = `PLW${String(ts).slice(-5)}`;
 
     await page.goto('/lista-instructores');
 
@@ -35,13 +39,13 @@ test.describe('SCRUM-137 — Registrar instructor', () => {
     await page.locator('mat-select[name="tipodocumento"]').click();
     await page.locator(`mat-option:has-text("${TEST_INSTRUCTOR_BASE.tipoId}")`).first().click();
 
-    await page.fill('input[name="identificacion"]', TEST_INSTRUCTOR_BASE.id);
+    await page.fill('input[name="identificacion"]', id);
 
     // Sexo (mat-select)
     await page.locator('mat-select[name="sexo"]').click();
     await page.locator(`mat-option:has-text("${TEST_INSTRUCTOR_BASE.sexo}")`).first().click();
 
-    await page.fill('input[name="codigo"]', TEST_INSTRUCTOR_BASE.alumnoCodigo);
+    await page.fill('input[name="codigo"]', alumnoCodigo);
 
     // Submit
     await page.locator('button.aceptar').click();

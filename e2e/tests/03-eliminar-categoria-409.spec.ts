@@ -22,8 +22,9 @@ test.describe('SCRUM-141 — Eliminar categoría con manejo de 409', () => {
     // Sin baseURL: se usan URLs absolutas completas para evitar que el /api/v2
     // sea descartado por la resolución estándar de URLs con paths que inician en '/'
     apiContext = await playwright.request.newContext();
+    // imagenId: 201 es obligatorio en el backend (todas las categorías existentes lo usan)
     const res = await apiContext.post(`${API_BASE}/categoria`, {
-      data: { titulo: TEST_CATEGORIA, descripcion: 'Categoría creada por Playwright E2E' },
+      data: { titulo: TEST_CATEGORIA, descripcion: 'Categoría creada por Playwright E2E', imagenId: 201 },
     });
     // Si ya existía de una ejecución anterior fallida, el 409 aquí no es un problema —
     // la categoría sigue existiendo en la BD lista para ser eliminada en el test.

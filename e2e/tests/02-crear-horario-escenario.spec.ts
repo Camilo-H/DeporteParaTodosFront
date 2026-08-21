@@ -53,13 +53,15 @@ test.describe('SCRUM-134/135 — Crear horario con selector de escenario', () =>
     // Snackbar de éxito
     await expect(page.locator('mat-snack-bar-container')).toContainText('Horario(s) agregado(s) correctamente', { timeout: 8_000 });
 
-    // El horario aparece en "Horarios registrados" dentro del dialog
-    await expect(page.locator('.horario-text').first()).toBeVisible({ timeout: 8_000 });
-    await expect(page.locator('.horario-text').first()).toContainText('LUNES');
-    await expect(page.locator('.horario-text').first()).toContainText('08:00');
-    await expect(page.locator('.horario-text').first()).toContainText('10:00');
+    // El horario aparece en "Horarios registrados" dentro del dialog.
+    // No usamos .first() porque puede haber horarios preexistentes encabezando la lista.
+    // Buscamos el elemento específico que contiene 'LUNES'.
+    const horarioNuevo = page.locator('.horario-text', { hasText: 'LUNES' });
+    await expect(horarioNuevo).toBeVisible({ timeout: 8_000 });
+    await expect(horarioNuevo).toContainText('08:00');
+    await expect(horarioNuevo).toContainText('10:00');
     if (nombreEscenario) {
-      await expect(page.locator('.horario-text').first()).toContainText(nombreEscenario);
+      await expect(horarioNuevo).toContainText(nombreEscenario);
     }
 
     // Cerrar el dialog
