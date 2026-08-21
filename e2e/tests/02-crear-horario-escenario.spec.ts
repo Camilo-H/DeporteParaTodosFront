@@ -24,8 +24,9 @@ test.describe('SCRUM-134/135 — Crear horario con selector de escenario', () =>
     await expect(page.locator('button[mat-menu-item]:has-text("Gestionar horarios")')).toBeVisible();
     await page.locator('button[mat-menu-item]:has-text("Gestionar horarios")').click();
 
-    // Dialog FormHorarioComponent abierto
-    await expect(page.getByText('Gestionar Horarios')).toBeVisible();
+    // Dialog FormHorarioComponent abierto — header.title-two es único en el DOM
+    // (el menu item usa <span>, no <header class="title-two">)
+    await expect(page.locator('header.title-two', { hasText: 'Gestionar Horarios' })).toBeVisible();
 
     // Seleccionar día "Lun"
     const chipLun = page.locator('.dia-chip', { hasText: 'Lun' });
@@ -63,7 +64,7 @@ test.describe('SCRUM-134/135 — Crear horario con selector de escenario', () =>
 
     // Cerrar el dialog
     await page.locator('button[mat-button]:has-text("Cerrar")').click();
-    await expect(page.getByText('Gestionar Horarios')).not.toBeVisible();
+    await expect(page.locator('header.title-two', { hasText: 'Gestionar Horarios' })).not.toBeVisible();
 
     // El horario recargado también aparece en la tarjeta del grupo
     // (gestionarHorarios() llama getHorarios() al cerrarse con cambiosRealizados=true)
