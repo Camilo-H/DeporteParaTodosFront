@@ -67,11 +67,12 @@ test.describe('SCRUM-66 — Editar y eliminar alumno del grupo', () => {
     );
 
     await expect(page.locator('table[mat-table]')).toBeVisible({ timeout: 10_000 });
-    const primeraFila = page.locator('tr[mat-row]').nth(0);
-    await expect(primeraFila).toBeVisible();
+    // nth(1) = DIANA LAZO (segunda fila); nth(0) = Daniel Tucanes (perfil personal, no tocar)
+    const filaEditar = page.locator('tr[mat-row]').nth(1);
+    await expect(filaEditar).toBeVisible();
 
-    // Click en editar (ícono "edit") en la primera fila
-    const btnEditar = primeraFila.locator('button').filter({
+    // Click en editar (ícono "edit") en la fila de DIANA LAZO
+    const btnEditar = filaEditar.locator('button').filter({
       has: page.locator('mat-icon', { hasText: 'edit' }),
     });
     await btnEditar.click();
@@ -91,7 +92,7 @@ test.describe('SCRUM-66 — Editar y eliminar alumno del grupo', () => {
       { timeout: 8_000 }
     );
     // cargarDatos() re-fetches → nombre actualizado visible en la tabla
-    await expect(primeraFila.locator('td').nth(1)).toContainText(
+    await expect(filaEditar.locator('td').nth(1)).toContainText(
       'Nombre Editado Playwright',
       { timeout: 8_000 }
     );
