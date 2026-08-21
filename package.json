@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "playwright test",
+    "e2e:report": "playwright show-report"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +42,7 @@
     "@angular-devkit/build-angular": "^16.1.4",
     "@angular/cli": "~16.1.4",
     "@angular/compiler-cli": "^16.1.0",
+    "@playwright/test": "^1.62.1",
     "@types/bootstrap": "^5.2.10",
     "@types/d3-scale": "^4.0.8",
     "@types/d3-selection": "^3.0.11",
