@@ -17,11 +17,13 @@ test.describe('SCRUM-66 — Editar y eliminar alumno del grupo', () => {
 
   test.beforeAll(async ({ playwright }) => {
     const { categoria, curso, anio, iterable } = TEST_GROUP;
-    apiContext = await playwright.request.newContext({ baseURL: API_BASE });
+    // Sin baseURL: se usan URLs absolutas completas para evitar que el /api/v2
+    // sea descartado por la resolución estándar de URLs con paths que inician en '/'
+    apiContext = await playwright.request.newContext();
 
     // Obtener la lista actual de alumnos del grupo
     const res = await apiContext.get(
-      `/alumnosGrupo?categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(curso)}&anio=${anio}&iterable=${iterable}`
+      `${API_BASE}/alumnosGrupo?categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(curso)}&anio=${anio}&iterable=${iterable}`
     );
     if (!res.ok()) throw new Error(`GET /alumnosGrupo falló: ${res.status()}`);
 
@@ -40,7 +42,7 @@ test.describe('SCRUM-66 — Editar y eliminar alumno del grupo', () => {
     if (alumnoParaDesvincular) {
       const { categoria, curso, anio, iterable } = TEST_GROUP;
       const hoy = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
-      await apiContext.post('/inscripcion', {
+      await apiContext.post(`${API_BASE}/inscripcion`, {
         data: {
           fechaInscripcion: hoy,
           fechaDesvinculacion: '',
