@@ -5,8 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './viewswebsite/pages/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertaServiceService } from './services/alerta-service.service';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 
 @NgModule({
@@ -21,8 +23,12 @@ import { AlertaServiceService } from './services/alerta-service.service';
     BrowserAnimationsModule,
     OAuthModule.forRoot(),
     HttpClientModule,
+    MatSnackBarModule,
   ],
-  providers: [AlertaServiceService],
+  providers: [
+    AlertaServiceService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { HttpClient } from '@angular/common/http';
 import { PerfilDTO } from '../Models/DTOs/perfil-tdo';
-import { catchError, throwError, Observable, from } from 'rxjs';
+import { catchError, throwError, Observable, from, filter, take } from 'rxjs';
+import { TokenInterchangeService } from './token-interchange.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class AuthService {
   constructor(
     private oauthService: OAuthService,
     private http: HttpClient,
+    private tokenInterchangeService: TokenInterchangeService,
   ) {
     this.initLogin();
   }
@@ -28,6 +30,25 @@ export class AuthService {
 
     this.oauthService.configure(config);
     this.oauthService.setupAutomaticSilentRefresh();
+
+    // Intercambio de token con el backend inmediatamente después del login de Google.
+    // token_received se emite solo cuando hay un login real (o silent refresh),
+    // nunca en cargas de página sin sesión activa.
+    // take(1): el intercambio se hace una vez por sesión; cuando SCRUM-159 requiera
+    // manejar renovaciones del dpt_token, se quitará el take(1) y se filtrará
+    // también por token_refreshed.
+    this.oauthService.events.pipe(
+      filter(e => e.type === 'token_received'),
+      take(1),
+    ).subscribe(() => {
+      const idToken = this.oauthService.getIdToken();
+      if (idToken) {
+        this.tokenInterchangeService.exchangeGoogleToken(idToken).subscribe({
+          error: err => console.error('Error en intercambio de token con el backend:', err),
+        });
+      }
+    });
+
     this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
       const claims: any = this.oauthService.getIdentityClaims();
       if (claims) {
