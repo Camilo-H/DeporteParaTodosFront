@@ -1,0 +1,62 @@
+<div class="pagina">
+  <div class="contenedor">
+    <mat-card class="tarjeta">
+      <header class="title-two">Completa tu perfil</header>
+      <p class="subtitulo">
+        Tu cuenta de Google está verificada. Completa los datos para acceder al sistema.
+      </p>
+
+      <form (ngSubmit)="onSubmit(perfilForm)" #perfilForm="ngForm" class="formulario">
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Nombre</mat-label>
+          <input matInput [(ngModel)]="perfil.nombre" name="nombre" required readonly />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Correo institucional</mat-label>
+          <input matInput [(ngModel)]="perfil.correo" name="correo" type="email" required readonly />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Rol</mat-label>
+          <mat-select [(ngModel)]="perfil.tipoAlumno" name="rol" required>
+            <mat-option *ngFor="let r of roles" [value]="r">{{ r }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Tipo de identificación</mat-label>
+          <mat-select [(ngModel)]="perfil.tipoId" name="tipodocumento" required>
+            <mat-option *ngFor="let tipo of tiposDocumento" [value]="tipo">{{ tipo }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Número de identificación</mat-label>
+          <input matInput [(ngModel)]="perfil.id" name="identificacion" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Sexo</mat-label>
+          <mat-select [(ngModel)]="perfil.sexo" name="sexo" required>
+            <mat-option *ngFor="let s of opcSexo" [value]="s">{{ s }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Código institucional</mat-label>
+          <input matInput [(ngModel)]="perfil.alumnoCodigo" name="codigo" required />
+        </mat-form-field>
+
+        <div class="botones">
+          <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!perfilForm.form.valid">
+            Registrarme
+          </button>
+        </div>
+
+      </form>
+    </mat-card>
+  </div>
+</div>

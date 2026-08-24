@@ -1,0 +1,49 @@
+.pagina {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: 480px;
+  padding: 16px;
+}
+
+.tarjeta {
+  padding: 32px 24px;
+}
+
+.title-two {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #000066;
+}
+
+.subtitulo {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo {
+  width: 100%;
+}
+
+.botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

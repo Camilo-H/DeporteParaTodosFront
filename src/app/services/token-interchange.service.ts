@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -12,7 +12,7 @@ export class TokenInterchangeService {
 
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar,
+    private router: Router,
   ) {}
 
   exchangeGoogleToken(idToken: string): Observable<void> {
@@ -21,15 +21,10 @@ export class TokenInterchangeService {
       map(() => void 0),
       catchError(err => {
         if (err.status === 404) {
-          // TODO SCRUM-159: reemplazar este snackbar por
-          //   this.router.navigate(['/completar-perfil'])
-          // cuando FormCompletarPerfilComponent esté implementado
-          // y la ruta esté registrada en app-routing.module.ts.
-          this.snackBar.open(
-            'Tu cuenta de Google es válida pero no está registrada en el sistema. Contacta al administrador.',
-            'Cerrar',
-            { duration: 8000, panelClass: ['snack-warn'] }
-          );
+          // Usuario autenticado con Google pero sin rol registrado en el sistema.
+          // SCRUM-159: redirige a CompletarPerfilComponent donde elige rol
+          // y completa sus datos identificativos.
+          this.router.navigate(['/completar-perfil']);
           return EMPTY;
         }
         return throwError(() => err);
