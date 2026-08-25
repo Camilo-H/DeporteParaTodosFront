@@ -74,6 +74,7 @@ export class AuthService {
 
   logout() {
     this.oauthService.logOut();
+    sessionStorage.removeItem('dpt_token');
   }
 
   getProfile() {

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { PerfilService } from 'src/app/services/perfil.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -34,8 +35,11 @@ import { PerfilService } from 'src/app/services/perfil.service';
 export class SidenavComponent implements OnInit {
   perfil?: string;
 
-  constructor(private router: Router, private perfilservice: PerfilService) {
-  }
+  constructor(
+    private router: Router,
+    private perfilservice: PerfilService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
     this.perfilservice.perfil$.subscribe(perfil => {
@@ -56,6 +60,11 @@ export class SidenavComponent implements OnInit {
 
   redirectionTo(url: string): void {
     window.location.href = url;
+  }
+
+  cerrarSesion(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 
