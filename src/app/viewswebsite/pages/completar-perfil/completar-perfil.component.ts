@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { PerfilService } from 'src/app/services/perfil.service';
 import { PerfilDTO } from 'src/app/Models/DTOs/perfil-tdo';
@@ -22,6 +23,7 @@ import { PerfilDTO } from 'src/app/Models/DTOs/perfil-tdo';
     MatSelectModule,
     MatFormFieldModule,
     MatCardModule,
+    MatSnackBarModule,
   ],
   templateUrl: './completar-perfil.component.html',
   styleUrls: ['./completar-perfil.component.css'],
@@ -47,6 +49,7 @@ export class CompletarPerfilComponent implements OnInit {
     private oauthService: OAuthService,
     private perfilService: PerfilService,
     private router: Router,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -61,8 +64,20 @@ export class CompletarPerfilComponent implements OnInit {
     if (form.invalid) return;
     // Los 3 roles van al mismo endpoint; role queda vacío (no es instructor del programa)
     this.perfilService.registrarPerfil({ ...this.perfil, role: '', facultad: '' }).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: err => console.error('Error al completar perfil:', err),
+      next: () => {
+        this.snackBar.open('Registro exitoso, bienvenido/a', 'Cerrar', {
+          duration: 4000,
+          panelClass: ['snack-success'],
+        });
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        console.error('Error al completar perfil:', err);
+        this.snackBar.open('No se pudo completar el registro, intenta de nuevo', 'Cerrar', {
+          duration: 6000,
+          panelClass: ['snack-error'],
+        });
+      },
     });
   }
 
