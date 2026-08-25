@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -16,7 +16,8 @@ export class TokenInterchangeService {
   ) {}
 
   exchangeGoogleToken(idToken: string): Observable<void> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/auth/token`, { idToken }).pipe(
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${idToken}`);
+    return this.http.post<{ token: string }>(`${this.apiUrl}/auth/token`, {}, { headers }).pipe(
       tap(resp => sessionStorage.setItem('dpt_token', resp.token)),
       map(() => void 0),
       catchError(err => {
