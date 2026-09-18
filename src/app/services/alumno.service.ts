@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, throwError, catchError } from "rxjs";
 import { AlumnoDTO } from "../Models/DTOs/alumno-dto";
+import { PerfilDTO } from "../Models/DTOs/perfil-tdo";
 import { HttpClient } from "@angular/common/http";
 
 
@@ -23,5 +24,9 @@ export class AlumnoService {
         return this.http.put<any>(`${this.apiUrl}/alumnos/${id}`, data).pipe(
             catchError((error) => throwError(error))
         );
+    }
+
+    buscarPorCorreo(correo: string): Observable<PerfilDTO> {
+        return this.http.get<PerfilDTO>(`${this.apiUrl}/login?email=${encodeURIComponent(correo)}`);
     }
 }

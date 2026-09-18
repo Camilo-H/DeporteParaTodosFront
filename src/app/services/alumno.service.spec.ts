@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AlumnoService } from './alumno.service';
 import { AlumnoDTO } from '../Models/DTOs/alumno-dto';
+import { PerfilDTO } from '../Models/DTOs/perfil-tdo';
 
 describe('AlumnoService', () => {
   let service: AlumnoService;
@@ -128,5 +129,33 @@ describe('AlumnoService', () => {
     const req = httpMock.expectOne(`${API}/alumnos/42`);
     req.flush('Error interno', { status: 500, statusText: 'Server Error' });
     expect(errorCapturado).toBeTruthy();
+  });
+
+  // ── buscarPorCorreo ───────────────────────────────────────────────────────
+
+  it('buscarPorCorreo: GET /login?email= y retorna PerfilDTO', () => {
+    const mockPerfil: PerfilDTO = {
+      id: 99, nombre: 'María López', correo: 'maria@unicauca.edu.co',
+      tipoId: 'CC', sexo: 'F', facultad: 'Ingenieria',
+      tipoAlumno: 'Regular', role: 'Alumno', alumnoCodigo: 'MA1001',
+    };
+    service.buscarPorCorreo('maria@unicauca.edu.co').subscribe(p => {
+      expect(p.id).toBe(99);
+      expect(p.role).toBe('Alumno');
+    });
+    const req = httpMock.expectOne(`${API}/login?email=maria%40unicauca.edu.co`);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockPerfil);
+  });
+
+  it('buscarPorCorreo: propaga HTTP 404 cuando el correo no existe', () => {
+    let errorCapturado: any;
+    service.buscarPorCorreo('noexiste@unicauca.edu.co').subscribe({
+      next: () => fail('debería haber fallado'),
+      error: err => (errorCapturado = err),
+    });
+    const req = httpMock.expectOne(`${API}/login?email=noexiste%40unicauca.edu.co`);
+    req.flush('No encontrado', { status: 404, statusText: 'Not Found' });
+    expect(errorCapturado.status).toBe(404);
   });
 });

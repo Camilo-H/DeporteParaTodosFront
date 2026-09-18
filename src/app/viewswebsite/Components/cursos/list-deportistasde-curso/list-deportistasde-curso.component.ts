@@ -135,7 +135,7 @@ export class ListDeportistasdeCursoComponent implements OnInit {
 
   inscribirAlumno() {
     const dialogRef = this.dialog.open(FormInscripcionesComponent, {
-      data: {}
+      data: { modo: 'inscribir' }
     });
 
     dialogRef.afterClosed().subscribe(

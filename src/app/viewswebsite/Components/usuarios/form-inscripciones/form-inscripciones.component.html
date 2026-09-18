@@ -3,8 +3,49 @@
 </button>
 
 <mat-dialog-content class="dialog-content">
-  <header class="title-two">{{ isEditing ? 'Editar usuario' : 'Registro de usuario' }}</header>
-  <form (ngSubmit)="onSubmit(inscripcionForm)" #inscripcionForm="ngForm" class="form-content">
+  <header class="title-two">{{ isEditing ? 'Editar usuario' : isInscribirMode ? 'Inscribir deportista' : 'Registro de usuario' }}</header>
+
+  <!-- ── Sección de búsqueda (solo modo inscribir) ── -->
+  <div *ngIf="isInscribirMode" class="busqueda-section">
+    <div class="search-row">
+      <mat-form-field appearance="outline" class="form-field search-field">
+        <mat-label>Correo del deportista</mat-label>
+        <input matInput type="email" [(ngModel)]="correoBusqueda" name="correoBusqueda"
+               placeholder="correo@unicauca.edu.co" [disabled]="buscando" />
+      </mat-form-field>
+      <button mat-raised-button type="button" class="btn-buscar"
+              (click)="buscarAlumno()" [disabled]="!correoBusqueda.trim() || buscando">
+        <mat-icon>search</mat-icon>
+        {{ buscando ? 'Buscando…' : 'Buscar' }}
+      </button>
+    </div>
+
+    <!-- Estado: ENCONTRADO -->
+    <div *ngIf="estado === 'encontrado'" class="resultado encontrado">
+      <mat-icon class="icono-estado verde">check_circle</mat-icon>
+      <p class="resultado-nombre">{{ perfilEncontrado?.nombre }}</p>
+      <p class="resultado-correo">{{ perfilEncontrado?.correo }}</p>
+      <div class="form-buttons">
+        <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
+        <button mat-raised-button class="aceptar" type="button" (click)="inscribirEncontrado()">Inscribir</button>
+      </div>
+    </div>
+
+    <!-- Estado: ROL_INVALIDO -->
+    <div *ngIf="estado === 'rol_invalido'" class="resultado rol-invalido">
+      <mat-icon class="icono-estado rojo">block</mat-icon>
+      <p>Este correo pertenece a un <strong>Instructor o Coordinador</strong> y no puede inscribirse como deportista.</p>
+      <button mat-button type="button" class="cancelar" (click)="onCancel()">Cerrar</button>
+    </div>
+
+    <!-- Estado: NO_ENCONTRADO → mensaje antes del formulario -->
+    <div *ngIf="estado === 'no_encontrado'" class="aviso-no-encontrado">
+      <mat-icon>info</mat-icon>
+      <span>No existe un deportista con ese correo. Complete los datos para registrarlo:</span>
+    </div>
+  </div>
+
+  <form *ngIf="showRegisterForm" (ngSubmit)="onSubmit(inscripcionForm)" #inscripcionForm="ngForm" class="form-content">
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Nombre</mat-label>
       <input matInput placeholder="Nombre" [(ngModel)]="perfil.nombre" name="nombre" required />
@@ -46,7 +87,7 @@
 
     <div class="form-buttons">
       <button mat-button type="button" class="cancelar" (click)="onCancel()">Cancelar</button>
-      <button mat-raised-button class="aceptar" type="submit" [disabled]="!inscripcionForm.form.valid">Aceptar</button>
+      <button mat-raised-button class="aceptar" type="submit" [disabled]="!inscripcionForm.form.valid">{{ isInscribirMode ? 'Registrar e Inscribir' : 'Aceptar' }}</button>
       <!--<button mat-raised-button class="aceptar" type="submit">Aceptar</button>-->
     </div>
   </form>

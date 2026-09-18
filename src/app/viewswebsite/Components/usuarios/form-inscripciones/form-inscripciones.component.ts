@@ -14,6 +14,8 @@ import { PerfilDTO } from 'src/app/Models/DTOs/perfil-tdo';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { AlumnoDTO } from 'src/app/Models/DTOs/alumno-dto';
 
+type EstadoBusqueda = 'busqueda' | 'encontrado' | 'no_encontrado' | 'rol_invalido';
+
 @Component({
   selector: 'app-form-inscripciones',
   standalone: true,
@@ -32,9 +34,15 @@ import { AlumnoDTO } from 'src/app/Models/DTOs/alumno-dto';
   styleUrls: ['./form-inscripciones.component.css'],
 })
 export class FormInscripcionesComponent implements OnInit {
-  isEditing: boolean = false;
+  isEditing = false;
+  isInscribirMode = false;
   tipoDocumento: string[] = ['CC', 'TI', 'CE', 'PP', 'PEP', 'DIE'];
   sexo: string[] = ['M', 'F'];
+
+  estado: EstadoBusqueda = 'busqueda';
+  correoBusqueda = '';
+  perfilEncontrado: PerfilDTO | null = null;
+  buscando = false;
 
   perfil: PerfilDTO = {
     id: 0,
@@ -55,7 +63,7 @@ export class FormInscripcionesComponent implements OnInit {
     @Optional() private dialogref: MatDialogRef<FormInscripcionesComponent> | null,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: {
       rol?: 'Estudiante' | 'Instructor',
-      modo?: 'editar',
+      modo?: 'editar' | 'inscribir',
       alumno?: AlumnoDTO,
     } | null,
   ) { }
@@ -68,6 +76,42 @@ export class FormInscripcionesComponent implements OnInit {
       this.perfil.correo = alumno.correo;
       this.perfil.tipoAlumno = alumno.tipo;
     }
+    if (this.dialogData?.modo === 'inscribir') {
+      this.isInscribirMode = true;
+      this.estado = 'busqueda';
+    }
+  }
+
+  get showRegisterForm(): boolean {
+    return !this.isInscribirMode || this.estado === 'no_encontrado';
+  }
+
+  buscarAlumno(): void {
+    if (!this.correoBusqueda.trim()) return;
+    this.buscando = true;
+    this.perfilEncontrado = null;
+    this.alumnoService.buscarPorCorreo(this.correoBusqueda.trim()).subscribe({
+      next: (perfil) => {
+        this.buscando = false;
+        if (perfil.role === 'Alumno') {
+          this.perfilEncontrado = perfil;
+          this.estado = 'encontrado';
+        } else {
+          this.estado = 'rol_invalido';
+        }
+      },
+      error: (err) => {
+        this.buscando = false;
+        if (err.status === 404) {
+          this.perfil.correo = this.correoBusqueda.trim();
+          this.estado = 'no_encontrado';
+        }
+      },
+    });
+  }
+
+  inscribirEncontrado(): void {
+    this.dialogref?.close({ confirmacionCreacion: true, idAlumno: this.perfilEncontrado!.id });
   }
 
   onSubmit(form: NgForm) {
