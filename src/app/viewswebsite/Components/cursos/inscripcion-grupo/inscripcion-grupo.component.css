@@ -89,12 +89,65 @@
   cursor: not-allowed;
 }
 
+.btn-espera {
+  background-color: #e65100;
+}
+
+.btn-espera:hover:not(:disabled) {
+  background-color: #bf360c;
+}
+
+.aviso-espera {
+  background-color: #fff3e0;
+  border: 1px solid #ffb74d;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #e65100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.estado-inscripcion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .inscrito-badge {
   background-color: #2e7d32;
   color: white;
   border-radius: 20px;
   padding: 0.75rem 2.5rem;
   font-size: 1rem;
+}
+
+.espera-badge {
+  background-color: #e65100;
+}
+
+.btn-cancelar {
+  background: none;
+  border: 1px solid #c62828;
+  color: #c62828;
+  border-radius: 20px;
+  padding: 0.5rem 2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background-color: #c62828;
+  color: white;
+}
+
+.btn-cancelar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .cargando {

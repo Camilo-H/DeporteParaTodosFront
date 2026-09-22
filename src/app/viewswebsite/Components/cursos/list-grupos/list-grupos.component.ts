@@ -13,7 +13,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CursoDTO } from 'src/app/Models/DTOs/curso-dto';
 import { GrupoDTO } from 'src/app/Models/DTOs/grupo-dto';
 import { GrupoService } from 'src/app/services/grupo.service';
-import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/form-inscripciones.component';
 import { PerfilService } from 'src/app/services/perfil.service';
 import { ImagenService } from 'src/app/services/imagen.service';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -23,6 +22,8 @@ import { HorarioService } from 'src/app/services/horario.service';
 import { HorarioDTO } from 'src/app/Models/DTOs/horario-dto';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormHorarioComponent } from '../form-horario/form-horario.component';
+import { InscripcionesService } from 'src/app/services/inscripciones.service';
+import { DisponibilidadDTO } from 'src/app/Models/DTOs/disponibilidad-dto';
 
 @Component({
   selector: 'app-list-grupos',
@@ -51,6 +52,7 @@ export class ListGruposComponent implements OnInit {
   categoria: string | null = '';
   titulo: string | null = '';
   perfil?: string;
+  disponibilidad: Record<string, DisponibilidadDTO> = {};
 
   constructor(
     private breakPointObserver: BreakpointObserver,
@@ -63,9 +65,14 @@ export class ListGruposComponent implements OnInit {
     private instructorService: InstructorServisce,
     private horarioservice: HorarioService,
     private snackBar: MatSnackBar,
+    private inscripcionesService: InscripcionesService,
   ) { }
 
-  inscrito: boolean = false; // Estado de la inscripción
+  inscrito: boolean = false;
+
+  dispKey(anio: number | null, iterable: number | null): string {
+    return `${anio}-${iterable}`;
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -91,42 +98,36 @@ export class ListGruposComponent implements OnInit {
     });
   }
 
-  inscribirseAcurso() {
-    this.inscrito = !this.inscrito;
-    const dialogRef = this.dialog.open(FormInscripcionesComponent, {
-      /*data: {name: this.name(), animal: this.animal()},*/
-    });
-  }
-
   private loadGrupos(categoria: any, nombreCurso: any): void {
     this.grupoService.getGrupos(categoria, nombreCurso).subscribe(
       (grupostemp) => {
         this.grupos = grupostemp;
 
-        this.grupos.forEach(
-          (itemgrupo) => {
-            this.instructorService.getInstructor(itemgrupo.idInstructor!).subscribe(
-              (instructor) => {
-                itemgrupo.nombreInstructor = instructor.nombre;
+        this.grupos.forEach((itemgrupo) => {
+          this.instructorService.getInstructor(itemgrupo.idInstructor!).subscribe(
+            (instructor) => { itemgrupo.nombreInstructor = instructor.nombre; }
+          );
+
+          this.horarioservice.getHorarios(categoria, nombreCurso, itemgrupo.anio!, itemgrupo.iterable!).subscribe(
+            (horarios: any) => { itemgrupo.horarios = Array.isArray(horarios) ? horarios : []; }
+          );
+
+          if (itemgrupo.imagenGrupo != null) {
+            this.imagenService.getimagen(itemgrupo.imagenGrupo).subscribe(
+              (imagenTemp) => {
+                itemgrupo.imagenBase64 = imagenTemp.datosBase64;
+                itemgrupo.tipoArchivo = imagenTemp.tipoArchivo;
               }
             );
-
-            this.horarioservice.getHorarios(categoria, nombreCurso, itemgrupo.anio!, itemgrupo.iterable!).subscribe(
-              (horarios: any) => {
-                itemgrupo.horarios = Array.isArray(horarios) ? horarios : [];
-              }
-            );
-
-            if (itemgrupo.imagenGrupo != null) {
-              this.imagenService.getimagen(itemgrupo.imagenGrupo).subscribe(
-                (imagenTemp) => {
-                  itemgrupo.imagenBase64 = imagenTemp.datosBase64;
-                  itemgrupo.tipoArchivo = imagenTemp.tipoArchivo;
-                },
-              )
-            }
           }
-        );
+
+          this.inscripcionesService.getDisponibilidad(categoria, nombreCurso, itemgrupo.anio!, itemgrupo.iterable!).subscribe({
+            next: (disp) => {
+              this.disponibilidad[this.dispKey(itemgrupo.anio, itemgrupo.iterable)] = disp;
+            },
+            error: () => {},
+          });
+        });
       },
       (error) => console.error('Error al obtener los grupos', error)
     );

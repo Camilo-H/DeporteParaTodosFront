@@ -66,19 +66,22 @@
                             </ng-template>
                         </div>
 
+                        <div class="disponibilidad-badges" *ngIf="disponibilidad[dispKey(item.anio, item.iterable)] as disp">
+                            <span class="badge"
+                                [ngClass]="disp.cuposDisponibles > 0 ? 'bg-success' : 'bg-warning text-dark'">
+                                {{ disp.cuposDisponibles > 0 ? (disp.cuposDisponibles + ' cupos disponibles') : 'Grupo lleno' }}
+                            </span>
+                            <span class="badge bg-info ms-1" *ngIf="disp.tamanoListaEspera > 0">
+                                {{ disp.tamanoListaEspera }} en espera
+                            </span>
+                        </div>
+
                         <div class="d-flex justify-content-center">
                             <button class="btnInscripcion"
                                 *ngIf="perfil === 'Alumno'"
-                                (click)="inscribirseAcurso()">
-                                {{ inscrito ? "" : "Inscribirme" }}
+                                (click)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)">
+                                Inscribirme
                             </button>
-                            <button class="btnInscripcion" *ngIf="perfil === 'Coordinador'"
-                                (click)="inscribirseAcurso()">
-                                Abrir inscripciones
-                            </button>
-                            <ng-template #inscripcionCerrada>and fecha===false; else inscripcionCerrada 
-                                <p>inscripciones cerradas</p>
-                            </ng-template>
                         </div>
                     </mat-card-content>
                 </mat-card>

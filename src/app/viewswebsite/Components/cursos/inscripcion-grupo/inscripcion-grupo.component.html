@@ -25,7 +25,17 @@
         </tr>
         <tr>
           <th>Cupos disponibles</th>
-          <td>{{ grupo!.cupos }}</td>
+          <td>
+            <ng-container *ngIf="disponibilidad; else cargandoCupos">
+              <span [ngClass]="disponibilidad.cuposDisponibles > 0 ? 'text-success fw-bold' : 'text-warning fw-bold'">
+                {{ disponibilidad.cuposDisponibles }} / {{ disponibilidad.cuposTotales }}
+              </span>
+              <span *ngIf="disponibilidad.tamanoListaEspera > 0" class="ms-2 text-muted">
+                ({{ disponibilidad.tamanoListaEspera }} en espera)
+              </span>
+            </ng-container>
+            <ng-template #cargandoCupos>—</ng-template>
+          </td>
         </tr>
         <tr>
           <th>Instructor</th>
@@ -49,17 +59,37 @@
       </table>
     </div>
 
+    <!-- Aviso lista de espera -->
+    <div class="aviso-espera" *ngIf="!yaInscrito && disponibilidad && disponibilidad.cuposDisponibles === 0">
+      <span>El grupo está completo.</span>
+      <span *ngIf="disponibilidad.tamanoListaEspera >= 0">
+        Si te unes, quedarás en posición {{ disponibilidad.tamanoListaEspera + 1 }} de la lista de espera.
+      </span>
+    </div>
+
     <!-- Acción de inscripción -->
     <div class="accion">
       <ng-container *ngIf="!yaInscrito; else inscritoTpl">
         <button class="btn-inscribirse"
                 [disabled]="inscribiendo"
+                [class.btn-espera]="disponibilidad && disponibilidad.cuposDisponibles === 0"
                 (click)="inscribirse()">
-          {{ inscribiendo ? 'Inscribiendo...' : 'Inscribirme en este grupo' }}
+          {{ inscribiendo ? 'Procesando...'
+             : (disponibilidad && disponibilidad.cuposDisponibles === 0) ? 'Unirse a lista de espera'
+             : 'Inscribirme en este grupo' }}
         </button>
       </ng-container>
       <ng-template #inscritoTpl>
-        <div class="inscrito-badge">✓ Inscripción realizada</div>
+        <div class="estado-inscripcion">
+          <div class="inscrito-badge" [class.espera-badge]="yaEnEspera">
+            {{ yaEnEspera ? '⏳ En lista de espera' : '✓ Inscripción realizada' }}
+          </div>
+          <button class="btn-cancelar"
+                  [disabled]="cancelando"
+                  (click)="cancelarInscripcion()">
+            {{ cancelando ? 'Cancelando...' : yaEnEspera ? 'Salir de lista de espera' : 'Cancelar inscripción' }}
+          </button>
+        </div>
       </ng-template>
     </div>
 

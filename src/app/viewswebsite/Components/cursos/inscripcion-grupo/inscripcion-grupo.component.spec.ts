@@ -38,7 +38,7 @@ describe('InscripcionGrupoComponent', () => {
 
   beforeEach(async () => {
     grupoSpy      = jasmine.createSpyObj('GrupoService', ['getGrupo']);
-    inscripcionSpy = jasmine.createSpyObj('InscripcionesService', ['postInscripcion']);
+    inscripcionSpy = jasmine.createSpyObj('InscripcionesService', ['postInscripcion', 'getDisponibilidad', 'validarInscripcion', 'eliminarInscripcion']);
     horarioSpy    = jasmine.createSpyObj('HorarioService', ['getHorarios']);
     instructorSpy = jasmine.createSpyObj('InstructorServisce', ['getInstructor']);
     routerSpy     = jasmine.createSpyObj('Router', ['navigate']);
@@ -46,6 +46,8 @@ describe('InscripcionGrupoComponent', () => {
     grupoSpy.getGrupo.and.returnValue(of({ ...mockGrupo } as any));
     horarioSpy.getHorarios.and.returnValue(of(mockHorarios as any));
     instructorSpy.getInstructor.and.returnValue(of(mockInstructor as any));
+    inscripcionSpy.getDisponibilidad.and.returnValue(of({ cuposTotales: 15, cuposDisponibles: 5, tamanoListaEspera: 0 } as any));
+    inscripcionSpy.validarInscripcion.and.returnValue(of(false));
 
     await TestBed.configureTestingModule({
       imports: [InscripcionGrupoComponent, HttpClientTestingModule, NoopAnimationsModule],

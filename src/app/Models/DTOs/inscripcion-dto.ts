@@ -7,4 +7,5 @@ export interface InscripcionDTO{
     anio: number;
     iterable: number;
     eliminado: number;
+    estado?: 'INSCRITO' | 'EN_ESPERA';
 }
