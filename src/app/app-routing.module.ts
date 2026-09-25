@@ -10,7 +10,6 @@ import { FormCursoDeportiviComponent } from './viewswebsite/Components/cursos/fo
 import { NuevoCursoCategoriaComponent } from './viewswebsite/Components/cursos/nuevo-curso-categoria/nuevo-curso-categoria.component';
 import { ListGruposComponent } from './viewswebsite/Components/cursos/list-grupos/list-grupos.component';
 import { InformacinInstructorComponent } from './viewswebsite/Components/usuarios/informacion-instructor/informacion-instructor.component';
-import { InformacionCursoComponent } from './viewswebsite/Components/cursos/informacion-curso/informacion-curso.component';
 import { ListaInstructoresComponent } from './viewswebsite/Components/usuarios/lista-instructores/lista-instructores.component';
 import { ReportesComponent } from './viewswebsite/Components/estadisticas/reportes/reportes.component';
 import { InformacionEstudianteComponent } from './viewswebsite/Components/usuarios/informacion-estudiante/informacion-estudiante.component';
@@ -30,7 +29,6 @@ const routes: Routes = [
   {path: 'nuevoCursoCategoria', component: NuevoCursoCategoriaComponent},
   {path: 'list-grupos/:categoria/:curso', component: ListGruposComponent},
   {path: 'info-instructor', component: InformacinInstructorComponent},
-  {path: 'info-curso', component: InformacionCursoComponent},
   {path: 'lista-instructores', component: ListaInstructoresComponent},
   {path: 'reportes', component:ReportesComponent},
   {path: 'info-estudiante', component: InformacionEstudianteComponent},

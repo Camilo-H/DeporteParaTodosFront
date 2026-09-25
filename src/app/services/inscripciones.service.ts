@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { InscripcionDTO } from '../Models/DTOs/inscripcion-dto';
 import { DisponibilidadDTO } from '../Models/DTOs/disponibilidad-dto';
+import { InscripcionEnEsperaDto } from '../Models/DTOs/inscripcion-en-espera-dto';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -32,6 +33,19 @@ export class InscripcionesService {
   validarInscripcion(alumnoId: string, categoria: string, curso: string, anio: number, iterable: number): Observable<boolean> {
     return this.http.get<boolean>(
       `${this.apiUrl}/validarInscripcion?alumnoId=${encodeURIComponent(alumnoId)}&categoria=${encodeURIComponent(categoria)}&curso=${encodeURIComponent(curso)}&anio=${anio}&iterable=${iterable}`
+    ).pipe(catchError((error) => throwError(error)));
+  }
+
+  getListaEspera(categoria: string, curso: string, anio: number, iterable: number): Observable<InscripcionEnEsperaDto[]> {
+    return this.http.get<InscripcionEnEsperaDto[]>(
+      `${this.apiUrl}/inscripcion/listaEspera?prmCategoria=${encodeURIComponent(categoria)}&prmCurso=${encodeURIComponent(curso)}&prmAnio=${anio}&prmIterable=${iterable}`
+    ).pipe(catchError((error) => throwError(error)));
+  }
+
+  promoverAlumno(prmPerfId: string, categoria: string, curso: string, anio: number, iterable: number): Observable<InscripcionDTO> {
+    return this.http.patch<InscripcionDTO>(
+      `${this.apiUrl}/inscripcion/promover?prmPerfId=${encodeURIComponent(prmPerfId)}&prmCategoria=${encodeURIComponent(categoria)}&prmCurso=${encodeURIComponent(curso)}&prmAnio=${anio}&prmIterable=${iterable}`,
+      {}
     ).pipe(catchError((error) => throwError(error)));
   }
 }

@@ -19,11 +19,13 @@ import { FormInscripcionesComponent } from '../../usuarios/form-inscripciones/fo
 import { DialogComponent } from '../../dialog/dialog.component';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { InscripcionDTO } from 'src/app/Models/DTOs/inscripcion-dto';
+import { InscripcionEnEsperaDto } from 'src/app/Models/DTOs/inscripcion-en-espera-dto';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClaseService } from 'src/app/services/clase.service';
 import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { ClaseDTO } from 'src/app/Models/DTOs/clase-dto';
 import { AtencionDTO } from 'src/app/Models/DTOs/atencion-dto';
+import { PerfilService } from 'src/app/services/perfil.service';
 
 @Component({
   selector: 'app-list-deportistasde-curso',
@@ -53,8 +55,11 @@ export class ListDeportistasdeCursoComponent implements OnInit {
   anio: number | null = null;
   iterable: number | null = null;
   alumnos = new MatTableDataSource<AlumnoDTO>([]);
+  listaEspera: InscripcionEnEsperaDto[] = [];
   seleccionados: any[] = [];
+  rol: string = '';
   displayedColumns: string[] = ['Código', 'Nombre', 'Correo', 'Faltas', 'Asistencia', 'Acciones'];
+  displayedColumnsEspera: string[] = ['Posicion', 'Nombre', 'Correo', 'FechaInscripcion', 'Acciones'];
   fechaActual: Date = new Date();
 
   grupo: GrupoDTO = {
@@ -79,6 +84,7 @@ export class ListDeportistasdeCursoComponent implements OnInit {
     private instructorService: InstructorServisce,
     private horarioSerive: HorarioService,
     private inscripcionService: InscripcionesService,
+    private perfilService: PerfilService,
     private datepipe: DatePipe,
     private dialog: MatDialog,
     private claseService: ClaseService,
@@ -87,6 +93,7 @@ export class ListDeportistasdeCursoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.perfilService.perfil$.subscribe(p => { this.rol = p; });
     this.route.paramMap.subscribe(
       (params) => {
         this.categoria = params.get('categoria');
@@ -123,6 +130,11 @@ export class ListDeportistasdeCursoComponent implements OnInit {
         }
       }
     );
+
+    this.inscripcionService.getListaEspera(this.categoria!, this.titulo!, this.anio!, this.iterable!).subscribe({
+      next: (data) => { this.listaEspera = Array.isArray(data) ? data : []; },
+      error: () => { this.listaEspera = []; }
+    });
   }
 
   consultarInstructor(id: string): void {
@@ -216,6 +228,19 @@ export class ListDeportistasdeCursoComponent implements OnInit {
 
   isSelected(alumno: any): boolean {
     return this.seleccionados.includes(alumno);
+  }
+
+  promover(alumno: InscripcionEnEsperaDto): void {
+    this.inscripcionService.promoverAlumno(alumno.alumnoId, this.categoria!, this.titulo!, this.anio!, this.iterable!).subscribe({
+      next: () => {
+        this.snackBar.open(`${alumno.nombre} promovido al grupo`, 'Cerrar', { duration: 3000, panelClass: ['snack-success'] });
+        this.cargarDatos();
+      },
+      error: (err) => {
+        const msg = err?.status === 409 ? 'El alumno ya está inscrito en el grupo' : 'Error al promover, intente de nuevo';
+        this.snackBar.open(msg, 'Cerrar', { duration: 4000, panelClass: ['snack-error'] });
+      }
+    });
   }
 
   registrarAsistencia() {
