@@ -6,13 +6,31 @@
         </button>
     </div>
 
+    <div class="estado-info" *ngIf="curso">
+        <span class="badge"
+            [ngClass]="{
+                'bg-success': curso.estadoCurso === 'ACTIVO',
+                'bg-secondary': curso.estadoCurso === 'INACTIVO',
+                'bg-danger': curso.estadoCurso === 'CERRADO'
+            }">
+            {{ curso.estadoCurso === 'ACTIVO' ? 'Activo' :
+               curso.estadoCurso === 'INACTIVO' ? 'Inactivo' : 'Cerrado' }}
+        </span>
+        <span class="badge ms-2" *ngIf="curso.estadoInscripciones"
+            [ngClass]="curso.estadoInscripciones === 'ABIERTO' ? 'bg-info text-dark' : 'bg-warning text-dark'">
+            {{ curso.estadoInscripciones === 'ABIERTO' ? 'Inscripciones abiertas' : 'Inscripciones cerradas' }}
+        </span>
+    </div>
+
 
     <div class="content-tarjet">
         <mat-grid-list [cols]="colsize" rowHeight="460">
             <mat-grid-tile *ngFor="let item of grupos" [colspan]="1" [rowspan]="1">
                 <mat-card class="mycard shadow fixed-card">
 
-                    <div class="img-container" (click)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)">
+                    <div class="img-container"
+                         [class.img-no-click]="perfil === 'Alumno' && !puedeInscribirse()"
+                         (click)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)">
                         <img *ngIf="!!item.imagenBase64; else imagenPorDefecto"
                             [src]="'data:' + item.tipoArchivo + ';base64,' + item.imagenBase64" mat-card-image
                             alt="Imagen de grupo" />

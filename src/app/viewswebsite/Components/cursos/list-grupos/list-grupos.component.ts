@@ -24,6 +24,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormHorarioComponent } from '../form-horario/form-horario.component';
 import { InscripcionesService } from 'src/app/services/inscripciones.service';
 import { DisponibilidadDTO } from 'src/app/Models/DTOs/disponibilidad-dto';
+import { CursodeportivoService } from 'src/app/services/cursodeportivo.service';
 
 @Component({
   selector: 'app-list-grupos',
@@ -66,6 +67,7 @@ export class ListGruposComponent implements OnInit {
     private horarioservice: HorarioService,
     private snackBar: MatSnackBar,
     private inscripcionesService: InscripcionesService,
+    private cursodeportivoService: CursodeportivoService,
   ) { }
 
   inscrito: boolean = false;
@@ -99,6 +101,11 @@ export class ListGruposComponent implements OnInit {
   }
 
   private loadGrupos(categoria: any, nombreCurso: any): void {
+    this.cursodeportivoService.getCurso(categoria, nombreCurso).subscribe({
+      next: (curso) => { this.curso = curso; },
+      error: () => {},
+    });
+
     this.grupoService.getGrupos(categoria, nombreCurso).subscribe(
       (grupostemp) => {
         this.grupos = grupostemp;
@@ -171,6 +178,11 @@ export class ListGruposComponent implements OnInit {
         this.ngOnInit();
       }
     });
+  }
+
+  puedeInscribirse(): boolean {
+    if (this.categoria?.toLowerCase() === 'seleccionado') return false;
+    return this.curso?.estadoCurso === 'ACTIVO' && this.curso?.estadoInscripciones === 'ABIERTO';
   }
 
   letraDeIterable(n: number | null): string {

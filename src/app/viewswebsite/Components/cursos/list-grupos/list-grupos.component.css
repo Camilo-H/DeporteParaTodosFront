@@ -114,6 +114,18 @@ p {
   margin-top: 10px;
 }
 
+.estado-info {
+  padding: 6px 16px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.img-no-click {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 
 
 .btnAgregar {
