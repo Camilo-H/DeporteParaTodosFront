@@ -30,7 +30,10 @@
 
                     <div class="img-container"
                          [class.img-no-click]="perfil === 'Alumno' && !puedeInscribirse()"
-                         (click)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)">
+                         role="button"
+                         tabindex="0"
+                         (click)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)"
+                         (keydown.enter)="alumnosGrupo(categoria!, titulo!, item.anio!, item.iterable!)">
                         <img *ngIf="!!item.imagenBase64; else imagenPorDefecto"
                             [src]="'data:' + item.tipoArchivo + ';base64,' + item.imagenBase64" mat-card-image
                             alt="Imagen de grupo" />
