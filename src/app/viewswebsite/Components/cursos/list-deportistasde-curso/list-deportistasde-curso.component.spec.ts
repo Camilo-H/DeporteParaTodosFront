@@ -1,23 +1,126 @@
-// Candidato a refactorización: letraDeIterable() es idéntica en ListGruposComponent,
-// ListDeportistasdeCursoComponent y ReportesComponent. Mover a un pipe o util compartido
-// eliminaría esta duplicación. Ver los otros .spec.ts de esta función.
-//
-// Estrategia de test: Object.create(prototype) — ver list-grupos.component.spec.ts.
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 
 import { ListDeportistasdeCursoComponent } from './list-deportistasde-curso.component';
+import { PerfilService } from 'src/app/services/perfil.service';
+import { SidenavComponent } from 'src/app/viewswebsite/pages/sidenav/sidenav.component';
+import { GrupoDTO } from 'src/app/Models/DTOs/grupo-dto';
+import { InscripcionEnEsperaDto } from 'src/app/Models/DTOs/inscripcion-en-espera-dto';
 
-describe('ListDeportistasdeCursoComponent › letraDeIterable', () => {
-  let comp: ListDeportistasdeCursoComponent;
+describe('ListDeportistasdeCursoComponent', () => {
+  let component: ListDeportistasdeCursoComponent;
+  let fixture: ComponentFixture<ListDeportistasdeCursoComponent>;
+  let perfilSubject: BehaviorSubject<string>;
 
-  beforeEach(() => {
-    comp = Object.create(ListDeportistasdeCursoComponent.prototype) as ListDeportistasdeCursoComponent;
+  const mockGrupo: GrupoDTO = {
+    categoria: 'Futbol',
+    curso: 'Avanzado',
+    anio: 2024,
+    iterable: 1,
+    imagenGrupo: 0,
+    idInstructor: 'inst-1',
+    nombreInstructor: '',
+    cupos: 10,
+    fechaCreacion: '',
+  };
+
+  const mockAlumnoEspera: InscripcionEnEsperaDto = {
+    alumnoId: '42',
+    nombre: 'Juan Perez',
+    correo: 'juan@test.com',
+    fechaInscripcion: '2024-01-01',
+  };
+
+  beforeEach(async () => {
+    perfilSubject = new BehaviorSubject<string>('Coordinador');
+
+    await TestBed.configureTestingModule({
+      imports: [ListDeportistasdeCursoComponent, NoopAnimationsModule, HttpClientTestingModule],
+      providers: [
+        DatePipe,
+        { provide: PerfilService, useValue: { perfil$: perfilSubject } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of(convertToParamMap({
+              categoria: 'Futbol',
+              curso: 'Avanzado',
+              anio: '2024',
+              iterable: '1',
+            })),
+          },
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(ListDeportistasdeCursoComponent, {
+        remove: { imports: [SidenavComponent] },
+        add: { schemas: [NO_ERRORS_SCHEMA] },
+      })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(ListDeportistasdeCursoComponent);
+    component = fixture.componentInstance;
+
+    // Spy on the real injected instances before ngOnInit fires
+    spyOn(component['grupoService'], 'getGrupo').and.returnValue(of(mockGrupo));
+    spyOn(component['alumnoService'], 'getAlumnosGrupo').and.returnValue(of([]));
+    spyOn(component['inscripcionService'], 'getListaEspera').and.returnValue(of([]));
+    spyOn(component['horarioSerive'], 'getHorarios').and.returnValue(of([]));
+    spyOn(component['instructorService'], 'getInstructor').and.returnValue(of({ nombre: 'Test' } as any));
+    spyOn(component['snackBar'], 'open').and.returnValue(null as any);
+
+    fixture.detectChanges();
   });
 
-  it('1  → "A"', () => expect(comp.letraDeIterable(1)).toBe('A'));
-  it('2  → "B"', () => expect(comp.letraDeIterable(2)).toBe('B'));
-  it('3  → "C"', () => expect(comp.letraDeIterable(3)).toBe('C'));
-  it('26 → "Z" (límite superior del alfabeto)', () => expect(comp.letraDeIterable(26)).toBe('Z'));
-  it('0   → "?" (cero es falsy)', () => expect(comp.letraDeIterable(0)).toBe('?'));
-  it('-1  → "?" (negativo < 1)', () => expect(comp.letraDeIterable(-1)).toBe('?'));
-  it('null → "?" (null es falsy)', () => expect(comp.letraDeIterable(null)).toBe('?'));
+  it('should create and initialize listaEspera, rol y displayedColumnsEspera', () => {
+    expect(component).toBeTruthy();
+    expect(component.listaEspera).toEqual([]);
+    expect(component.rol).toBe('Coordinador');
+    expect(component.displayedColumnsEspera).toContain('Acciones');
+    expect(component['inscripcionService'].getListaEspera).toHaveBeenCalled();
+  });
+
+  describe('cargarDatos()', () => {
+    it('deja listaEspera vacía cuando getListaEspera falla', () => {
+      (component['inscripcionService'].getListaEspera as jasmine.Spy)
+        .and.returnValue(throwError(() => new Error('network error')));
+
+      component.cargarDatos();
+
+      expect(component.listaEspera).toEqual([]);
+    });
+  });
+
+  describe('promover()', () => {
+    it('muestra snackbar de éxito y recarga datos cuando promoverAlumno responde correctamente', () => {
+      spyOn(component['inscripcionService'], 'promoverAlumno').and.returnValue(of({} as any));
+
+      component.promover(mockAlumnoEspera);
+
+      expect(component['snackBar'].open).toHaveBeenCalledWith(
+        jasmine.stringContaining(mockAlumnoEspera.nombre),
+        'Cerrar',
+        jasmine.objectContaining({ panelClass: ['snack-success'] })
+      );
+    });
+
+    it('muestra mensaje de conflicto cuando promoverAlumno falla con 409', () => {
+      spyOn(component['inscripcionService'], 'promoverAlumno')
+        .and.returnValue(throwError(() => ({ status: 409 })));
+
+      component.promover(mockAlumnoEspera);
+
+      expect(component['snackBar'].open).toHaveBeenCalledWith(
+        'El alumno ya está inscrito en el grupo',
+        'Cerrar',
+        jasmine.objectContaining({ panelClass: ['snack-error'] })
+      );
+    });
+  });
 });

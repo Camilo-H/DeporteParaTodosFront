@@ -1,129 +1,87 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { InscripcionesService } from './inscripciones.service';
-import { InscripcionDTO } from '../Models/DTOs/inscripcion-dto';
+import { InscripcionEnEsperaDto } from '../Models/DTOs/inscripcion-en-espera-dto';
 
 describe('InscripcionesService', () => {
   let service: InscripcionesService;
   let httpMock: HttpTestingController;
-  const API = 'http://127.0.0.1:8082/api/v2';
-
-  const inscripcionDummy: InscripcionDTO = {
-    fechaInscripcion: '2026-08-19',
-    fechaDesvinculacion: '',
-    alumnoId: 42,
-    categoria: 'Acuáticos',
-    curso: 'Natación',
-    anio: 2026,
-    iterable: 1,
-    eliminado: 0,
-  };
+  const base = 'http://127.0.0.1:8082/api/v2';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [InscripcionesService],
     });
     service = TestBed.inject(InscripcionesService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
+  afterEach(() => httpMock.verify());
 
-  it('debería crearse correctamente', () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  // postInscripcion
-  it('postInscripcion: POST /inscripcion con body correcto', () => {
-    service.postInscripcion(inscripcionDummy).subscribe(resp => {
-      expect(resp.alumnoId).toBe(42);
-      expect(resp.eliminado).toBe(0);
+  describe('getListaEspera()', () => {
+    it('hace GET a /inscripcion/listaEspera y retorna la lista', () => {
+      const mockData: InscripcionEnEsperaDto[] = [
+        { alumnoId: '42', nombre: 'Juan', correo: 'juan@test.com', fechaInscripcion: '2024-01-01' },
+      ];
+
+      let resultado: InscripcionEnEsperaDto[] | undefined;
+      service.getListaEspera('Futbol', 'Avanzado', 2024, 1).subscribe(data => {
+        resultado = data;
+      });
+
+      const req = httpMock.expectOne(r => r.url.includes('/inscripcion/listaEspera'));
+      expect(req.request.method).toBe('GET');
+      req.flush(mockData);
+
+      expect(resultado).toEqual(mockData);
     });
-    const req = httpMock.expectOne(`${API}/inscripcion`);
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(inscripcionDummy);
-    req.flush(inscripcionDummy);
+
+    it('propaga el error del servidor cuando getListaEspera falla', () => {
+      let errorCapturado = false;
+      service.getListaEspera('Futbol', 'Avanzado', 2024, 1).subscribe({
+        next: () => {},
+        error: () => { errorCapturado = true; },
+      });
+
+      const req = httpMock.expectOne(r => r.url.includes('/inscripcion/listaEspera'));
+      req.flush('Error del servidor', { status: 500, statusText: 'Internal Server Error' });
+
+      expect(errorCapturado).toBeTrue();
+    });
   });
 
-  it('postInscripcion: propaga error HTTP 409 (ya inscrito)', () => {
-    let errorCapturado: any;
-    service.postInscripcion(inscripcionDummy).subscribe({
-      next: () => fail('debería haber fallado'),
-      error: err => (errorCapturado = err),
-    });
-    const req = httpMock.expectOne(`${API}/inscripcion`);
-    req.flush('Ya inscrito', { status: 409, statusText: 'Conflict' });
-    expect(errorCapturado).toBeTruthy();
-  });
+  describe('promoverAlumno()', () => {
+    it('hace PATCH a /inscripcion/promover y retorna la inscripcion promovida', () => {
+      const mockResp = { alumnoId: '42', categoria: 'Futbol' };
 
-  it('postInscripcion: propaga error HTTP 500', () => {
-    let errorCapturado: any;
-    service.postInscripcion(inscripcionDummy).subscribe({
-      next: () => fail('debería haber fallado'),
-      error: err => (errorCapturado = err),
-    });
-    const req = httpMock.expectOne(`${API}/inscripcion`);
-    req.flush('Error interno', { status: 500, statusText: 'Server Error' });
-    expect(errorCapturado).toBeTruthy();
-  });
+      let responded = false;
+      service.promoverAlumno('42', 'Futbol', 'Avanzado', 2024, 1).subscribe(() => {
+        responded = true;
+      });
 
-  // eliminarInscripcion
-  it('eliminarInscripcion: PUT /desvincularInscripcion con body correcto', () => {
-    const desvinculacion: InscripcionDTO = {
-      ...inscripcionDummy,
-      fechaDesvinculacion: '2026-08-19',
-      eliminado: 1,
-    };
-    service.eliminarInscripcion(desvinculacion).subscribe(resp => {
-      expect(resp.eliminado).toBe(1);
-      expect(resp.fechaDesvinculacion).toBe('2026-08-19');
-    });
-    const req = httpMock.expectOne(`${API}/desvincularInscripcion`);
-    expect(req.request.method).toBe('PUT');
-    expect(req.request.body).toEqual(desvinculacion);
-    req.flush(desvinculacion);
-  });
+      const req = httpMock.expectOne(r => r.url.includes('/inscripcion/promover'));
+      expect(req.request.method).toBe('PATCH');
+      expect(req.request.body).toEqual({});
+      req.flush(mockResp);
 
-  it('eliminarInscripcion: solo los 5 campos mínimos también llegan al endpoint', () => {
-    const soloClaves = {
-      alumnoId: 42,
-      categoria: 'Acuáticos',
-      curso: 'Natación',
-      anio: 2026,
-      iterable: 1,
-    } as any;
-    service.eliminarInscripcion(soloClaves).subscribe(resp => {
-      expect(resp).toBeDefined();
+      expect(responded).toBeTrue();
     });
-    const req = httpMock.expectOne(`${API}/desvincularInscripcion`);
-    expect(req.request.method).toBe('PUT');
-    expect(req.request.body.alumnoId).toBe(42);
-    expect(req.request.body.curso).toBe('Natación');
-    req.flush(soloClaves);
-  });
 
-  it('eliminarInscripcion: propaga error HTTP 404 (inscripción no encontrada)', () => {
-    let errorCapturado: any;
-    service.eliminarInscripcion(inscripcionDummy).subscribe({
-      next: () => fail('debería haber fallado'),
-      error: err => (errorCapturado = err),
-    });
-    const req = httpMock.expectOne(`${API}/desvincularInscripcion`);
-    req.flush('No encontrado', { status: 404, statusText: 'Not Found' });
-    expect(errorCapturado).toBeTruthy();
-  });
+    it('propaga el error del servidor cuando promoverAlumno falla', () => {
+      let errorCapturado = false;
+      service.promoverAlumno('42', 'Futbol', 'Avanzado', 2024, 1).subscribe({
+        next: () => {},
+        error: () => { errorCapturado = true; },
+      });
 
-  it('eliminarInscripcion: propaga error HTTP 500', () => {
-    let errorCapturado: any;
-    service.eliminarInscripcion(inscripcionDummy).subscribe({
-      next: () => fail('debería haber fallado'),
-      error: err => (errorCapturado = err),
+      const req = httpMock.expectOne(r => r.url.includes('/inscripcion/promover'));
+      req.flush('Error del servidor', { status: 500, statusText: 'Internal Server Error' });
+
+      expect(errorCapturado).toBeTrue();
     });
-    const req = httpMock.expectOne(`${API}/desvincularInscripcion`);
-    req.flush('Error interno', { status: 500, statusText: 'Server Error' });
-    expect(errorCapturado).toBeTruthy();
   });
 });
